@@ -1,4 +1,4 @@
-import { Component, input, signal, effect } from '@angular/core';
+import { Component, input, signal } from '@angular/core';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { FormlyModule, FormlyFieldConfig } from '@ngx-formly/core';
 import { FormlyBootstrapModule } from '@ngx-formly/bootstrap';
@@ -57,10 +57,8 @@ export class FormPreviewComponent {
 
   constructor() {
     // Watch for form value changes
-    effect(() => {
-      this.form.valueChanges.subscribe((value) => {
-        this.model.set(value);
-      });
+    this.form.valueChanges.subscribe((value) => {
+      this.model.set(value);
     });
   }
 }
