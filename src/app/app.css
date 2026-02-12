@@ -1,0 +1,19 @@
+:host {
+  display: block;
+  height: 100vh;
+}
+
+.container-fluid {
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  overflow: hidden;
+}
+
+.main-content > div {
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+}
