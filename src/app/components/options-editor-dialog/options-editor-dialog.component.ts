@@ -174,6 +174,8 @@ export class OptionsEditorDialogComponent {
 
   private calculateNextOptionIndex() {
     // Find the highest numeric suffix in existing option values
+    // This ensures new options don't conflict with existing ones that follow the optionN pattern
+    // For custom values (e.g., 'yes', 'no'), the regex won't match and maxIndex stays 0
     let maxIndex = 0;
     this.options.forEach(option => {
       const match = String(option.value).match(/^option(\d+)$/);
@@ -188,10 +190,11 @@ export class OptionsEditorDialogComponent {
   }
 
   addOption() {
+    const index = this.nextOptionIndex;
     this.options.push({
-      label: `Option ${this.nextOptionIndex}`,
-      description: `Option ${this.nextOptionIndex} Description`,
-      value: `option${this.nextOptionIndex}`,
+      label: `Option ${index}`,
+      description: `Option ${index} Description`,
+      value: `option${index}`,
     });
     this.nextOptionIndex++;
   }
