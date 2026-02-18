@@ -27,21 +27,21 @@ import { App } from '../app';
     `
       .field-wrapper {
         position: relative;
-        padding: 2rem 1rem 1rem 1rem;
+        padding: 0 1rem 1rem 1rem;
         margin-bottom: 1rem;
-        border: 2px solid #dee2e6;
+        border: 2px solid transparent;
         border-radius: 0.25rem;
         cursor: pointer;
         transition: all 0.2s ease;
       }
 
       .field-wrapper:hover {
-        border-color: #adb5bd;
+        border-color: rgba(255, 255, 255, 0.3);
       }
 
       .field-wrapper.selected {
-        border-color: #0d6efd;
-        background-color: rgba(13, 110, 253, 0.05);
+        border-color: rgba(255, 255, 255, 1);
+        background-color: rgba(255, 255, 255, 0.05);
       }
 
       .field-header {
@@ -54,6 +54,8 @@ import { App } from '../app';
         align-items: center;
         padding: 0.25rem 0.5rem;
         background-color: transparent;
+        height: 0;
+        overflow: visible;
       }
 
       .field-type {
