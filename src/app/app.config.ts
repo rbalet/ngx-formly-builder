@@ -4,12 +4,14 @@ import {
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
 } from '@angular/core';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideFormlyCore } from '@ngx-formly/core';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideFormlyCore } from '@ngx-formly/core';
 
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { MAT_ICON_DEFAULT_OPTIONS } from '@angular/material/icon';
 import { FormlyMaterialModule, withFormlyMaterial } from '@ngx-formly/material';
 import { FormlyMatCheckboxModule } from '@ngx-formly/material/checkbox';
 import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
@@ -24,6 +26,12 @@ import { FieldWrapperComponent } from './wrappers/field-wrapper.component';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    {
+      provide: MAT_ICON_DEFAULT_OPTIONS,
+      useValue: { fontSet: 'material-symbols-outlined' },
+    },
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' } },
+
     provideZonelessChangeDetection(),
     provideBrowserGlobalErrorListeners(),
     provideAnimationsAsync(),
