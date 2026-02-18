@@ -1,8 +1,10 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { SCREEN_SIZE } from '../../core/token';
+import { FormBuilderService } from '../../services/form-builder.service';
 import { ColorScheme, ThemeService } from '../../services/theme.service';
 
 @Component({
@@ -23,7 +25,17 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
       <div class="navbar-center">
         <div class="menu-items">
           <button mat-button class="menu-item">File</button>
-          <button mat-button class="menu-item">Edit</button>
+          <button mat-button class="menu-item" [matMenuTriggerFor]="editMenu">Edit</button>
+          <mat-menu #editMenu="matMenu">
+            <button
+              mat-menu-item
+              [disabled]="!formBuilderService.$selectedField()"
+              (click)="onDuplicate()"
+            >
+              <mat-icon>content_copy</mat-icon>
+              <span>Duplicate</span>
+            </button>
+          </mat-menu>
           <button mat-button class="menu-item">View</button>
           <button mat-button class="menu-item">Help</button>
         </div>
@@ -38,7 +50,7 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
             <mat-icon>history</mat-icon>
           </button>
           <mat-button-toggle-group
-            [value]="screenSize()"
+            [value]="$screenSize()"
             (change)="onScreenSizeChange($event)"
             class="screen-size-toggle"
             hideSingleSelectionIndicator
@@ -160,16 +172,16 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
         display: flex;
         align-items: center;
         gap: 0.125rem;
-      }
 
-      .navbar-controls button {
-        color: #aaa;
-      }
+        .navbar-controls button {
+          color: #aaa;
+        }
 
-      .navbar-controls mat-icon {
-        font-size: 18px;
-        width: 18px;
-        height: 18px;
+        mat-icon {
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+        }
       }
 
       .screen-size-toggle {
@@ -186,32 +198,32 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
 
       .preview-button {
         font-size: 0.875rem;
-      }
 
-      .preview-button mat-icon {
-        margin-right: 0.25rem;
-        font-size: 18px;
-        width: 18px;
-        height: 18px;
+        mat-icon {
+          margin-right: 0.25rem;
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+        }
       }
 
       .export-button {
         font-size: 0.875rem;
-      }
 
-      .export-button mat-icon {
-        margin-right: 0.25rem;
-        font-size: 18px;
-        width: 18px;
-        height: 18px;
+        mat-icon {
+          margin-right: 0.25rem;
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+        }
       }
     `,
   ],
 })
 export class NavbarComponent {
-  screenSize = signal<'sm' | 'md' | 'lg'>('lg');
-
-  constructor(public themeService: ThemeService) {}
+  readonly formBuilderService = inject(FormBuilderService);
+  readonly themeService = inject(ThemeService);
+  readonly $screenSize = inject(SCREEN_SIZE);
 
   // Expose color scheme from theme service
   get colorScheme() {
@@ -232,10 +244,17 @@ export class NavbarComponent {
   });
 
   onScreenSizeChange(event: MatButtonToggleChange) {
-    this.screenSize.set(event.value);
+    this.$screenSize.set(event.value);
   }
 
   setColorScheme(scheme: ColorScheme) {
     this.themeService.setColorScheme(scheme);
+  }
+
+  onDuplicate() {
+    const selectedField = this.formBuilderService.$selectedField();
+    if (selectedField) {
+      this.formBuilderService.duplicateField(selectedField);
+    }
   }
 }
