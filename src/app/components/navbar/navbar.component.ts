@@ -1,8 +1,8 @@
 import { Component, signal } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatButtonToggleModule, MatButtonToggleChange } from '@angular/material/button-toggle';
 
 @Component({
   selector: 'app-navbar',
@@ -36,7 +36,11 @@ import { MatButtonToggleModule, MatButtonToggleChange } from '@angular/material/
           <button mat-icon-button title="History">
             <mat-icon>history</mat-icon>
           </button>
-          <mat-button-toggle-group [value]="screenSize()" (change)="onScreenSizeChange($event)" class="screen-size-toggle">
+          <mat-button-toggle-group
+            [value]="screenSize()"
+            (change)="onScreenSizeChange($event)"
+            class="screen-size-toggle"
+          >
             <mat-button-toggle value="sm" title="Small screen">
               <mat-icon>smartphone</mat-icon>
             </mat-button-toggle>
@@ -47,7 +51,11 @@ import { MatButtonToggleModule, MatButtonToggleChange } from '@angular/material/
               <mat-icon>desktop_windows</mat-icon>
             </mat-button-toggle>
           </mat-button-toggle-group>
-          <button mat-icon-button (click)="toggleTheme()" [title]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'">
+          <button
+            mat-icon-button
+            (click)="toggleTheme()"
+            [title]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+          >
             <mat-icon>{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
           </button>
         </div>
@@ -73,8 +81,6 @@ import { MatButtonToggleModule, MatButtonToggleChange } from '@angular/material/
         align-items: center;
         justify-content: space-between;
         padding: 0.5rem 1rem;
-        background-color: #1a1a1a;
-        color: #ffffff;
         border-bottom: 1px solid #333;
         height: 56px;
         gap: 1rem;
@@ -203,6 +209,6 @@ export class NavbarComponent {
   }
 
   toggleTheme() {
-    this.isDarkMode.update(value => !value);
+    this.isDarkMode.update((value) => !value);
   }
 }
