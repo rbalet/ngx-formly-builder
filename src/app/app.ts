@@ -11,43 +11,9 @@ import { PropertiesPanelComponent } from './components/properties-panel/properti
   styleUrl: './app.css',
 })
 export class App {
-  fields = signal<FormlyFieldConfig[]>([
-    {
-      key: 'name',
-      type: 'input',
-      props: {
-        label: 'Full Name',
-        placeholder: 'Enter your name',
-        required: true,
-      },
-    },
-    {
-      key: 'comments',
-      type: 'textarea',
-      props: {
-        label: 'Comments',
-        placeholder: 'Enter your comments',
-        rows: 5,
-      },
-    },
-    {
-      key: 'country',
-      type: 'select',
-      props: {
-        label: 'Country',
-        placeholder: 'Select country',
-        required: true,
-        options: [
-          { value: 'us', label: 'United States' },
-          { value: 'uk', label: 'United Kingdom' },
-          { value: 'ca', label: 'Canada' },
-          { value: 'au', label: 'Australia' },
-        ],
-      },
-    },
-  ]);
+  $fields = signal<FormlyFieldConfig[]>([]);
 
-  selectedField = signal<FormlyFieldConfig | null>(null);
+  $selectedField = signal<FormlyFieldConfig | null>(null);
 
   onFieldSelect(fieldType: string) {
     const newField: FormlyFieldConfig = {
@@ -70,7 +36,7 @@ export class App {
       newField.props!.rows = 5;
     }
 
-    this.fields.update((fields) => [...fields, newField]);
-    this.selectedField.set(newField);
+    this.$fields.update((fields) => [...fields, newField]);
+    this.$selectedField.set(newField);
   }
 }
