@@ -10,7 +10,7 @@ import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
   imports: [ReactiveFormsModule, FormlyModule, FormlyBootstrapModule, JsonPipe],
   template: `
     <div class="form-preview">
-      <h5 class="mb-3">Form Preview</h5>
+      <h5 class="mb-3 text-base font-semibold">Form Preview</h5>
       <form [formGroup]="form" class="mb-4">
         <formly-form
           [model]="$model()"
@@ -21,13 +21,13 @@ import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
       </form>
 
       @if (!$fields().length) {
-        <div class="alert alert-info">Please add a new component here</div>
+        <div class="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded">Please add a new component here</div>
       } @else {
-        <div class="card">
-          <div class="card-header">
+        <div class="border border-gray-200 rounded overflow-hidden">
+          <div class="bg-gray-50 border-b border-gray-200 px-4 py-2">
             <strong>Model JSON</strong>
           </div>
-          <div class="card-body">
+          <div class="p-4">
             <pre class="mb-0"><code>{{ $model() | json }}</code></pre>
           </div>
         </div>
@@ -43,7 +43,7 @@ import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
       }
 
       pre {
-        background-color: #f8f9fa;
+        background-color: #f9fafb;
         padding: 1rem;
         border-radius: 0.25rem;
         max-height: 300px;

@@ -3,17 +3,15 @@
   height: 100vh;
 }
 
-.container-fluid {
+.flex {
   display: flex;
-  flex-direction: column;
 }
 
-.main-content {
+.flex-1 {
   flex: 1;
-  overflow: hidden;
 }
 
-.main-content > div {
+.overflow-hidden > div {
   height: calc(100vh - 80px);
   overflow-y: auto;
 }

@@ -12,15 +12,15 @@ interface FieldType {
   imports: [],
   template: `
     <div class="field-palette">
-      <h5 class="mb-3">Field Types</h5>
-      <div class="list-group">
+      <h5 class="mb-3 text-base font-semibold">Field Types</h5>
+      <div class="space-y-1">
         @for (field of fieldTypes; track field.type) {
           <button
             type="button"
-            class="list-group-item list-group-item-action"
+            class="w-full text-left px-4 py-2 border border-gray-300 bg-white hover:bg-gray-50 active:bg-gray-100 rounded transition-colors"
             (click)="onFieldSelect(field.type)"
           >
-            <span class="me-2">{{ field.icon }}</span>
+            <span class="mr-2">{{ field.icon }}</span>
             {{ field.label }}
           </button>
         }
@@ -32,8 +32,8 @@ interface FieldType {
       .field-palette {
         padding: 1rem;
         height: 100%;
-        background-color: #f8f9fa;
-        border-right: 1px solid #dee2e6;
+        background-color: #f9fafb;
+        border-right: 1px solid #e5e7eb;
       }
     `,
   ],

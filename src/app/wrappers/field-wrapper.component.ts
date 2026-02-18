@@ -11,10 +11,10 @@ import { App } from '../app';
         <span class="field-type">{{ getFieldType() }}</span>
         <button
           type="button"
-          class="btn-close"
+          class="close-button"
           aria-label="Remove field"
           (click)="onRemove($event)"
-        ></button>
+        >×</button>
       </div>
       <ng-container #fieldComponent></ng-container>
     </div>
@@ -33,12 +33,12 @@ import { App } from '../app';
 
       .field-wrapper {
         &:hover {
-          border-color: #adb5bd;
+          border-color: #9ca3af;
           .field-type {
             opacity: 0.5;
           }
 
-          .btn-close {
+          .close-button {
             opacity: 0.5;
 
             &:hover {
@@ -48,13 +48,13 @@ import { App } from '../app';
         }
 
         &.selected {
-          border-color: #0d6efd;
-          background-color: rgba(13, 110, 253, 0.05);
+          border-color: #3b82f6;
+          background-color: rgba(59, 130, 246, 0.05);
           .field-type {
             opacity: 1;
           }
 
-          .btn-close {
+          .close-button {
             opacity: 0.5;
 
             &:hover {
@@ -78,15 +78,29 @@ import { App } from '../app';
 
       .field-type {
         font-size: 0.75rem;
-        color: #6c757d;
+        color: #6b7280;
         font-weight: 500;
         opacity: 0;
       }
 
-      .btn-close {
-        padding: 0.25rem;
-        font-size: 0.75rem;
+      .close-button {
+        padding: 0;
+        font-size: 1.25rem;
+        line-height: 1;
+        color: #6b7280;
+        background: transparent;
+        border: none;
         opacity: 0;
+        cursor: pointer;
+        width: 1.5rem;
+        height: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+          color: #ef4444;
+        }
       }
     `,
   ],

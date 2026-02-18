@@ -9,37 +9,37 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
   imports: [JsonPipe, FormsModule],
   template: `
     <div class="properties-panel">
-      <h5 class="mb-3">Field Properties</h5>
+      <h5 class="mb-3 text-base font-semibold">Field Properties</h5>
       @if ($selectedField()) {
         <div class="mb-3">
-          <label class="form-label">Label</label>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Label</label>
           <input
             type="text"
-            class="form-control"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             [ngModel]="getLabel()"
             (ngModelChange)="updateLabel($event)"
           />
         </div>
         <div class="mb-3">
-          <label class="form-label">Placeholder</label>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Placeholder</label>
           <input
             type="text"
-            class="form-control"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             [ngModel]="getPlaceholder()"
             (ngModelChange)="updatePlaceholder($event)"
           />
         </div>
-        <hr />
-        <div class="card">
-          <div class="card-header">
-            <small class="text-muted">Debug: Field Config</small>
+        <hr class="my-4 border-gray-200" />
+        <div class="border border-gray-200 rounded overflow-hidden">
+          <div class="bg-gray-50 border-b border-gray-200 px-4 py-2">
+            <small class="text-gray-500">Debug: Field Config</small>
           </div>
-          <div class="card-body">
+          <div class="p-4">
             <pre class="mb-0"><code>{{ $selectedField() | json }}</code></pre>
           </div>
         </div>
       } @else {
-        <div class="alert alert-info">Select a component to configure its properties</div>
+        <div class="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded">Select a component to configure its properties</div>
       }
     </div>
   `,
@@ -48,8 +48,8 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
       .properties-panel {
         padding: 1rem;
         height: 100%;
-        background-color: #f8f9fa;
-        border-left: 1px solid #dee2e6;
+        background-color: #f9fafb;
+        border-left: 1px solid #e5e7eb;
         overflow-y: auto;
       }
 
@@ -59,11 +59,6 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
         border-radius: 0.25rem;
         max-height: 300px;
         overflow-y: auto;
-      }
-
-      .form-label {
-        font-weight: 500;
-        margin-bottom: 0.5rem;
       }
     `,
   ],
