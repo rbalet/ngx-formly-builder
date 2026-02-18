@@ -77,18 +77,20 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
         color: #ffffff;
         border-bottom: 1px solid #333;
         height: 56px;
+        gap: 1rem;
       }
 
       .navbar-left {
         display: flex;
         align-items: center;
         gap: 0.75rem;
+        min-width: fit-content;
       }
 
       .logo-icon {
-        font-size: 24px;
-        width: 24px;
-        height: 24px;
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
       }
 
       .title-section {
@@ -99,64 +101,88 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
       .app-title {
         margin: 0;
-        font-size: 0.9rem;
+        font-size: 0.875rem;
         font-weight: 500;
         white-space: nowrap;
       }
 
       .alpha-badge {
         background-color: #444;
-        color: #ccc;
+        color: #aaa;
         padding: 0.125rem 0.375rem;
-        border-radius: 4px;
-        font-size: 0.7rem;
+        border-radius: 3px;
+        font-size: 0.65rem;
         font-weight: 500;
+        text-transform: uppercase;
       }
 
       .navbar-center {
         display: flex;
         align-items: center;
-        gap: 2rem;
+        gap: 1rem;
         flex: 1;
         justify-content: center;
+        max-width: 800px;
       }
 
       .menu-items {
         display: flex;
-        gap: 0.25rem;
+        gap: 0rem;
       }
 
       .menu-item {
         color: #ffffff;
-        font-size: 0.875rem;
+        font-size: 0.813rem;
+        min-width: auto;
+        padding: 0 0.75rem;
       }
 
       .navbar-controls {
         display: flex;
         align-items: center;
-        gap: 0.25rem;
+        gap: 0.125rem;
       }
 
       .navbar-controls button {
+        color: #aaa;
+      }
+
+      .navbar-controls button:hover {
         color: #ffffff;
       }
 
+      .navbar-controls mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+
       .screen-size-toggle {
-        height: 36px;
+        height: 32px;
+        margin-left: 0.25rem;
       }
 
       .navbar-right {
         display: flex;
         align-items: center;
         gap: 0.5rem;
+        min-width: fit-content;
       }
 
       .preview-button {
         color: #ffffff;
+        font-size: 0.875rem;
       }
 
       .preview-button mat-icon {
         margin-right: 0.25rem;
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+
+      .export-button {
+        font-size: 0.875rem;
       }
 
       .export-button mat-icon {
