@@ -17,9 +17,17 @@ export class FormBuilderService {
   }
 
   duplicateField(field: FormlyFieldConfig) {
+    // Validate that field has a key
+    if (!field.key) {
+      console.error('Cannot duplicate field without a key');
+      return;
+    }
+
     // Deep copy the field to avoid shared references
     const duplicatedField: FormlyFieldConfig = structuredClone(field);
-    duplicatedField.key = `${field.key}_copy_${Date.now()}`;
+    // Use crypto.randomUUID() for robust unique key generation
+    const uniqueId = crypto.randomUUID().slice(0, 8);
+    duplicatedField.key = `${field.key}_copy_${uniqueId}`;
 
     this.$fields.update((fields) => [...fields, duplicatedField]);
     this.$selectedField.set(duplicatedField);
