@@ -160,7 +160,7 @@ export class PropertiesPanelComponent {
       if (!field.props) {
         field.props = {};
       }
-      field.props.description = value || undefined;
+      field.props.description = value === '' ? undefined : value;
       this.fieldUpdated.emit();
     }
   }
@@ -176,7 +176,7 @@ export class PropertiesPanelComponent {
   updateDefaultValue(value: string) {
     const field = this.$selectedField();
     if (field) {
-      field.defaultValue = value || undefined;
+      field.defaultValue = value === '' ? undefined : value;
       this.fieldUpdated.emit();
     }
   }
