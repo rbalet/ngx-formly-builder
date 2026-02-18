@@ -1,4 +1,5 @@
 import { Component, output } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 
 interface FieldType {
@@ -10,15 +11,15 @@ interface FieldType {
 @Component({
   selector: 'app-field-palette',
   standalone: true,
-  imports: [MatListModule],
+  imports: [MatListModule, MatIconModule],
   template: `
     <div class="field-palette">
       <h5 class="mb-3">Field Types</h5>
       <mat-action-list>
         @for (field of fieldTypes; track field.type) {
           <button mat-list-item (click)="onFieldSelect(field.type)">
+            <mat-icon matListItemIcon>{{ field.icon }}</mat-icon>
             <span matListItemTitle>
-              <span class="me-2">{{ field.icon }}</span>
               {{ field.label }}
             </span>
           </button>
@@ -45,14 +46,14 @@ export class FieldPaletteComponent {
   fieldSelect = output<string>();
 
   fieldTypes: FieldType[] = [
-    { type: 'input', label: 'Text Input', icon: '📝' },
-    { type: 'textarea', label: 'Textarea', icon: '📄' },
-    { type: 'number', label: 'Number', icon: '🔢' },
-    { type: 'email', label: 'Email', icon: '✉️' },
-    { type: 'password', label: 'Password', icon: '🔐' },
-    { type: 'telephone', label: 'Telephone', icon: '☎️' },
-    { type: 'url', label: 'URL', icon: '🔗' },
-    { type: 'select', label: 'Select', icon: '📋' },
+    { type: 'input', label: 'Text Input', icon: 'input' },
+    { type: 'textarea', label: 'Textarea', icon: 'description' },
+    { type: 'number', label: 'Number', icon: 'numbers' },
+    { type: 'email', label: 'Email', icon: 'email' },
+    { type: 'password', label: 'Password', icon: 'lock' },
+    { type: 'telephone', label: 'Telephone', icon: 'phone' },
+    { type: 'url', label: 'URL', icon: 'link' },
+    { type: 'select', label: 'Select', icon: 'list' },
   ];
 
   onFieldSelect(type: string) {
