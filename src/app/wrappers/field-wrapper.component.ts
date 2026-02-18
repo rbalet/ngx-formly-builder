@@ -60,7 +60,6 @@ import { App } from '../app';
         font-size: 0.75rem;
         color: #6c757d;
         font-weight: 500;
-        text-transform: lowercase;
       }
 
       .btn-close {
