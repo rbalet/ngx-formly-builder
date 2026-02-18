@@ -1,5 +1,5 @@
-import { Component, input } from '@angular/core';
 import { JsonPipe } from '@angular/common';
+import { Component, input } from '@angular/core';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 
 @Component({
@@ -16,7 +16,7 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
           </div>
         </div>
       } @else {
-        <div class="alert alert-info">Select a field from the palette to add it to the form.</div>
+        <div class="alert alert-info">Select a component to configure its properties</div>
       }
     </div>
   `,

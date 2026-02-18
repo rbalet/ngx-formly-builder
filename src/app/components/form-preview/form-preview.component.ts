@@ -20,14 +20,18 @@ import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
         ></formly-form>
       </form>
 
-      <div class="card">
-        <div class="card-header">
-          <strong>Model JSON</strong>
+      @if (!$fields().length) {
+        <div class="alert alert-info">Please add a new component here</div>
+      } @else {
+        <div class="card">
+          <div class="card-header">
+            <strong>Model JSON</strong>
+          </div>
+          <div class="card-body">
+            <pre class="mb-0"><code>{{ $model() | json }}</code></pre>
+          </div>
         </div>
-        <div class="card-body">
-          <pre class="mb-0"><code>{{ $model() | json }}</code></pre>
-        </div>
-      </div>
+      }
     </div>
   `,
   styles: [
