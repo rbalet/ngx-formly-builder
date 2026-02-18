@@ -10,7 +10,6 @@ interface FieldType {
 
 @Component({
   selector: 'app-field-palette',
-  standalone: true,
   imports: [MatListModule, MatIconModule],
   template: `
     <div class="field-palette">

@@ -2,12 +2,11 @@ import { JsonPipe } from '@angular/common';
 import { Component, input, model, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
-import { FormlyMaterialModule } from '@ngx-formly/material';
 import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
+import { FormlyMaterialModule } from '@ngx-formly/material';
 
 @Component({
   selector: 'app-form-preview',
-  standalone: true,
   imports: [ReactiveFormsModule, FormlyModule, FormlyMaterialModule, JsonPipe, MatCardModule],
   template: `
     <div class="form-preview">

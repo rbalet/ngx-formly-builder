@@ -1,23 +1,17 @@
 import { Component, inject } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { FieldWrapper } from '@ngx-formly/core';
 import { App } from '../app';
 
 @Component({
   selector: 'formly-wrapper-field',
-  standalone: true,
   imports: [MatIconModule, MatButtonModule],
   template: `
     <div class="field-wrapper" [class.selected]="isSelected()" (click)="onFieldClick($event)">
       <div class="field-header">
         <span class="field-type">{{ getFieldType() }}</span>
-        <button
-          mat-icon-button
-          type="button"
-          aria-label="Remove field"
-          (click)="onRemove($event)"
-        >
+        <button mat-icon-button type="button" aria-label="Remove field" (click)="onRemove($event)">
           <mat-icon>close</mat-icon>
         </button>
       </div>

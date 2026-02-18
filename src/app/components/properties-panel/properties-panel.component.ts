@@ -2,13 +2,12 @@ import { JsonPipe } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
-import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 
 @Component({
   selector: 'app-properties-panel',
-  standalone: true,
   imports: [JsonPipe, FormsModule, MatCardModule, MatInputModule, MatFormFieldModule],
   template: `
     <div class="properties-panel">
