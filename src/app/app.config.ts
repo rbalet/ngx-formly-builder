@@ -23,7 +23,7 @@ import { FormlyMatRadioModule } from '@ngx-formly/material/radio';
 import { FormlyMatSelectModule } from '@ngx-formly/material/select';
 import { FormlyMatTextAreaModule } from '@ngx-formly/material/textarea';
 import { FormlyMatToggleModule } from '@ngx-formly/material/toggle';
-import { SCREEN_SIZE } from './core/token';
+import { PREVIEW_MODE, SCREEN_SIZE } from './core/token';
 import { FieldWrapperComponent } from './wrappers/field-wrapper.component';
 
 export const appConfig: ApplicationConfig = {
@@ -35,6 +35,7 @@ export const appConfig: ApplicationConfig = {
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' } },
 
     { provide: SCREEN_SIZE, useValue: signal('lg') },
+    { provide: PREVIEW_MODE, useValue: signal(false) },
 
     provideZonelessChangeDetection(),
     provideBrowserGlobalErrorListeners(),

@@ -3,7 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { SCREEN_SIZE } from '../../core/token';
+import { PREVIEW_MODE, SCREEN_SIZE } from '../../core/token';
 import { FormBuilderService } from '../../services/form-builder.service';
 import { ColorScheme, ThemeService } from '../../services/theme.service';
 
@@ -23,32 +23,36 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
 
       <!-- Center Section -->
       <div class="navbar-center">
-        <div class="menu-items">
-          <button mat-button class="menu-item">File</button>
-          <button mat-button class="menu-item" [matMenuTriggerFor]="editMenu">Edit</button>
-          <mat-menu #editMenu="matMenu">
-            <button
-              mat-menu-item
-              [disabled]="!formBuilderService.$selectedField()"
-              (click)="onDuplicate()"
-            >
-              <mat-icon>content_copy</mat-icon>
-              <span>Duplicate</span>
-            </button>
-          </mat-menu>
-          <!-- <button mat-button class="menu-item">View</button>
-          <button mat-button class="menu-item">Help</button> -->
-        </div>
+        @if (!$previewMode()) {
+          <div class="menu-items">
+            <button mat-button class="menu-item">File</button>
+            <button mat-button class="menu-item" [matMenuTriggerFor]="editMenu">Edit</button>
+            <mat-menu #editMenu="matMenu">
+              <button
+                mat-menu-item
+                [disabled]="!formBuilderService.$selectedField()"
+                (click)="onDuplicate()"
+              >
+                <mat-icon>content_copy</mat-icon>
+                <span>Duplicate</span>
+              </button>
+            </mat-menu>
+            <!-- <button mat-button class="menu-item">View</button>
+            <button mat-button class="menu-item">Help</button> -->
+          </div>
+        }
 
         <div class="navbar-controls">
-          <div class="left-controls">
-            <button mat-icon-button title="Undo">
-              <mat-icon>undo</mat-icon>
-            </button>
-            <button mat-icon-button title="Redo">
-              <mat-icon>redo</mat-icon>
-            </button>
-          </div>
+          @if (!$previewMode()) {
+            <div class="left-controls">
+              <button mat-icon-button title="Undo">
+                <mat-icon>undo</mat-icon>
+              </button>
+              <button mat-icon-button title="Redo">
+                <mat-icon>redo</mat-icon>
+              </button>
+            </div>
+          }
 
           <div class="right-controls">
             <mat-button-toggle-group
@@ -94,14 +98,21 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
 
       <!-- Right Section -->
       <div class="navbar-right">
-        <button mat-button class="preview-button">
-          <mat-icon>play_arrow</mat-icon>
-          Preview
-        </button>
-        <button mat-raised-button color="primary" class="export-button">
-          <mat-icon>open_in_new</mat-icon>
-          Export
-        </button>
+        @if (!$previewMode()) {
+          <button mat-button class="preview-button" (click)="togglePreviewMode()">
+            <mat-icon>play_arrow</mat-icon>
+            Preview
+          </button>
+          <button mat-raised-button color="primary" class="export-button">
+            <mat-icon>open_in_new</mat-icon>
+            Export
+          </button>
+        } @else {
+          <button mat-stroked-button class="exit-preview-button" (click)="togglePreviewMode()">
+            <mat-icon>close</mat-icon>
+            Exit Preview
+          </button>
+        }
       </div>
     </header>
   `,
@@ -133,7 +144,6 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
         gap: 1rem;
         padding: 0 1rem;
         flex: 1;
-        justify-content: center;
         justify-content: space-between;
         flex-grow: 1;
         height: 64px;
@@ -233,6 +243,17 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
           height: 18px;
         }
       }
+
+      .exit-preview-button {
+        font-size: 0.875rem;
+
+        mat-icon {
+          margin-right: 0.25rem;
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+        }
+      }
     `,
   ],
 })
@@ -240,6 +261,7 @@ export class NavbarComponent {
   readonly formBuilderService = inject(FormBuilderService);
   readonly themeService = inject(ThemeService);
   readonly $screenSize = inject(SCREEN_SIZE);
+  readonly $previewMode = inject(PREVIEW_MODE);
 
   // Expose color scheme from theme service
   get colorScheme() {
@@ -272,5 +294,9 @@ export class NavbarComponent {
     if (selectedField) {
       this.formBuilderService.duplicateField(selectedField);
     }
+  }
+
+  togglePreviewMode() {
+    this.$previewMode.set(!this.$previewMode());
   }
 }
