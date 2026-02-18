@@ -8,20 +8,6 @@
   flex-direction: column;
 }
 
-header {
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.h3 {
-  font-size: 1.5rem;
-  font-weight: 500;
-}
-
-.border-bottom {
-  border-bottom: 1px solid #e0e0e0;
-}
-
 .main-content {
   flex: 1;
   display: flex;
@@ -31,19 +17,19 @@ header {
 .palette-section {
   width: 25%;
   min-width: 250px;
-  height: calc(100vh - 80px);
+  height: calc(100vh - 56px);
   overflow-y: auto;
 }
 
 .preview-section {
   flex: 1;
-  height: calc(100vh - 80px);
+  height: calc(100vh - 56px);
   overflow-y: auto;
 }
 
 .properties-section {
   width: 25%;
   min-width: 250px;
-  height: calc(100vh - 80px);
+  height: calc(100vh - 56px);
   overflow-y: auto;
 }
