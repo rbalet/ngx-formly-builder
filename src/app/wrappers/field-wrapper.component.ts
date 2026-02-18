@@ -6,11 +6,7 @@ import { App } from '../app';
   selector: 'formly-wrapper-field',
   standalone: true,
   template: `
-    <div
-      class="field-wrapper"
-      [class.selected]="isSelected()"
-      (click)="onFieldClick($event)"
-    >
+    <div class="field-wrapper" [class.selected]="isSelected()" (click)="onFieldClick($event)">
       <div class="field-header">
         <span class="field-type">{{ getFieldType() }}</span>
         <button
@@ -27,21 +23,45 @@ import { App } from '../app';
     `
       .field-wrapper {
         position: relative;
-        padding: 2rem 1rem 1rem 1rem;
+        padding: 0.25rem;
         margin-bottom: 1rem;
-        border: 2px solid #dee2e6;
+        border: 2px solid transparent;
         border-radius: 0.25rem;
         cursor: pointer;
         transition: all 0.2s ease;
       }
 
-      .field-wrapper:hover {
-        border-color: #adb5bd;
-      }
+      .field-wrapper {
+        &:hover {
+          border-color: #adb5bd;
+          .field-type {
+            opacity: 0.5;
+          }
 
-      .field-wrapper.selected {
-        border-color: #0d6efd;
-        background-color: rgba(13, 110, 253, 0.05);
+          .btn-close {
+            opacity: 0.5;
+
+            &:hover {
+              opacity: 1;
+            }
+          }
+        }
+
+        &.selected {
+          border-color: #0d6efd;
+          background-color: rgba(13, 110, 253, 0.05);
+          .field-type {
+            opacity: 1;
+          }
+
+          .btn-close {
+            opacity: 0.5;
+
+            &:hover {
+              opacity: 1;
+            }
+          }
+        }
       }
 
       .field-header {
@@ -52,24 +72,21 @@ import { App } from '../app';
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0.25rem 0.5rem;
         background-color: transparent;
+        transform: translateY(-100%);
       }
 
       .field-type {
         font-size: 0.75rem;
         color: #6c757d;
         font-weight: 500;
+        opacity: 0;
       }
 
       .btn-close {
         padding: 0.25rem;
         font-size: 0.75rem;
-        opacity: 0.5;
-      }
-
-      .btn-close:hover {
-        opacity: 1;
+        opacity: 0;
       }
     `,
   ],
@@ -104,16 +121,16 @@ export class FieldWrapperComponent extends FieldWrapper {
 
   onRemove(event: MouseEvent): void {
     event.stopPropagation();
-    
+
     // Remove this field from the fields array
     this.app.$fields.update((fields) => {
       const filtered = fields.filter((f) => f !== this.field);
-      
+
       // If the removed field was selected, clear selection
       if (this.isSelected()) {
         this.app.$selectedField.set(null);
       }
-      
+
       return filtered;
     });
   }
