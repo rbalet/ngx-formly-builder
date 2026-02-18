@@ -16,14 +16,30 @@ export class App {
   $selectedField = signal<FormlyFieldConfig | null>(null);
 
   onFieldSelect(fieldType: string) {
+    // Field types that use the 'input' Formly type with specific HTML input types
+    const inputFieldTypes = ['number', 'email', 'password', 'telephone', 'url'];
+    
+    // Map field types to Formly type and HTML input type
+    let formlyType = fieldType;
+    let inputType: string | undefined;
+
+    if (inputFieldTypes.includes(fieldType)) {
+      formlyType = 'input';
+      inputType = fieldType === 'telephone' ? 'tel' : fieldType;
+    }
+
     const newField: FormlyFieldConfig = {
       key: `field_${Date.now()}`,
-      type: fieldType,
+      type: formlyType,
       props: {
         label: `New ${fieldType.charAt(0).toUpperCase() + fieldType.slice(1)}`,
         placeholder: `Enter ${fieldType}`,
       },
     };
+
+    if (inputType) {
+      newField.props!.type = inputType;
+    }
 
     if (fieldType === 'select') {
       newField.props!.options = [

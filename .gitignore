@@ -10,6 +10,7 @@
 /node_modules
 npm-debug.log
 yarn-error.log
+package-lock.json
 
 # IDEs and editors
 .idea/
@@ -22,6 +23,7 @@ yarn-error.log
 
 # Visual Studio Code
 .vscode/*
+!.vscode/cspell.json
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
