@@ -40,6 +40,7 @@ import { MatMenuModule } from '@angular/material/menu';
             [value]="screenSize()"
             (change)="onScreenSizeChange($event)"
             class="screen-size-toggle"
+            hideSingleSelectionIndicator
           >
             <mat-button-toggle value="sm" title="Small screen">
               <mat-icon>smartphone</mat-icon>
