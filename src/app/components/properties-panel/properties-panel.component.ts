@@ -1,18 +1,53 @@
 import { JsonPipe } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 
 @Component({
   selector: 'app-properties-panel',
-  imports: [JsonPipe, FormsModule, MatCardModule, MatInputModule, MatFormFieldModule],
+  imports: [
+    JsonPipe,
+    FormsModule,
+    MatCardModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatIconModule,
+  ],
   template: `
     <div class="properties-panel">
       <h5 class="mb-3">Field Properties</h5>
       @if ($selectedField()) {
+        @if (hasOptions()) {
+          <div class="data-options-section mb-4">
+            <h6 class="section-title">Data Options</h6>
+            <div class="options-table">
+              <div class="table-header">
+                <div class="table-cell">Label</div>
+                <div class="table-cell">Value</div>
+              </div>
+              @for (option of getOptions(); track $index) {
+                <div class="table-row">
+                  <div class="table-cell">{{ option.label }}</div>
+                  <div class="table-cell">{{ option.value }}</div>
+                </div>
+              }
+            </div>
+            <button
+              mat-stroked-button
+              class="full-width mt-2 manage-options-btn"
+            >
+              <mat-icon>list</mat-icon>
+              Manage Options
+            </button>
+          </div>
+          <hr />
+        }
         <mat-form-field class="full-width mb-3">
           <mat-label>Label</mat-label>
           <input
@@ -101,12 +136,104 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
         border: 0;
         border-top: 1px solid #e0e0e0;
       }
+
+      .data-options-section {
+        background-color: #ffffff;
+        padding: 1rem;
+        border-radius: 0.25rem;
+        border: 1px solid #e0e0e0;
+      }
+
+      .section-title {
+        margin: 0 0 1rem 0;
+        font-size: 1rem;
+        font-weight: 500;
+      }
+
+      .options-table {
+        border: 1px solid #e0e0e0;
+        border-radius: 0.25rem;
+        overflow: hidden;
+      }
+
+      .table-header {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        background-color: #f5f5f5;
+        font-weight: 500;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .table-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .table-row:last-child {
+        border-bottom: none;
+      }
+
+      .table-cell {
+        padding: 0.75rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .table-header .table-cell {
+        border-right: 1px solid #e0e0e0;
+      }
+
+      .table-header .table-cell:last-child,
+      .table-row .table-cell:last-child {
+        border-right: none;
+      }
+
+      .table-row .table-cell {
+        border-right: 1px solid #e0e0e0;
+      }
+
+      .manage-options-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+
+      .mt-2 {
+        margin-top: 0.5rem;
+      }
+
+      .mb-3 {
+        margin-bottom: 1rem;
+      }
+
+      .mb-4 {
+        margin-bottom: 1.5rem;
+      }
     `,
   ],
 })
 export class PropertiesPanelComponent {
   $selectedField = input<FormlyFieldConfig | null>(null);
   fieldUpdated = output<void>();
+
+  hasOptions(): boolean {
+    const field = this.$selectedField();
+    if (!field || !field.props) {
+      return false;
+    }
+    return Array.isArray(field.props.options) && field.props.options.length > 0;
+  }
+
+  getOptions(): Array<{ label: string; value: string | number }> {
+    const field = this.$selectedField();
+    if (!field || !field.props || !Array.isArray(field.props.options)) {
+      return [];
+    }
+    return field.props.options as Array<{ label: string; value: string | number }>;
+  }
 
   getLabel(): string {
     const field = this.$selectedField();
