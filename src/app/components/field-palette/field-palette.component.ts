@@ -44,6 +44,11 @@ export class FieldPaletteComponent {
   fieldTypes: FieldType[] = [
     { type: 'input', label: 'Text Input', icon: '📝' },
     { type: 'textarea', label: 'Textarea', icon: '📄' },
+    { type: 'number', label: 'Number', icon: '🔢' },
+    { type: 'email', label: 'Email', icon: '✉️' },
+    { type: 'password', label: 'Password', icon: '🔐' },
+    { type: 'telephone', label: 'Telephone', icon: '☎️' },
+    { type: 'url', label: 'URL', icon: '🔗' },
     { type: 'select', label: 'Select', icon: '📋' },
   ];
 
