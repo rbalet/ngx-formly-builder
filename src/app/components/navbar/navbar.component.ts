@@ -2,7 +2,7 @@ import { Component, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatButtonToggleModule, MatButtonToggleChange } from '@angular/material/button-toggle';
 
 @Component({
   selector: 'app-navbar',
@@ -198,7 +198,7 @@ export class NavbarComponent {
   screenSize = signal<'sm' | 'md' | 'lg'>('lg');
   isDarkMode = signal<boolean>(true);
 
-  onScreenSizeChange(event: any) {
+  onScreenSizeChange(event: MatButtonToggleChange) {
     this.screenSize.set(event.value);
   }
 
