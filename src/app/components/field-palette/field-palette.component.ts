@@ -42,8 +42,8 @@ interface FieldGroup {
     `
       .field-palette {
         padding: 1rem;
-        background-color: #fafafa;
-        border-right: 1px solid #e0e0e0;
+        background-color: var(--mat-sys-surface-container-lowest);
+        border-right: 1px solid var(--mat-sys-outline-variant);
       }
 
       .field-group {
@@ -58,7 +58,7 @@ interface FieldGroup {
         padding: 0.5rem 1rem;
         font-size: 0.875rem;
         font-weight: 600;
-        color: #666;
+        color: var(--mat-sys-on-surface-variant);
         text-transform: uppercase;
         letter-spacing: 0.05em;
         margin-bottom: 0.5rem;
@@ -67,13 +67,13 @@ interface FieldGroup {
       .field-label {
         font-size: 0.9375rem;
         font-weight: 500;
-        color: #333;
+        color: var(--mat-sys-on-surface);
         margin-bottom: 0.125rem;
       }
 
       .field-description {
         font-size: 0.8125rem;
-        color: #666;
+        color: var(--mat-sys-on-surface-variant);
         line-height: 1.3;
       }
 
