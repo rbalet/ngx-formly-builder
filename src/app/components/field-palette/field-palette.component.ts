@@ -53,6 +53,11 @@ export class FieldPaletteComponent {
     { type: 'telephone', label: 'Telephone', icon: 'phone' },
     { type: 'url', label: 'URL', icon: 'link' },
     { type: 'select', label: 'Select', icon: 'list' },
+    { type: 'checkbox', label: 'Checkbox', icon: 'check_box' },
+    { type: 'multicheckbox', label: 'Checkbox Group', icon: 'checklist' },
+    { type: 'radio', label: 'Radio Group', icon: 'radio_button_checked' },
+    { type: 'toggle', label: 'Toggle', icon: 'toggle_on' },
+    { type: 'datepicker', label: 'Date Picker', icon: 'calendar_today' },
   ];
 
   onFieldSelect(type: string) {

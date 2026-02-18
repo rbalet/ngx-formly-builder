@@ -74,6 +74,23 @@ export class App {
       newField.props!.rows = 5;
     }
 
+    if (fieldType === 'multicheckbox' || fieldType === 'radio') {
+      newField.props!.options = [
+        { value: 'option1', label: 'Option 1' },
+        { value: 'option2', label: 'Option 2' },
+        { value: 'option3', label: 'Option 3' },
+      ];
+    }
+
+    if (fieldType === 'checkbox' || fieldType === 'toggle') {
+      newField.props!.label = `New ${fieldType.charAt(0).toUpperCase() + fieldType.slice(1)}`;
+      delete newField.props!.placeholder;
+    }
+
+    if (fieldType === 'datepicker') {
+      newField.props!.placeholder = 'Select a date';
+    }
+
     this.$fields.update((fields) => [...fields, newField]);
     this.$selectedField.set(newField);
   }
