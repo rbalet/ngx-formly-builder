@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormlyFieldConfig } from '@ngx-formly/core';
-import { NavbarComponent } from './components/navbar/navbar.component';
 import { FieldPaletteComponent } from './components/field-palette/field-palette.component';
 import { FormPreviewComponent } from './components/form-preview/form-preview.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 import { PropertiesPanelComponent } from './components/properties-panel/properties-panel.component';
+import { SCREEN_SIZE } from './core/token';
 import { FormBuilderService } from './services/form-builder.service';
 
 @Component({
@@ -13,16 +14,19 @@ import { FormBuilderService } from './services/form-builder.service';
   styleUrl: './app.css',
 })
 export class App {
+  readonly $screenSize = inject(SCREEN_SIZE);
+  readonly #formBuilderService = inject(FormBuilderService);
+
   // Expose service signals for template use
   $fields;
   $selectedField;
 
-  constructor(private formBuilderService: FormBuilderService) {
-    this.$fields = this.formBuilderService.$fields;
-    this.$selectedField = this.formBuilderService.$selectedField;
+  constructor() {
+    this.$fields = this.#formBuilderService.$fields;
+    this.$selectedField = this.#formBuilderService.$selectedField;
 
     // Initialize with default fields
-    this.formBuilderService.$fields.set([
+    this.#formBuilderService.$fields.set([
       {
         key: 'firstName',
         type: 'input',
@@ -101,12 +105,12 @@ export class App {
       newField.props!.placeholder = 'Select a date';
     }
 
-    this.formBuilderService.addField(newField);
-    this.formBuilderService.$selectedField.set(newField);
+    this.#formBuilderService.addField(newField);
+    this.#formBuilderService.$selectedField.set(newField);
   }
 
   onFieldUpdated() {
     // Force update of fields array to trigger change detection
-    this.formBuilderService.updateFields();
+    this.#formBuilderService.updateFields();
   }
 }
