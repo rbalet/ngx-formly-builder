@@ -6,6 +6,7 @@ interface FieldType {
   type: string;
   label: string;
   icon: string;
+  description: string;
 }
 
 interface FieldGroup {
@@ -26,9 +27,10 @@ interface FieldGroup {
             @for (field of group.fields; track field.type) {
               <button mat-list-item (click)="onFieldSelect(field.type)">
                 <mat-icon matListItemIcon>{{ field.icon }}</mat-icon>
-                <span matListItemTitle>
-                  {{ field.label }}
-                </span>
+                <div matListItemTitle>
+                  <div class="field-label">{{ field.label }}</div>
+                  <div class="field-description">{{ field.description }}</div>
+                </div>
               </button>
             }
           </mat-action-list>
@@ -40,8 +42,8 @@ interface FieldGroup {
     `
       .field-palette {
         padding: 1rem;
-        background-color: #fafafa;
-        border-right: 1px solid #e0e0e0;
+        background-color: var(--mat-sys-surface-container-lowest);
+        border-right: 1px solid var(--mat-sys-outline-variant);
       }
 
       .field-group {
@@ -56,10 +58,23 @@ interface FieldGroup {
         padding: 0.5rem 1rem;
         font-size: 0.875rem;
         font-weight: 600;
-        color: #666;
+        color: var(--mat-sys-on-surface-variant);
         text-transform: uppercase;
         letter-spacing: 0.05em;
         margin-bottom: 0.5rem;
+      }
+
+      .field-label {
+        font-size: 0.9375rem;
+        font-weight: 500;
+        color: var(--mat-sys-on-surface);
+        margin-bottom: 0.125rem;
+      }
+
+      .field-description {
+        font-size: 0.8125rem;
+        color: var(--mat-sys-on-surface-variant);
+        line-height: 1.3;
       }
 
       .me-2 {
@@ -75,29 +90,54 @@ export class FieldPaletteComponent {
     {
       category: 'Input Fields',
       fields: [
-        { type: 'input', label: 'Text Input', icon: 'input' },
-        { type: 'textarea', label: 'Textarea', icon: 'description' },
-        { type: 'number', label: 'Number', icon: 'numbers' },
-        { type: 'email', label: 'Email', icon: 'email' },
-        { type: 'password', label: 'Password', icon: 'lock' },
-        { type: 'telephone', label: 'Telephone', icon: 'phone' },
-        { type: 'url', label: 'URL', icon: 'link' },
+        {
+          type: 'input',
+          label: 'Text Input',
+          icon: 'input',
+          description: 'Single line text input',
+        },
+        {
+          type: 'textarea',
+          label: 'Textarea',
+          icon: 'description',
+          description: 'Multi-line text input',
+        },
+        { type: 'number', label: 'Number', icon: 'numbers', description: 'Numeric input' },
+        { type: 'email', label: 'Email', icon: 'email', description: 'Email input' },
+        { type: 'password', label: 'Password', icon: 'lock', description: 'Password input' },
+        { type: 'telephone', label: 'Telephone', icon: 'phone', description: 'Phone number input' },
+        { type: 'url', label: 'URL', icon: 'link', description: 'Website URL input' },
       ],
     },
     {
       category: 'Selection Fields',
       fields: [
-        { type: 'select', label: 'Select', icon: 'list' },
-        { type: 'checkbox', label: 'Checkbox', icon: 'check_box' },
-        { type: 'multicheckbox', label: 'Checkbox Group', icon: 'checklist' },
-        { type: 'radio', label: 'Radio Group', icon: 'radio_button_checked' },
-        { type: 'toggle', label: 'Toggle', icon: 'toggle_on' },
+        { type: 'select', label: 'Select', icon: 'list', description: 'Dropdown select' },
+        { type: 'checkbox', label: 'Checkbox', icon: 'check_box', description: 'Single checkbox' },
+        {
+          type: 'multicheckbox',
+          label: 'Checkbox Group',
+          icon: 'checklist',
+          description: 'Multiple checkboxes',
+        },
+        {
+          type: 'radio',
+          label: 'Radio Group',
+          icon: 'radio_button_checked',
+          description: 'Radio button group',
+        },
+        { type: 'toggle', label: 'Toggle', icon: 'toggle_on', description: 'Toggle switch' },
       ],
     },
     {
       category: 'Date & Time',
       fields: [
-        { type: 'datepicker', label: 'Date Picker', icon: 'calendar_today' },
+        {
+          type: 'datepicker',
+          label: 'Date Picker',
+          icon: 'calendar_today',
+          description: 'Date picker',
+        },
       ],
     },
   ];
