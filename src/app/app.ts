@@ -1,12 +1,13 @@
 import { Component, signal } from '@angular/core';
 import { FormlyFieldConfig } from '@ngx-formly/core';
+import { NavbarComponent } from './components/navbar/navbar.component';
 import { FieldPaletteComponent } from './components/field-palette/field-palette.component';
 import { FormPreviewComponent } from './components/form-preview/form-preview.component';
 import { PropertiesPanelComponent } from './components/properties-panel/properties-panel.component';
 
 @Component({
   selector: 'app-root',
-  imports: [FieldPaletteComponent, FormPreviewComponent, PropertiesPanelComponent],
+  imports: [NavbarComponent, FieldPaletteComponent, FormPreviewComponent, PropertiesPanelComponent],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
