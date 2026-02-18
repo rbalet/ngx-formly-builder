@@ -4,8 +4,8 @@ import { FieldPaletteComponent } from './components/field-palette/field-palette.
 import { FormPreviewComponent } from './components/form-preview/form-preview.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { PropertiesPanelComponent } from './components/properties-panel/properties-panel.component';
+import { SCREEN_SIZE } from './core/token';
 import { FormBuilderService } from './services/form-builder.service';
-import { UiStateService } from './services/ui-state.service';
 
 @Component({
   selector: 'app-root',
@@ -14,8 +14,8 @@ import { UiStateService } from './services/ui-state.service';
   styleUrl: './app.css',
 })
 export class App {
-  #formBuilderService = inject(FormBuilderService);
-  #uiStateService = inject(UiStateService);
+  readonly $screenSize = inject(SCREEN_SIZE);
+  readonly #formBuilderService = inject(FormBuilderService);
 
   // Expose service signals for template use
   $fields;

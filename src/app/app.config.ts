@@ -3,6 +3,7 @@ import {
   importProvidersFrom,
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
+  signal,
 } from '@angular/core';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -22,6 +23,7 @@ import { FormlyMatRadioModule } from '@ngx-formly/material/radio';
 import { FormlyMatSelectModule } from '@ngx-formly/material/select';
 import { FormlyMatTextAreaModule } from '@ngx-formly/material/textarea';
 import { FormlyMatToggleModule } from '@ngx-formly/material/toggle';
+import { SCREEN_SIZE } from './core/token';
 import { FieldWrapperComponent } from './wrappers/field-wrapper.component';
 
 export const appConfig: ApplicationConfig = {
@@ -31,6 +33,8 @@ export const appConfig: ApplicationConfig = {
       useValue: { fontSet: 'material-symbols-outlined' },
     },
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' } },
+
+    { provide: SCREEN_SIZE, useValue: signal('lg') },
 
     provideZonelessChangeDetection(),
     provideBrowserGlobalErrorListeners(),

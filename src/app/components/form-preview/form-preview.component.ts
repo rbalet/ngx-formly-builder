@@ -4,7 +4,7 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
-import { ScreenSize } from '../../services/ui-state.service';
+import { ScreenSize } from '../../core/type';
 
 @Component({
   selector: 'app-form-preview',

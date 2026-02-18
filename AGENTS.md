@@ -8,11 +8,46 @@
 
 ## Service Injection Pattern
 
-- **Inject services using Angular's inject() function:**
-  ```ts
-  readonly #uiStateService = inject(UiStateService);
-  ```
+**Inject services using Angular's inject() function:**
+```ts
+readonly #uiStateService = inject(UiStateService);
+```
 - Do **not** use constructor injection for services. See AGENTS.md for rationale and examples.
+
+**If a service only exposes a single signal, prefer using an InjectionToken instead of a service.**
+
+### Example: Using InjectionToken for a single signal
+
+Define the token (see `src/app/core/token.ts`):
+```ts
+import { InjectionToken, WritableSignal } from '@angular/core';
+import { ScreenSize } from './type';
+
+export const SCREEN_SIZE = new InjectionToken<WritableSignal<ScreenSize>>(
+  'formly.builder.screen.size',
+);
+```
+
+Provide the token in your app config (see `src/app/app.config.ts`):
+```ts
+import { SCREEN_SIZE } from './core/token';
+import { signal } from '@angular/core';
+
+export const appConfig = {
+  providers: [
+    { provide: SCREEN_SIZE, useValue: signal('lg') },
+    // ...other providers
+  ],
+};
+```
+
+Inject the signal where needed:
+```ts
+import { inject } from '@angular/core';
+import { SCREEN_SIZE } from './core/token';
+
+const screenSize = inject(SCREEN_SIZE);
+```
 
 ## State Management
 

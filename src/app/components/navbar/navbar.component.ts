@@ -3,8 +3,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { SCREEN_SIZE } from '../../core/token';
 import { FormBuilderService } from '../../services/form-builder.service';
-import { UiStateService } from '../../services/ui-state.service';
 
 @Component({
   selector: 'app-navbar',
@@ -49,7 +49,7 @@ import { UiStateService } from '../../services/ui-state.service';
             <mat-icon>history</mat-icon>
           </button>
           <mat-button-toggle-group
-            [value]="screenSize()"
+            [value]="$screenSize()"
             (change)="onScreenSizeChange($event)"
             class="screen-size-toggle"
             hideSingleSelectionIndicator
@@ -215,16 +215,12 @@ import { UiStateService } from '../../services/ui-state.service';
 })
 export class NavbarComponent {
   readonly formBuilderService = inject(FormBuilderService);
-  readonly #uiStateService = inject(UiStateService);
+  readonly $screenSize = inject(SCREEN_SIZE);
 
   isDarkMode = signal<boolean>(true);
 
-  get screenSize() {
-    return this.#uiStateService.$screenSize;
-  }
-
   onScreenSizeChange(event: MatButtonToggleChange) {
-    this.#uiStateService.setScreenSize(event.value);
+    this.$screenSize.set(event.value);
   }
 
   toggleTheme() {
