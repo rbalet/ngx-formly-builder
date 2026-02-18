@@ -29,19 +29,19 @@ import { App } from '../app';
         position: relative;
         padding: 2rem 1rem 1rem 1rem;
         margin-bottom: 1rem;
-        border: 2px solid transparent;
+        border: 2px solid #dee2e6;
         border-radius: 0.25rem;
         cursor: pointer;
-        transition: border-color 0.2s ease;
+        transition: all 0.2s ease;
       }
 
       .field-wrapper:hover {
-        border-color: #dee2e6;
+        border-color: #adb5bd;
       }
 
       .field-wrapper.selected {
-        border-color: #fff;
-        background-color: rgba(255, 255, 255, 0.05);
+        border-color: #0d6efd;
+        background-color: rgba(13, 110, 253, 0.05);
       }
 
       .field-header {
