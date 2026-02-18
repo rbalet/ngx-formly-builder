@@ -6,6 +6,7 @@ interface FieldType {
   type: string;
   label: string;
   icon: string;
+  description: string;
 }
 
 interface FieldGroup {
@@ -26,9 +27,10 @@ interface FieldGroup {
             @for (field of group.fields; track field.type) {
               <button mat-list-item (click)="onFieldSelect(field.type)">
                 <mat-icon matListItemIcon>{{ field.icon }}</mat-icon>
-                <span matListItemTitle>
-                  {{ field.label }}
-                </span>
+                <div matListItemTitle>
+                  <div class="field-label">{{ field.label }}</div>
+                  <div class="field-description">{{ field.description }}</div>
+                </div>
               </button>
             }
           </mat-action-list>
@@ -62,6 +64,19 @@ interface FieldGroup {
         margin-bottom: 0.5rem;
       }
 
+      .field-label {
+        font-size: 0.9375rem;
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 0.125rem;
+      }
+
+      .field-description {
+        font-size: 0.8125rem;
+        color: #666;
+        line-height: 1.3;
+      }
+
       .me-2 {
         margin-right: 0.5rem;
       }
@@ -75,29 +90,29 @@ export class FieldPaletteComponent {
     {
       category: 'Input Fields',
       fields: [
-        { type: 'input', label: 'Text Input', icon: 'input' },
-        { type: 'textarea', label: 'Textarea', icon: 'description' },
-        { type: 'number', label: 'Number', icon: 'numbers' },
-        { type: 'email', label: 'Email', icon: 'email' },
-        { type: 'password', label: 'Password', icon: 'lock' },
-        { type: 'telephone', label: 'Telephone', icon: 'phone' },
-        { type: 'url', label: 'URL', icon: 'link' },
+        { type: 'input', label: 'Text Input', icon: 'input', description: 'Basic text input field for single-line text' },
+        { type: 'textarea', label: 'Textarea', icon: 'description', description: 'Multi-line text input field for longer content' },
+        { type: 'number', label: 'Number', icon: 'numbers', description: 'Input field for numeric values only' },
+        { type: 'email', label: 'Email', icon: 'email', description: 'Input field for email addresses with validation' },
+        { type: 'password', label: 'Password', icon: 'lock', description: 'Input field for passwords with hidden characters' },
+        { type: 'telephone', label: 'Telephone', icon: 'phone', description: 'Input field for phone numbers' },
+        { type: 'url', label: 'URL', icon: 'link', description: 'Input field for website URLs with validation' },
       ],
     },
     {
       category: 'Selection Fields',
       fields: [
-        { type: 'select', label: 'Select', icon: 'list' },
-        { type: 'checkbox', label: 'Checkbox', icon: 'check_box' },
-        { type: 'multicheckbox', label: 'Checkbox Group', icon: 'checklist' },
-        { type: 'radio', label: 'Radio Group', icon: 'radio_button_checked' },
-        { type: 'toggle', label: 'Toggle', icon: 'toggle_on' },
+        { type: 'select', label: 'Select', icon: 'list', description: 'Dropdown menu for selecting one option from a list' },
+        { type: 'checkbox', label: 'Checkbox', icon: 'check_box', description: 'Single checkbox for yes/no or true/false choices' },
+        { type: 'multicheckbox', label: 'Checkbox Group', icon: 'checklist', description: 'Multiple checkboxes for selecting multiple options' },
+        { type: 'radio', label: 'Radio Group', icon: 'radio_button_checked', description: 'Radio buttons for selecting one option from a group' },
+        { type: 'toggle', label: 'Toggle', icon: 'toggle_on', description: 'Toggle switch for on/off or enabled/disabled states' },
       ],
     },
     {
       category: 'Date & Time',
       fields: [
-        { type: 'datepicker', label: 'Date Picker', icon: 'calendar_today' },
+        { type: 'datepicker', label: 'Date Picker', icon: 'calendar_today', description: 'Calendar widget for selecting dates' },
       ],
     },
   ];
