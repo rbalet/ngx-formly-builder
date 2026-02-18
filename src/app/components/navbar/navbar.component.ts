@@ -1,10 +1,11 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { SCREEN_SIZE } from '../../core/token';
 import { FormBuilderService } from '../../services/form-builder.service';
+import { ColorScheme, ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-navbar',
@@ -66,11 +67,25 @@ import { FormBuilderService } from '../../services/form-builder.service';
           </mat-button-toggle-group>
           <button
             mat-icon-button
-            (click)="toggleTheme()"
-            [title]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+            [matMenuTriggerFor]="themeMenu"
+            [title]="'Color scheme: ' + colorScheme()"
           >
-            <mat-icon>{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+            <mat-icon>{{ themeIcon() }}</mat-icon>
           </button>
+          <mat-menu #themeMenu="matMenu">
+            <button mat-menu-item (click)="setColorScheme('light')">
+              <mat-icon>light_mode</mat-icon>
+              <span>Light</span>
+            </button>
+            <button mat-menu-item (click)="setColorScheme('dark')">
+              <mat-icon>dark_mode</mat-icon>
+              <span>Dark</span>
+            </button>
+            <button mat-menu-item (click)="setColorScheme('system')">
+              <mat-icon>computer</mat-icon>
+              <span>System</span>
+            </button>
+          </mat-menu>
         </div>
       </div>
 
@@ -120,15 +135,13 @@ import { FormBuilderService } from '../../services/form-builder.service';
 
       .app-title {
         margin: 0;
-        font-size: 0.875rem;
-        font-weight: 500;
         white-space: nowrap;
       }
 
       .alpha-badge {
         background-color: #444;
         color: #aaa;
-        padding: 0.125rem 0.375rem;
+        padding: 0.1rem 0.3rem;
         border-radius: 3px;
         font-size: 0.65rem;
         font-weight: 500;
@@ -150,7 +163,6 @@ import { FormBuilderService } from '../../services/form-builder.service';
       }
 
       .menu-item {
-        color: #ffffff;
         font-size: 0.813rem;
         min-width: auto;
         padding: 0 0.75rem;
@@ -161,12 +173,8 @@ import { FormBuilderService } from '../../services/form-builder.service';
         align-items: center;
         gap: 0.125rem;
 
-        button {
+        .navbar-controls button {
           color: #aaa;
-
-          &:hover {
-            color: #ffffff;
-          }
         }
 
         mat-icon {
@@ -189,7 +197,6 @@ import { FormBuilderService } from '../../services/form-builder.service';
       }
 
       .preview-button {
-        color: #ffffff;
         font-size: 0.875rem;
 
         mat-icon {
@@ -215,16 +222,33 @@ import { FormBuilderService } from '../../services/form-builder.service';
 })
 export class NavbarComponent {
   readonly formBuilderService = inject(FormBuilderService);
+  readonly themeService = inject(ThemeService);
   readonly $screenSize = inject(SCREEN_SIZE);
 
-  isDarkMode = signal<boolean>(true);
+  // Expose color scheme from theme service
+  get colorScheme() {
+    return this.themeService.colorScheme;
+  }
+
+  // Compute the icon to display based on current color scheme
+  themeIcon = computed(() => {
+    const scheme = this.themeService.colorScheme();
+    switch (scheme) {
+      case 'light':
+        return 'light_mode';
+      case 'dark':
+        return 'dark_mode';
+      case 'system':
+        return 'computer';
+    }
+  });
 
   onScreenSizeChange(event: MatButtonToggleChange) {
     this.$screenSize.set(event.value);
   }
 
-  toggleTheme() {
-    this.isDarkMode.update((value) => !value);
+  setColorScheme(scheme: ColorScheme) {
+    this.themeService.setColorScheme(scheme);
   }
 
   onDuplicate() {

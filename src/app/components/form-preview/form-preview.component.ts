@@ -75,7 +75,6 @@ import { ScreenSize } from '../../core/type';
       }
 
       pre {
-        background-color: #f5f5f5;
         padding: 1rem;
         border-radius: 0.25rem;
         max-height: 300px;

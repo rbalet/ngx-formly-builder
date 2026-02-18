@@ -9,8 +9,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import {
-  OptionsEditorDialogComponent,
   OptionItem,
+  OptionsEditorDialogComponent,
 } from '../options-editor-dialog/options-editor-dialog.component';
 
 @Component({
@@ -115,7 +115,7 @@ import {
       .properties-panel {
         padding: 1rem;
         height: 100%;
-        background-color: #fafafa;
+        background-color: var(--mat-sys-surface-container-lowest);
         border-left: 1px solid #e0e0e0;
         overflow-y: auto;
       }
@@ -130,7 +130,6 @@ import {
       }
 
       pre {
-        background-color: #ffffff;
         padding: 1rem;
         border-radius: 0.25rem;
         max-height: 300px;
@@ -144,7 +143,6 @@ import {
       }
 
       .data-options-section {
-        background-color: #ffffff;
         padding: 1rem;
         border-radius: 0.25rem;
         border: 1px solid #e0e0e0;
@@ -165,7 +163,6 @@ import {
       .table-header {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        background-color: #f5f5f5;
         font-weight: 500;
         border-bottom: 1px solid #e0e0e0;
       }
