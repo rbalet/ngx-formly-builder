@@ -15,7 +15,10 @@
       ></app-form-preview>
     </div>
     <div class="col-md-3">
-      <app-properties-panel [$selectedField]="$selectedField()"></app-properties-panel>
+      <app-properties-panel
+        [$selectedField]="$selectedField()"
+        (fieldUpdated)="onFieldUpdated()"
+      ></app-properties-panel>
     </div>
   </div>
 </div>

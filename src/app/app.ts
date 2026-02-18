@@ -77,4 +77,9 @@ export class App {
     this.$fields.update((fields) => [...fields, newField]);
     this.$selectedField.set(newField);
   }
+
+  onFieldUpdated() {
+    // Force update of fields array to trigger change detection
+    this.$fields.update((fields) => [...fields]);
+  }
 }
