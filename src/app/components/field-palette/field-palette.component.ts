@@ -90,29 +90,54 @@ export class FieldPaletteComponent {
     {
       category: 'Input Fields',
       fields: [
-        { type: 'input', label: 'Text Input', icon: 'input', description: 'Basic text input field for single-line text' },
-        { type: 'textarea', label: 'Textarea', icon: 'description', description: 'Multi-line text input field for longer content' },
-        { type: 'number', label: 'Number', icon: 'numbers', description: 'Input field for numeric values only' },
-        { type: 'email', label: 'Email', icon: 'email', description: 'Input field for email addresses with validation' },
-        { type: 'password', label: 'Password', icon: 'lock', description: 'Input field for passwords with hidden characters' },
-        { type: 'telephone', label: 'Telephone', icon: 'phone', description: 'Input field for phone numbers' },
-        { type: 'url', label: 'URL', icon: 'link', description: 'Input field for website URLs with validation' },
+        {
+          type: 'input',
+          label: 'Text Input',
+          icon: 'input',
+          description: 'Single line text input',
+        },
+        {
+          type: 'textarea',
+          label: 'Textarea',
+          icon: 'description',
+          description: 'Multi-line text input',
+        },
+        { type: 'number', label: 'Number', icon: 'numbers', description: 'Numeric input' },
+        { type: 'email', label: 'Email', icon: 'email', description: 'Email input' },
+        { type: 'password', label: 'Password', icon: 'lock', description: 'Password input' },
+        { type: 'telephone', label: 'Telephone', icon: 'phone', description: 'Phone number input' },
+        { type: 'url', label: 'URL', icon: 'link', description: 'Website URL input' },
       ],
     },
     {
       category: 'Selection Fields',
       fields: [
-        { type: 'select', label: 'Select', icon: 'list', description: 'Dropdown menu for selecting one option from a list' },
-        { type: 'checkbox', label: 'Checkbox', icon: 'check_box', description: 'Single checkbox for yes/no or true/false choices' },
-        { type: 'multicheckbox', label: 'Checkbox Group', icon: 'checklist', description: 'Multiple checkboxes for selecting multiple options' },
-        { type: 'radio', label: 'Radio Group', icon: 'radio_button_checked', description: 'Radio buttons for selecting one option from a group' },
-        { type: 'toggle', label: 'Toggle', icon: 'toggle_on', description: 'Toggle switch for on/off or enabled/disabled states' },
+        { type: 'select', label: 'Select', icon: 'list', description: 'Dropdown select' },
+        { type: 'checkbox', label: 'Checkbox', icon: 'check_box', description: 'Single checkbox' },
+        {
+          type: 'multicheckbox',
+          label: 'Checkbox Group',
+          icon: 'checklist',
+          description: 'Multiple checkboxes',
+        },
+        {
+          type: 'radio',
+          label: 'Radio Group',
+          icon: 'radio_button_checked',
+          description: 'Radio button group',
+        },
+        { type: 'toggle', label: 'Toggle', icon: 'toggle_on', description: 'Toggle switch' },
       ],
     },
     {
       category: 'Date & Time',
       fields: [
-        { type: 'datepicker', label: 'Date Picker', icon: 'calendar_today', description: 'Calendar widget for selecting dates' },
+        {
+          type: 'datepicker',
+          label: 'Date Picker',
+          icon: 'calendar_today',
+          description: 'Date picker',
+        },
       ],
     },
   ];
