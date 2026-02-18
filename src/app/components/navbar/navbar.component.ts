@@ -1,9 +1,9 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { ThemeService, ColorScheme } from '../../services/theme.service';
+import { ColorScheme, ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-navbar',
@@ -123,15 +123,13 @@ import { ThemeService, ColorScheme } from '../../services/theme.service';
 
       .app-title {
         margin: 0;
-        font-size: 0.875rem;
-        font-weight: 500;
         white-space: nowrap;
       }
 
       .alpha-badge {
         background-color: #444;
         color: #aaa;
-        padding: 0.125rem 0.375rem;
+        padding: 0.1rem 0.3rem;
         border-radius: 3px;
         font-size: 0.65rem;
         font-weight: 500;
@@ -153,7 +151,6 @@ import { ThemeService, ColorScheme } from '../../services/theme.service';
       }
 
       .menu-item {
-        color: #ffffff;
         font-size: 0.813rem;
         min-width: auto;
         padding: 0 0.75rem;
@@ -167,10 +164,6 @@ import { ThemeService, ColorScheme } from '../../services/theme.service';
 
       .navbar-controls button {
         color: #aaa;
-      }
-
-      .navbar-controls button:hover {
-        color: #ffffff;
       }
 
       .navbar-controls mat-icon {
@@ -192,7 +185,6 @@ import { ThemeService, ColorScheme } from '../../services/theme.service';
       }
 
       .preview-button {
-        color: #ffffff;
         font-size: 0.875rem;
       }
 
@@ -218,14 +210,14 @@ import { ThemeService, ColorScheme } from '../../services/theme.service';
 })
 export class NavbarComponent {
   screenSize = signal<'sm' | 'md' | 'lg'>('lg');
-  
+
   constructor(public themeService: ThemeService) {}
-  
+
   // Expose color scheme from theme service
   get colorScheme() {
     return this.themeService.colorScheme;
   }
-  
+
   // Compute the icon to display based on current color scheme
   themeIcon = computed(() => {
     const scheme = this.themeService.colorScheme();
