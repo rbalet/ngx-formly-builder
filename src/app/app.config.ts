@@ -1,9 +1,10 @@
 import {
   ApplicationConfig,
-  provideZonelessChangeDetection,
   provideBrowserGlobalErrorListeners,
+  provideZonelessChangeDetection,
 } from '@angular/core';
 import { provideFormlyCore } from '@ngx-formly/core';
+
 import { FieldWrapperComponent } from './wrappers/field-wrapper.component';
 
 export const appConfig: ApplicationConfig = {
