@@ -1,4 +1,5 @@
 import { Component, output } from '@angular/core';
+import { MatListModule } from '@angular/material/list';
 
 interface FieldType {
   type: string;
@@ -9,22 +10,20 @@ interface FieldType {
 @Component({
   selector: 'app-field-palette',
   standalone: true,
-  imports: [],
+  imports: [MatListModule],
   template: `
     <div class="field-palette">
       <h5 class="mb-3">Field Types</h5>
-      <div class="list-group">
+      <mat-action-list>
         @for (field of fieldTypes; track field.type) {
-          <button
-            type="button"
-            class="list-group-item list-group-item-action"
-            (click)="onFieldSelect(field.type)"
-          >
-            <span class="me-2">{{ field.icon }}</span>
-            {{ field.label }}
+          <button mat-list-item (click)="onFieldSelect(field.type)">
+            <span matListItemTitle>
+              <span class="me-2">{{ field.icon }}</span>
+              {{ field.label }}
+            </span>
           </button>
         }
-      </div>
+      </mat-action-list>
     </div>
   `,
   styles: [
@@ -32,8 +31,12 @@ interface FieldType {
       .field-palette {
         padding: 1rem;
         height: 100%;
-        background-color: #f8f9fa;
-        border-right: 1px solid #dee2e6;
+        background-color: #fafafa;
+        border-right: 1px solid #e0e0e0;
+      }
+
+      .me-2 {
+        margin-right: 0.5rem;
       }
     `,
   ],

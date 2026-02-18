@@ -1,13 +1,14 @@
 import { JsonPipe } from '@angular/common';
 import { Component, input, model, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { FormlyBootstrapModule } from '@ngx-formly/bootstrap';
+import { MatCardModule } from '@angular/material/card';
+import { FormlyMaterialModule } from '@ngx-formly/material';
 import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
 
 @Component({
   selector: 'app-form-preview',
   standalone: true,
-  imports: [ReactiveFormsModule, FormlyModule, FormlyBootstrapModule, JsonPipe],
+  imports: [ReactiveFormsModule, FormlyModule, FormlyMaterialModule, JsonPipe, MatCardModule],
   template: `
     <div class="form-preview">
       <h5 class="mb-3">Form Preview</h5>
@@ -21,16 +22,20 @@ import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
       </form>
 
       @if (!$fields().length) {
-        <div class="alert alert-info">Please add a new component here</div>
+        <mat-card>
+          <mat-card-content class="info-message">
+            Please add a new component here
+          </mat-card-content>
+        </mat-card>
       } @else {
-        <div class="card">
-          <div class="card-header">
-            <strong>Model JSON</strong>
-          </div>
-          <div class="card-body">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Model JSON</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
             <pre class="mb-0"><code>{{ $model() | json }}</code></pre>
-          </div>
-        </div>
+          </mat-card-content>
+        </mat-card>
       }
     </div>
   `,
@@ -42,8 +47,13 @@ import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
         overflow-y: auto;
       }
 
+      .info-message {
+        color: #1976d2;
+        padding: 1rem;
+      }
+
       pre {
-        background-color: #f8f9fa;
+        background-color: #f5f5f5;
         padding: 1rem;
         border-radius: 0.25rem;
         max-height: 300px;

@@ -1,20 +1,25 @@
 import { Component, inject } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { FieldWrapper } from '@ngx-formly/core';
 import { App } from '../app';
 
 @Component({
   selector: 'formly-wrapper-field',
   standalone: true,
+  imports: [MatIconModule, MatButtonModule],
   template: `
     <div class="field-wrapper" [class.selected]="isSelected()" (click)="onFieldClick($event)">
       <div class="field-header">
         <span class="field-type">{{ getFieldType() }}</span>
         <button
+          mat-icon-button
           type="button"
-          class="btn-close"
           aria-label="Remove field"
           (click)="onRemove($event)"
-        ></button>
+        >
+          <mat-icon>close</mat-icon>
+        </button>
       </div>
       <ng-container #fieldComponent></ng-container>
     </div>
@@ -38,7 +43,7 @@ import { App } from '../app';
             opacity: 0.5;
           }
 
-          .btn-close {
+          button {
             opacity: 0.5;
 
             &:hover {
@@ -54,7 +59,7 @@ import { App } from '../app';
             opacity: 1;
           }
 
-          .btn-close {
+          button {
             opacity: 0.5;
 
             &:hover {
@@ -83,10 +88,16 @@ import { App } from '../app';
         opacity: 0;
       }
 
-      .btn-close {
-        padding: 0.25rem;
-        font-size: 0.75rem;
+      button {
         opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+
+      button mat-icon {
+        font-size: 1.2rem;
+        width: 1.2rem;
+        height: 1.2rem;
+        line-height: 1.2rem;
       }
     `,
   ],
