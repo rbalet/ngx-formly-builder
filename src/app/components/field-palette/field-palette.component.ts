@@ -40,7 +40,6 @@ interface FieldGroup {
     `
       .field-palette {
         padding: 1rem;
-        height: 100%;
         background-color: #fafafa;
         border-right: 1px solid #e0e0e0;
       }
