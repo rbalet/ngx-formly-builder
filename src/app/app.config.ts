@@ -1,9 +1,11 @@
 import {
   ApplicationConfig,
-  provideZonelessChangeDetection,
   provideBrowserGlobalErrorListeners,
+  provideZonelessChangeDetection,
 } from '@angular/core';
 import { provideFormlyCore } from '@ngx-formly/core';
+
+import { FieldWrapperComponent } from './wrappers/field-wrapper.component';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -11,6 +13,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideFormlyCore({
       validationMessages: [{ name: 'required', message: 'This field is required' }],
+      wrappers: [{ name: 'field-wrapper', component: FieldWrapperComponent }],
     }),
   ],
 };

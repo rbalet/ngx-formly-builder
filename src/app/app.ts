@@ -11,14 +11,35 @@ import { PropertiesPanelComponent } from './components/properties-panel/properti
   styleUrl: './app.css',
 })
 export class App {
-  $fields = signal<FormlyFieldConfig[]>([]);
+  $fields = signal<FormlyFieldConfig[]>([
+    // {
+    //   key: 'firstName',
+    //   type: 'input',
+    //   wrappers: ['field-wrapper'],
+    //   props: {
+    //     label: 'First Name',
+    //     placeholder: 'Enter your first name',
+    //     required: true,
+    //   },
+    // },
+    // {
+    //   key: 'email',
+    //   type: 'input',
+    //   wrappers: ['field-wrapper'],
+    //   props: {
+    //     label: 'Email',
+    //     placeholder: 'Enter your email',
+    //     type: 'email',
+    //   },
+    // },
+  ]);
 
   $selectedField = signal<FormlyFieldConfig | null>(null);
 
   onFieldSelect(fieldType: string) {
     // Field types that use the 'input' Formly type with specific HTML input types
     const inputFieldTypes = ['number', 'email', 'password', 'telephone', 'url'];
-    
+
     // Map field types to Formly type and HTML input type
     let formlyType = fieldType;
     let inputType: string | undefined;
@@ -31,6 +52,7 @@ export class App {
     const newField: FormlyFieldConfig = {
       key: `field_${Date.now()}`,
       type: formlyType,
+      wrappers: ['field-wrapper'],
       props: {
         label: `New ${fieldType.charAt(0).toUpperCase() + fieldType.slice(1)}`,
         placeholder: `Enter ${fieldType}`,
