@@ -31,6 +31,24 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
             (ngModelChange)="updatePlaceholder($event)"
           />
         </mat-form-field>
+        <mat-form-field class="full-width mb-3">
+          <mat-label>Description</mat-label>
+          <input
+            matInput
+            type="text"
+            [ngModel]="getDescription()"
+            (ngModelChange)="updateDescription($event)"
+          />
+        </mat-form-field>
+        <mat-form-field class="full-width mb-3">
+          <mat-label>Default Value</mat-label>
+          <input
+            matInput
+            type="text"
+            [ngModel]="getDefaultValue()"
+            (ngModelChange)="updateDefaultValue($event)"
+          />
+        </mat-form-field>
         <hr />
         <mat-card>
           <mat-card-header>
@@ -124,6 +142,41 @@ export class PropertiesPanelComponent {
         field.props = {};
       }
       field.props.placeholder = value;
+      this.fieldUpdated.emit();
+    }
+  }
+
+  getDescription(): string {
+    const field = this.$selectedField();
+    if (!field || !field.props) {
+      return '';
+    }
+    return field.props.description || '';
+  }
+
+  updateDescription(value: string) {
+    const field = this.$selectedField();
+    if (field) {
+      if (!field.props) {
+        field.props = {};
+      }
+      field.props.description = value;
+      this.fieldUpdated.emit();
+    }
+  }
+
+  getDefaultValue(): string {
+    const field = this.$selectedField();
+    if (!field) {
+      return '';
+    }
+    return field.defaultValue !== undefined ? String(field.defaultValue) : '';
+  }
+
+  updateDefaultValue(value: string) {
+    const field = this.$selectedField();
+    if (field) {
+      field.defaultValue = value;
       this.fieldUpdated.emit();
     }
   }
