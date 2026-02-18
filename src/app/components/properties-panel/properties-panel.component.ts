@@ -16,8 +16,8 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
           <input
             type="text"
             class="form-control"
-            [(ngModel)]="$selectedField()!.props!.label"
-            (ngModelChange)="onPropertyChange()"
+            [ngModel]="getLabel()"
+            (ngModelChange)="updateLabel($event)"
           />
         </div>
         <div class="mb-3">
@@ -25,8 +25,8 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
           <input
             type="text"
             class="form-control"
-            [(ngModel)]="$selectedField()!.props!.placeholder"
-            (ngModelChange)="onPropertyChange()"
+            [ngModel]="getPlaceholder()"
+            (ngModelChange)="updatePlaceholder($event)"
           />
         </div>
         <hr />
@@ -72,8 +72,41 @@ export class PropertiesPanelComponent {
   $selectedField = input<FormlyFieldConfig | null>(null);
   fieldUpdated = output<void>();
 
-  onPropertyChange() {
-    // Emit event to trigger field update in parent component
-    this.fieldUpdated.emit();
+  getLabel(): string {
+    const field = this.$selectedField();
+    if (!field || !field.props) {
+      return '';
+    }
+    return field.props.label || '';
+  }
+
+  getPlaceholder(): string {
+    const field = this.$selectedField();
+    if (!field || !field.props) {
+      return '';
+    }
+    return field.props.placeholder || '';
+  }
+
+  updateLabel(value: string) {
+    const field = this.$selectedField();
+    if (field) {
+      if (!field.props) {
+        field.props = {};
+      }
+      field.props.label = value;
+      this.fieldUpdated.emit();
+    }
+  }
+
+  updatePlaceholder(value: string) {
+    const field = this.$selectedField();
+    if (field) {
+      if (!field.props) {
+        field.props = {};
+      }
+      field.props.placeholder = value;
+      this.fieldUpdated.emit();
+    }
   }
 }
