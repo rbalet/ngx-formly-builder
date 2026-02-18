@@ -1,0 +1,18 @@
+<div class="container-fluid h-100">
+  <header class="py-3 border-bottom">
+    <h1 class="h3 mb-0">Formly Builder</h1>
+    <p class="text-muted mb-0">Alpha</p>
+  </header>
+
+  <div class="row g-0 main-content">
+    <div class="col-md-3">
+      <app-field-palette (fieldSelect)="onFieldSelect($event)"></app-field-palette>
+    </div>
+    <div class="col-md-6">
+      <app-form-preview [$fields]="$fields()"></app-form-preview>
+    </div>
+    <div class="col-md-3">
+      <app-properties-panel [selectedField]="$selectedField()"></app-properties-panel>
+    </div>
+  </div>
+</div>
