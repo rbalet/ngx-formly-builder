@@ -8,6 +8,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideFormlyCore } from '@ngx-formly/core';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { FormlyMaterialModule, withFormlyMaterial } from '@ngx-formly/material';
 import { FormlyMatCheckboxModule } from '@ngx-formly/material/checkbox';
@@ -39,6 +40,7 @@ export const appConfig: ApplicationConfig = {
       FormlyMatTextAreaModule,
       FormlyMatToggleModule,
       MatDatepickerModule,
+      MatDialogModule,
       MatNativeDateModule,
     ]),
 
