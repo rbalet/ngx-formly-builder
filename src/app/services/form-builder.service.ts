@@ -17,16 +17,9 @@ export class FormBuilderService {
   }
 
   duplicateField(field: FormlyFieldConfig) {
-    const duplicatedField: FormlyFieldConfig = {
-      ...field,
-      key: `${field.key}_copy_${Date.now()}`,
-      props: { ...field.props },
-    };
-
-    // If the field has options, duplicate them as well
-    if (field.props?.options && Array.isArray(field.props.options)) {
-      duplicatedField.props!.options = [...field.props.options];
-    }
+    // Deep copy the field to avoid shared references
+    const duplicatedField: FormlyFieldConfig = structuredClone(field);
+    duplicatedField.key = `${field.key}_copy_${Date.now()}`;
 
     this.$fields.update((fields) => [...fields, duplicatedField]);
     this.$selectedField.set(duplicatedField);
