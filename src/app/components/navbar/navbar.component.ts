@@ -36,56 +36,59 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
               <span>Duplicate</span>
             </button>
           </mat-menu>
-          <button mat-button class="menu-item">View</button>
-          <button mat-button class="menu-item">Help</button>
+          <!-- <button mat-button class="menu-item">View</button>
+          <button mat-button class="menu-item">Help</button> -->
         </div>
+
         <div class="navbar-controls">
-          <button mat-icon-button title="Undo">
-            <mat-icon>undo</mat-icon>
-          </button>
-          <button mat-icon-button title="Redo">
-            <mat-icon>redo</mat-icon>
-          </button>
-          <button mat-icon-button title="History">
-            <mat-icon>history</mat-icon>
-          </button>
-          <mat-button-toggle-group
-            [value]="$screenSize()"
-            (change)="onScreenSizeChange($event)"
-            class="screen-size-toggle"
-            hideSingleSelectionIndicator
-          >
-            <mat-button-toggle value="sm" title="Small screen">
-              <mat-icon>smartphone</mat-icon>
-            </mat-button-toggle>
-            <mat-button-toggle value="md" title="Medium screen">
-              <mat-icon>tablet</mat-icon>
-            </mat-button-toggle>
-            <mat-button-toggle value="lg" title="Large screen">
-              <mat-icon>desktop_windows</mat-icon>
-            </mat-button-toggle>
-          </mat-button-toggle-group>
-          <button
-            mat-icon-button
-            [matMenuTriggerFor]="themeMenu"
-            [title]="'Color scheme: ' + colorScheme()"
-          >
-            <mat-icon>{{ themeIcon() }}</mat-icon>
-          </button>
-          <mat-menu #themeMenu="matMenu">
-            <button mat-menu-item (click)="setColorScheme('light')">
-              <mat-icon>light_mode</mat-icon>
-              <span>Light</span>
+          <div class="left-controls">
+            <button mat-icon-button title="Undo">
+              <mat-icon>undo</mat-icon>
             </button>
-            <button mat-menu-item (click)="setColorScheme('dark')">
-              <mat-icon>dark_mode</mat-icon>
-              <span>Dark</span>
+            <button mat-icon-button title="Redo">
+              <mat-icon>redo</mat-icon>
             </button>
-            <button mat-menu-item (click)="setColorScheme('system')">
-              <mat-icon>computer</mat-icon>
-              <span>System</span>
+          </div>
+
+          <div class="right-controls">
+            <mat-button-toggle-group
+              [value]="$screenSize()"
+              (change)="onScreenSizeChange($event)"
+              class="screen-size-toggle"
+              hideSingleSelectionIndicator
+            >
+              <mat-button-toggle value="sm" title="Small screen">
+                <mat-icon>smartphone</mat-icon>
+              </mat-button-toggle>
+              <mat-button-toggle value="md" title="Medium screen">
+                <mat-icon>tablet</mat-icon>
+              </mat-button-toggle>
+              <mat-button-toggle value="lg" title="Large screen">
+                <mat-icon>desktop_windows</mat-icon>
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+            <button
+              mat-icon-button
+              [matMenuTriggerFor]="themeMenu"
+              [title]="'Color scheme: ' + colorScheme()"
+            >
+              <mat-icon>{{ themeIcon() }}</mat-icon>
             </button>
-          </mat-menu>
+            <mat-menu #themeMenu="matMenu">
+              <button mat-menu-item (click)="setColorScheme('light')">
+                <mat-icon>light_mode</mat-icon>
+                <span>Light</span>
+              </button>
+              <button mat-menu-item (click)="setColorScheme('dark')">
+                <mat-icon>dark_mode</mat-icon>
+                <span>Dark</span>
+              </button>
+              <button mat-menu-item (click)="setColorScheme('system')">
+                <mat-icon>computer</mat-icon>
+                <span>System</span>
+              </button>
+            </mat-menu>
+          </div>
         </div>
       </div>
 
@@ -108,17 +111,45 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 0.5rem 1rem;
-        border-bottom: 1px solid #333;
-        height: 56px;
-        gap: 1rem;
+        border-bottom: 1px solid var(--mat-sys-outline-variant);
+        background-color: var(--mat-sys-surface-container-lowest);
       }
 
       .navbar-left {
+        padding: 0.5rem 1rem;
         display: flex;
         align-items: center;
         gap: 0.75rem;
-        min-width: fit-content;
+        width: 25%;
+        min-width: 250px;
+        box-sizing: border-box;
+        border-right: 1px solid var(--mat-sys-outline-variant);
+        height: 64px;
+      }
+
+      .navbar-center {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0 1rem;
+        flex: 1;
+        justify-content: center;
+        justify-content: space-between;
+        flex-grow: 1;
+        height: 64px;
+      }
+
+      .navbar-right {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        width: 25%;
+        min-width: 250px;
+        justify-content: flex-end;
+        padding: 0.5rem 1rem;
+        box-sizing: border-box;
+        border-left: 1px solid var(--mat-sys-outline-variant);
+        height: 64px;
       }
 
       .logo-icon {
@@ -148,15 +179,6 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
         text-transform: uppercase;
       }
 
-      .navbar-center {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        flex: 1;
-        justify-content: center;
-        max-width: 800px;
-      }
-
       .menu-items {
         display: flex;
         gap: 0rem;
@@ -173,8 +195,9 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
         align-items: center;
         gap: 0.125rem;
 
-        .navbar-controls button {
-          color: #aaa;
+        .right-controls {
+          display: flex;
+          align-items: center;
         }
 
         mat-icon {
@@ -187,13 +210,6 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
       .screen-size-toggle {
         height: 32px;
         margin-left: 0.25rem;
-      }
-
-      .navbar-right {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        min-width: fit-content;
       }
 
       .preview-button {

@@ -44,6 +44,8 @@ interface FieldGroup {
         padding: 1rem;
         background-color: var(--mat-sys-surface-container-lowest);
         border-right: 1px solid var(--mat-sys-outline-variant);
+        min-height: 100%;
+        box-sizing: border-box;
       }
 
       .field-group {

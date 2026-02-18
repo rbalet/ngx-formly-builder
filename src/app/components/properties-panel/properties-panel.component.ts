@@ -118,6 +118,8 @@ import {
         background-color: var(--mat-sys-surface-container-lowest);
         border-left: 1px solid #e0e0e0;
         overflow-y: auto;
+        min-height: 100%;
+        box-sizing: border-box;
       }
 
       .full-width {
