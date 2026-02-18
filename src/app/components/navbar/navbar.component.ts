@@ -1,8 +1,9 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, computed } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { ThemeService, ColorScheme } from '../../services/theme.service';
 
 @Component({
   selector: 'app-navbar',
@@ -54,11 +55,25 @@ import { MatMenuModule } from '@angular/material/menu';
           </mat-button-toggle-group>
           <button
             mat-icon-button
-            (click)="toggleTheme()"
-            [title]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+            [matMenuTriggerFor]="themeMenu"
+            [title]="'Color scheme: ' + colorScheme()"
           >
-            <mat-icon>{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+            <mat-icon>{{ themeIcon() }}</mat-icon>
           </button>
+          <mat-menu #themeMenu="matMenu">
+            <button mat-menu-item (click)="setColorScheme('light')">
+              <mat-icon>light_mode</mat-icon>
+              <span>Light</span>
+            </button>
+            <button mat-menu-item (click)="setColorScheme('dark')">
+              <mat-icon>dark_mode</mat-icon>
+              <span>Dark</span>
+            </button>
+            <button mat-menu-item (click)="setColorScheme('system')">
+              <mat-icon>computer</mat-icon>
+              <span>System</span>
+            </button>
+          </mat-menu>
         </div>
       </div>
 
@@ -203,13 +218,32 @@ import { MatMenuModule } from '@angular/material/menu';
 })
 export class NavbarComponent {
   screenSize = signal<'sm' | 'md' | 'lg'>('lg');
-  isDarkMode = signal<boolean>(true);
+  
+  constructor(public themeService: ThemeService) {}
+  
+  // Expose color scheme from theme service
+  get colorScheme() {
+    return this.themeService.colorScheme;
+  }
+  
+  // Compute the icon to display based on current color scheme
+  themeIcon = computed(() => {
+    const scheme = this.themeService.colorScheme();
+    switch (scheme) {
+      case 'light':
+        return 'light_mode';
+      case 'dark':
+        return 'dark_mode';
+      case 'system':
+        return 'computer';
+    }
+  });
 
   onScreenSizeChange(event: MatButtonToggleChange) {
     this.screenSize.set(event.value);
   }
 
-  toggleTheme() {
-    this.isDarkMode.update((value) => !value);
+  setColorScheme(scheme: ColorScheme) {
+    this.themeService.setColorScheme(scheme);
   }
 }
