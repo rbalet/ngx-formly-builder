@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
@@ -203,16 +203,16 @@ import { UiStateService } from '../../services/ui-state.service';
   ],
 })
 export class NavbarComponent {
+  readonly #uiStateService = inject(UiStateService);
+
   isDarkMode = signal<boolean>(true);
 
-  constructor(private uiStateService: UiStateService) {}
-
   get screenSize() {
-    return this.uiStateService.$screenSize;
+    return this.#uiStateService.$screenSize;
   }
 
   onScreenSizeChange(event: MatButtonToggleChange) {
-    this.uiStateService.setScreenSize(event.value);
+    this.#uiStateService.setScreenSize(event.value);
   }
 
   toggleTheme() {
