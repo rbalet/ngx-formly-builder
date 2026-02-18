@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { FormBuilderService } from '../../services/form-builder.service';
 
 @Component({
   selector: 'app-navbar',
@@ -22,7 +23,17 @@ import { MatMenuModule } from '@angular/material/menu';
       <div class="navbar-center">
         <div class="menu-items">
           <button mat-button class="menu-item">File</button>
-          <button mat-button class="menu-item">Edit</button>
+          <button mat-button class="menu-item" [matMenuTriggerFor]="editMenu">Edit</button>
+          <mat-menu #editMenu="matMenu">
+            <button 
+              mat-menu-item 
+              [disabled]="!formBuilderService.$selectedField()"
+              (click)="onDuplicate()"
+            >
+              <mat-icon>content_copy</mat-icon>
+              <span>Duplicate</span>
+            </button>
+          </mat-menu>
           <button mat-button class="menu-item">View</button>
           <button mat-button class="menu-item">Help</button>
         </div>
@@ -205,11 +216,20 @@ export class NavbarComponent {
   screenSize = signal<'sm' | 'md' | 'lg'>('lg');
   isDarkMode = signal<boolean>(true);
 
+  constructor(public formBuilderService: FormBuilderService) {}
+
   onScreenSizeChange(event: MatButtonToggleChange) {
     this.screenSize.set(event.value);
   }
 
   toggleTheme() {
     this.isDarkMode.update((value) => !value);
+  }
+
+  onDuplicate() {
+    const selectedField = this.formBuilderService.$selectedField();
+    if (selectedField) {
+      this.formBuilderService.duplicateField(selectedField);
+    }
   }
 }
