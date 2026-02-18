@@ -4,6 +4,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { FieldPaletteComponent } from './components/field-palette/field-palette.component';
 import { FormPreviewComponent } from './components/form-preview/form-preview.component';
 import { PropertiesPanelComponent } from './components/properties-panel/properties-panel.component';
+import { UiStateService } from './services/ui-state.service';
 
 @Component({
   selector: 'app-root',
@@ -36,6 +37,8 @@ export class App {
   ]);
 
   $selectedField = signal<FormlyFieldConfig | null>(null);
+
+  constructor(public uiStateService: UiStateService) {}
 
   onFieldSelect(fieldType: string) {
     // Field types that use the 'input' Formly type with specific HTML input types
