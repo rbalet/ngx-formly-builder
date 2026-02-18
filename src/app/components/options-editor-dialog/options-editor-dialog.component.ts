@@ -162,19 +162,38 @@ export class OptionsEditorDialogComponent {
   private data = inject<OptionsEditorDialogData>(MAT_DIALOG_DATA);
 
   options: OptionItem[] = [];
+  private nextOptionIndex = 1;
 
   constructor() {
     // Deep clone the options to avoid mutating the original data
-    this.options = JSON.parse(JSON.stringify(this.data.options || []));
+    this.options = structuredClone(this.data.options || []);
+    
+    // Calculate the next option index based on existing options
+    this.calculateNextOptionIndex();
+  }
+
+  private calculateNextOptionIndex() {
+    // Find the highest numeric suffix in existing option values
+    let maxIndex = 0;
+    this.options.forEach(option => {
+      const match = String(option.value).match(/^option(\d+)$/);
+      if (match) {
+        const index = parseInt(match[1], 10);
+        if (index > maxIndex) {
+          maxIndex = index;
+        }
+      }
+    });
+    this.nextOptionIndex = maxIndex + 1;
   }
 
   addOption() {
-    const nextIndex = this.options.length + 1;
     this.options.push({
-      label: `Option ${nextIndex}`,
-      description: `Option ${nextIndex} Description`,
-      value: `option${nextIndex}`,
+      label: `Option ${this.nextOptionIndex}`,
+      description: `Option ${this.nextOptionIndex} Description`,
+      value: `option${this.nextOptionIndex}`,
     });
+    this.nextOptionIndex++;
   }
 
   removeOption(index: number) {
