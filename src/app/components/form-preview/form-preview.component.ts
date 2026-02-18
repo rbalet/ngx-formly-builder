@@ -1,5 +1,5 @@
 import { JsonPipe } from '@angular/common';
-import { Component, input, signal } from '@angular/core';
+import { Component, input, model, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormlyBootstrapModule } from '@ngx-formly/bootstrap';
 import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
@@ -54,6 +54,7 @@ import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
 })
 export class FormPreviewComponent {
   $fields = input.required<FormlyFieldConfig[]>();
+  $selectedField = model.required<FormlyFieldConfig | null>();
 
   form = new FormGroup({});
   $model = signal<Record<string, unknown>>({});

@@ -9,10 +9,13 @@
       <app-field-palette (fieldSelect)="onFieldSelect($event)"></app-field-palette>
     </div>
     <div class="col-md-6">
-      <app-form-preview [$fields]="$fields()"></app-form-preview>
+      <app-form-preview
+        [$fields]="$fields()"
+        [($selectedField)]="$selectedField"
+      ></app-form-preview>
     </div>
     <div class="col-md-3">
-      <app-properties-panel [selectedField]="$selectedField()"></app-properties-panel>
+      <app-properties-panel [$selectedField]="$selectedField()"></app-properties-panel>
     </div>
   </div>
 </div>

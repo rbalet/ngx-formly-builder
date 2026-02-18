@@ -9,10 +9,10 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
   template: `
     <div class="properties-panel">
       <h5 class="mb-3">Field Properties</h5>
-      @if (selectedField()) {
+      @if ($selectedField()) {
         <div class="card">
           <div class="card-body">
-            <pre class="mb-0"><code>{{ selectedField() | json }}</code></pre>
+            <pre class="mb-0"><code>{{ $selectedField() | json }}</code></pre>
           </div>
         </div>
       } @else {
@@ -40,5 +40,5 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
   ],
 })
 export class PropertiesPanelComponent {
-  selectedField = input<FormlyFieldConfig | null>(null);
+  $selectedField = input<FormlyFieldConfig | null>(null);
 }
