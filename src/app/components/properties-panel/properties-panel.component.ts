@@ -1,12 +1,17 @@
 import { JsonPipe } from '@angular/common';
-import { Component, input, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { FormlyFieldConfig } from '@ngx-formly/core';
+import {
+  OptionsEditorDialogComponent,
+  OptionItem,
+} from '../options-editor-dialog/options-editor-dialog.component';
 
 @Component({
   selector: 'app-properties-panel',
@@ -41,6 +46,7 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
             <button
               mat-stroked-button
               class="full-width mt-2 manage-options-btn"
+              (click)="openOptionsEditor()"
             >
               <mat-icon>list</mat-icon>
               Manage Options
@@ -218,6 +224,7 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
 export class PropertiesPanelComponent {
   $selectedField = input<FormlyFieldConfig | null>(null);
   fieldUpdated = output<void>();
+  private dialog = inject(MatDialog);
 
   hasOptions(): boolean {
     const field = this.$selectedField();
@@ -308,5 +315,26 @@ export class PropertiesPanelComponent {
       field.defaultValue = value === '' ? undefined : value;
       this.fieldUpdated.emit();
     }
+  }
+
+  openOptionsEditor() {
+    const field = this.$selectedField();
+    if (!field || !field.props) {
+      return;
+    }
+
+    const currentOptions = this.getOptions();
+
+    const dialogRef = this.dialog.open(OptionsEditorDialogComponent, {
+      width: '900px',
+      data: { options: currentOptions },
+    });
+
+    dialogRef.afterClosed().subscribe((result: OptionItem[] | undefined) => {
+      if (result && field.props) {
+        field.props.options = result;
+        this.fieldUpdated.emit();
+      }
+    });
   }
 }
