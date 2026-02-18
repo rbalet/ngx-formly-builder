@@ -1,11 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogModule,
-  MatDialogRef,
-} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -42,26 +38,18 @@ export interface OptionsEditorDialogData {
         </div>
         @for (option of options; track $index) {
           <div class="option-row">
-            <mat-form-field class="field-input">
-              <input
-                matInput
-                [(ngModel)]="option.label"
-                placeholder="Option {{ $index + 1 }}"
-              />
+            <mat-form-field class="field-input" subscriptSizing="dynamic">
+              <input matInput [(ngModel)]="option.label" placeholder="Option {{ $index + 1 }}" />
             </mat-form-field>
-            <mat-form-field class="field-input">
+            <mat-form-field class="field-input" subscriptSizing="dynamic">
               <input
                 matInput
                 [(ngModel)]="option.description"
                 placeholder="Option {{ $index + 1 }} Description"
               />
             </mat-form-field>
-            <mat-form-field class="field-input">
-              <input
-                matInput
-                [(ngModel)]="option.value"
-                placeholder="option{{ $index + 1 }}"
-              />
+            <mat-form-field class="field-input" subscriptSizing="dynamic">
+              <input matInput [(ngModel)]="option.value" placeholder="option{{ $index + 1 }}" />
             </mat-form-field>
             <button
               mat-icon-button
@@ -73,11 +61,7 @@ export interface OptionsEditorDialogData {
             </button>
           </div>
         }
-        <button
-          mat-stroked-button
-          class="add-option-btn"
-          (click)="addOption()"
-        >
+        <button mat-stroked-button class="add-option-btn" (click)="addOption()">
           <mat-icon>add</mat-icon>
           Add Option
         </button>
@@ -94,7 +78,6 @@ export interface OptionsEditorDialogData {
   styles: [
     `
       .options-editor {
-        min-width: 800px;
         padding: 1rem 0;
       }
 
@@ -152,7 +135,6 @@ export interface OptionsEditorDialogData {
 
       mat-dialog-content {
         max-height: 70vh;
-        overflow-y: auto;
       }
     `,
   ],
@@ -167,7 +149,7 @@ export class OptionsEditorDialogComponent {
   constructor() {
     // Deep clone the options to avoid mutating the original data
     this.options = structuredClone(this.data.options || []);
-    
+
     // Calculate the next option index based on existing options
     this.calculateNextOptionIndex();
   }
@@ -177,7 +159,7 @@ export class OptionsEditorDialogComponent {
     // This ensures new options don't conflict with existing ones that follow the optionN pattern
     // For custom values (e.g., 'yes', 'no'), the regex won't match and maxIndex stays 0
     let maxIndex = 0;
-    this.options.forEach(option => {
+    this.options.forEach((option) => {
       const match = String(option.value).match(/^option(\d+)$/);
       if (match) {
         const index = parseInt(match[1], 10);
