@@ -1,9 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormlyFieldConfig } from '@ngx-formly/core';
-import { NavbarComponent } from './components/navbar/navbar.component';
 import { FieldPaletteComponent } from './components/field-palette/field-palette.component';
 import { FormPreviewComponent } from './components/form-preview/form-preview.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 import { PropertiesPanelComponent } from './components/properties-panel/properties-panel.component';
+import { FormBuilderService } from './services/form-builder.service';
 import { UiStateService } from './services/ui-state.service';
 
 @Component({
@@ -13,32 +14,41 @@ import { UiStateService } from './services/ui-state.service';
   styleUrl: './app.css',
 })
 export class App {
-  $fields = signal<FormlyFieldConfig[]>([
-    {
-      key: 'firstName',
-      type: 'input',
-      wrappers: ['field-wrapper'],
-      props: {
-        label: 'First Name',
-        placeholder: 'Enter your first name',
-        required: true,
-      },
-    },
-    {
-      key: 'email',
-      type: 'input',
-      wrappers: ['field-wrapper'],
-      props: {
-        label: 'Email',
-        placeholder: 'Enter your email',
-        type: 'email',
-      },
-    },
-  ]);
+  #formBuilderService = inject(FormBuilderService);
+  #uiStateService = inject(UiStateService);
 
-  $selectedField = signal<FormlyFieldConfig | null>(null);
+  // Expose service signals for template use
+  $fields;
+  $selectedField;
 
-  constructor(public uiStateService: UiStateService) {}
+  constructor() {
+    this.$fields = this.#formBuilderService.$fields;
+    this.$selectedField = this.#formBuilderService.$selectedField;
+
+    // Initialize with default fields
+    this.#formBuilderService.$fields.set([
+      {
+        key: 'firstName',
+        type: 'input',
+        wrappers: ['field-wrapper'],
+        props: {
+          label: 'First Name',
+          placeholder: 'Enter your first name',
+          required: true,
+        },
+      },
+      {
+        key: 'email',
+        type: 'input',
+        wrappers: ['field-wrapper'],
+        props: {
+          label: 'Email',
+          placeholder: 'Enter your email',
+          type: 'email',
+        },
+      },
+    ]);
+  }
 
   onFieldSelect(fieldType: string) {
     // Field types that use the 'input' Formly type with specific HTML input types
@@ -95,12 +105,12 @@ export class App {
       newField.props!.placeholder = 'Select a date';
     }
 
-    this.$fields.update((fields) => [...fields, newField]);
-    this.$selectedField.set(newField);
+    this.#formBuilderService.addField(newField);
+    this.#formBuilderService.$selectedField.set(newField);
   }
 
   onFieldUpdated() {
     // Force update of fields array to trigger change detection
-    this.$fields.update((fields) => [...fields]);
+    this.#formBuilderService.updateFields();
   }
 }

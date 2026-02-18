@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { FormBuilderService } from '../../services/form-builder.service';
 import { UiStateService } from '../../services/ui-state.service';
 
 @Component({
@@ -23,7 +24,17 @@ import { UiStateService } from '../../services/ui-state.service';
       <div class="navbar-center">
         <div class="menu-items">
           <button mat-button class="menu-item">File</button>
-          <button mat-button class="menu-item">Edit</button>
+          <button mat-button class="menu-item" [matMenuTriggerFor]="editMenu">Edit</button>
+          <mat-menu #editMenu="matMenu">
+            <button
+              mat-menu-item
+              [disabled]="!formBuilderService.$selectedField()"
+              (click)="onDuplicate()"
+            >
+              <mat-icon>content_copy</mat-icon>
+              <span>Duplicate</span>
+            </button>
+          </mat-menu>
           <button mat-button class="menu-item">View</button>
           <button mat-button class="menu-item">Help</button>
         </div>
@@ -149,20 +160,20 @@ import { UiStateService } from '../../services/ui-state.service';
         display: flex;
         align-items: center;
         gap: 0.125rem;
-      }
 
-      .navbar-controls button {
-        color: #aaa;
-      }
+        button {
+          color: #aaa;
 
-      .navbar-controls button:hover {
-        color: #ffffff;
-      }
+          &:hover {
+            color: #ffffff;
+          }
+        }
 
-      .navbar-controls mat-icon {
-        font-size: 18px;
-        width: 18px;
-        height: 18px;
+        mat-icon {
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+        }
       }
 
       .screen-size-toggle {
@@ -180,29 +191,30 @@ import { UiStateService } from '../../services/ui-state.service';
       .preview-button {
         color: #ffffff;
         font-size: 0.875rem;
-      }
 
-      .preview-button mat-icon {
-        margin-right: 0.25rem;
-        font-size: 18px;
-        width: 18px;
-        height: 18px;
+        mat-icon {
+          margin-right: 0.25rem;
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+        }
       }
 
       .export-button {
         font-size: 0.875rem;
-      }
 
-      .export-button mat-icon {
-        margin-right: 0.25rem;
-        font-size: 18px;
-        width: 18px;
-        height: 18px;
+        mat-icon {
+          margin-right: 0.25rem;
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+        }
       }
     `,
   ],
 })
 export class NavbarComponent {
+  readonly formBuilderService = inject(FormBuilderService);
   readonly #uiStateService = inject(UiStateService);
 
   isDarkMode = signal<boolean>(true);
@@ -217,5 +229,12 @@ export class NavbarComponent {
 
   toggleTheme() {
     this.isDarkMode.update((value) => !value);
+  }
+
+  onDuplicate() {
+    const selectedField = this.formBuilderService.$selectedField();
+    if (selectedField) {
+      this.formBuilderService.duplicateField(selectedField);
+    }
   }
 }
