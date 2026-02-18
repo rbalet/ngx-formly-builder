@@ -170,12 +170,14 @@ export class PropertiesPanelComponent {
     if (!field) {
       return '';
     }
+    // Convert any defaultValue type to string for display in text input
     return field.defaultValue !== undefined ? String(field.defaultValue) : '';
   }
 
   updateDefaultValue(value: string) {
     const field = this.$selectedField();
     if (field) {
+      // Store defaultValue as string from text input; clear field if empty
       field.defaultValue = value === '' ? undefined : value;
       this.fieldUpdated.emit();
     }
