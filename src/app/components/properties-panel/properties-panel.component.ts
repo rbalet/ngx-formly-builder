@@ -1,45 +1,53 @@
 import { JsonPipe } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 
 @Component({
   selector: 'app-properties-panel',
-  standalone: true,
-  imports: [JsonPipe, FormsModule],
+  imports: [JsonPipe, FormsModule, MatCardModule, MatInputModule, MatFormFieldModule],
   template: `
     <div class="properties-panel">
       <h5 class="mb-3">Field Properties</h5>
       @if ($selectedField()) {
-        <div class="mb-3">
-          <label class="form-label">Label</label>
+        <mat-form-field class="full-width mb-3">
+          <mat-label>Label</mat-label>
           <input
+            matInput
             type="text"
-            class="form-control"
             [ngModel]="getLabel()"
             (ngModelChange)="updateLabel($event)"
           />
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Placeholder</label>
+        </mat-form-field>
+        <mat-form-field class="full-width mb-3">
+          <mat-label>Placeholder</mat-label>
           <input
+            matInput
             type="text"
-            class="form-control"
             [ngModel]="getPlaceholder()"
             (ngModelChange)="updatePlaceholder($event)"
           />
-        </div>
+        </mat-form-field>
         <hr />
-        <div class="card">
-          <div class="card-header">
-            <small class="text-muted">Debug: Field Config</small>
-          </div>
-          <div class="card-body">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>
+              <small class="text-muted">Debug: Field Config</small>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
             <pre class="mb-0"><code>{{ $selectedField() | json }}</code></pre>
-          </div>
-        </div>
+          </mat-card-content>
+        </mat-card>
       } @else {
-        <div class="alert alert-info">Select a component to configure its properties</div>
+        <mat-card>
+          <mat-card-content class="info-message">
+            Select a component to configure its properties
+          </mat-card-content>
+        </mat-card>
       }
     </div>
   `,
@@ -48,9 +56,18 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
       .properties-panel {
         padding: 1rem;
         height: 100%;
-        background-color: #f8f9fa;
-        border-left: 1px solid #dee2e6;
+        background-color: #fafafa;
+        border-left: 1px solid #e0e0e0;
         overflow-y: auto;
+      }
+
+      .full-width {
+        width: 100%;
+      }
+
+      .info-message {
+        color: #1976d2;
+        padding: 1rem;
       }
 
       pre {
@@ -61,9 +78,10 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
         overflow-y: auto;
       }
 
-      .form-label {
-        font-weight: 500;
-        margin-bottom: 0.5rem;
+      hr {
+        margin: 1rem 0;
+        border: 0;
+        border-top: 1px solid #e0e0e0;
       }
     `,
   ],

@@ -12,26 +12,26 @@ import { PropertiesPanelComponent } from './components/properties-panel/properti
 })
 export class App {
   $fields = signal<FormlyFieldConfig[]>([
-    // {
-    //   key: 'firstName',
-    //   type: 'input',
-    //   wrappers: ['field-wrapper'],
-    //   props: {
-    //     label: 'First Name',
-    //     placeholder: 'Enter your first name',
-    //     required: true,
-    //   },
-    // },
-    // {
-    //   key: 'email',
-    //   type: 'input',
-    //   wrappers: ['field-wrapper'],
-    //   props: {
-    //     label: 'Email',
-    //     placeholder: 'Enter your email',
-    //     type: 'email',
-    //   },
-    // },
+    {
+      key: 'firstName',
+      type: 'input',
+      wrappers: ['field-wrapper'],
+      props: {
+        label: 'First Name',
+        placeholder: 'Enter your first name',
+        required: true,
+      },
+    },
+    {
+      key: 'email',
+      type: 'input',
+      wrappers: ['field-wrapper'],
+      props: {
+        label: 'Email',
+        placeholder: 'Enter your email',
+        type: 'email',
+      },
+    },
   ]);
 
   $selectedField = signal<FormlyFieldConfig | null>(null);
