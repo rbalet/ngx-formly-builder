@@ -31,6 +31,7 @@ export class App {
     const newField: FormlyFieldConfig = {
       key: `field_${Date.now()}`,
       type: formlyType,
+      wrappers: ['field-wrapper'],
       props: {
         label: `New ${fieldType.charAt(0).toUpperCase() + fieldType.slice(1)}`,
         placeholder: `Enter ${fieldType}`,
