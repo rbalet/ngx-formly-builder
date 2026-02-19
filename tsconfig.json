@@ -18,7 +18,12 @@
     "paths": {
       "@components/*": ["src/app/components/*"],
       "@core/*": ["src/app/core/*"],
-      "@services/*": ["src/app/services/*"]
+      "@services/*": [
+        "src/app/services/*"
+      ],
+      "ngx-formly-builder": [
+        "./dist/ngx-formly-builder"
+      ]
     }
   },
   "angularCompilerOptions": {
@@ -34,6 +39,12 @@
     },
     {
       "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/ngx-formly-builder/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/ngx-formly-builder/tsconfig.spec.json"
     }
   ]
 }

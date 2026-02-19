@@ -1,0 +1,21 @@
+{
+  "name": "ngx-formly-builder",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/animations": "^21.0.0",
+    "@angular/cdk": "^21.0.0",
+    "@angular/common": "^21.0.0",
+    "@angular/core": "^21.0.0",
+    "@angular/forms": "^21.0.0",
+    "@angular/material": "^21.0.0",
+    "@ngx-formly/core": "^7.0.0",
+    "@ngx-formly/material": "^7.0.0",
+    "marked": "^17.0.0",
+    "ngx-markdown": "^21.0.0",
+    "prismjs": "^1.30.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}
