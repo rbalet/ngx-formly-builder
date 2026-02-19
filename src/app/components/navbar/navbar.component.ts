@@ -1,9 +1,12 @@
 import { Component, computed, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { OpenTemplateDialogComponent } from '@components/open-template-dialog/open-template-dialog.component';
 import { PREVIEW_MODE, SCREEN_SIZE } from '@core/token';
@@ -15,7 +18,16 @@ import { Template } from 'src/app/models/template.model';
 
 @Component({
   selector: 'app-navbar',
-  imports: [MatIconModule, MatButtonModule, MatMenuModule, MatButtonToggleModule, MatDividerModule],
+  imports: [
+    MatIconModule,
+    MatButtonModule,
+    MatMenuModule,
+    MatButtonToggleModule,
+    MatDividerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+  ],
   template: `
     <header class="navbar">
       <!-- Left Section -->
@@ -93,7 +105,13 @@ import { Template } from 'src/app/models/template.model';
           }
 
           <div class="center-controls">
-            <!-- Additional controls can be added here in the future -->
+            <input
+              type="text"
+              class="form-title-input"
+              [(ngModel)]="formTitle"
+              placeholder="Untitled Form"
+              maxlength="100"
+            />
           </div>
 
           <div class="right-controls">
@@ -249,6 +267,41 @@ import { Template } from 'src/app/models/template.model';
         align-items: center;
         gap: 0.125rem;
 
+        .center-controls {
+          flex: 1;
+          display: flex;
+          justify-content: center;
+          padding: 0 1rem;
+
+          .form-title-input {
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            font-weight: 500;
+            text-align: center;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            outline: none;
+            transition: background-color 0.2s;
+            color: var(--mat-sys-on-surface);
+            min-width: 200px;
+            max-width: 400px;
+
+            &:hover {
+              background-color: var(--mat-sys-surface-container-highest);
+            }
+
+            &:focus {
+              background-color: var(--mat-sys-surface-container-high);
+            }
+
+            &::placeholder {
+              color: var(--mat-sys-on-surface-variant);
+              opacity: 0.6;
+            }
+          }
+        }
+
         .right-controls {
           display: flex;
           align-items: center;
@@ -315,6 +368,15 @@ export class NavbarComponent {
     return this.themeService.colorScheme;
   }
 
+  // Form title getter and setter
+  get formTitle(): string {
+    return this.formBuilderService.$formTitle();
+  }
+
+  set formTitle(value: string) {
+    this.formBuilderService.$formTitle.set(value);
+  }
+
   // Compute the icon to display based on current color scheme
   themeIcon = computed(() => {
     const scheme = this.themeService.colorScheme();
@@ -345,7 +407,8 @@ export class NavbarComponent {
 
   onExport() {
     const fields = this.formBuilderService.$fields();
-    this.exportService.export(fields, 'form-settings');
+    const formTitle = this.formBuilderService.$formTitle();
+    this.exportService.export(fields, formTitle);
   }
 
   togglePreviewMode() {
@@ -377,7 +440,7 @@ export class NavbarComponent {
 
     dialogRef.afterClosed().subscribe((template: Template | null) => {
       if (template) {
-        this.formBuilderService.importFields(template.fields);
+        this.formBuilderService.importFields(template.fields, template.name);
       }
     });
   }
