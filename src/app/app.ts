@@ -134,6 +134,12 @@ export class App {
       newField.props!.placeholder = 'Select a date';
     }
 
+    if (fieldType === 'markdown') {
+      newField.props!.label = 'Text Block';
+      newField.props!.placeholder = 'Enter markdown content...';
+      newField.defaultValue = '# Heading\n\nYour text here...';
+    }
+
     return newField;
   }
 }

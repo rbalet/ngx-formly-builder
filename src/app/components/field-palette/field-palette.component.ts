@@ -174,6 +174,17 @@ export class FieldPaletteComponent {
         },
       ],
     },
+    {
+      category: 'Typography',
+      fields: [
+        {
+          type: 'markdown',
+          label: 'Text block',
+          icon: 'article',
+          description: 'WYSIWYG Editor',
+        },
+      ],
+    },
   ];
 
   onFieldSelect(type: string) {
