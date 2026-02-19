@@ -4,7 +4,6 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { FormlyModule } from '@ngx-formly/core';
-import { FormlyBootstrapModule } from '@ngx-formly/bootstrap';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { Template, TemplateCategory } from '../../models/template.model';
 import { TemplateService } from '../../services/template.service';
@@ -19,7 +18,6 @@ type ViewMode = 'categories' | 'templates';
     MatIconModule,
     MatListModule,
     FormlyModule,
-    FormlyBootstrapModule,
     ReactiveFormsModule,
   ],
   template: `

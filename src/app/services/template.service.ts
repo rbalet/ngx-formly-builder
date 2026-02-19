@@ -62,14 +62,6 @@ export class TemplateService {
                 rows: 4,
               },
             },
-            {
-              key: 'profilePicture',
-              type: 'input',
-              props: {
-                label: 'Profile Picture',
-                type: 'file',
-              },
-            },
           ],
         },
         {
