@@ -17,15 +17,24 @@ export class FormBuilderService {
   readonly $canRedo = computed(() => this.#redoStack().length > 0);
 
   addField(field: FormlyFieldConfig) {
-    this.#saveToUndoStack();
+    // Save state before making the change
+    const previousState = structuredClone(this.$fields());
     this.$fields.update((fields) => [...fields, field]);
-    this.#clearRedoStack();
+    // Defer undo stack updates to avoid ExpressionChangedAfterItHasBeenCheckedError
+    queueMicrotask(() => {
+      this.#undoStack.update((stack) => [...stack, previousState]);
+      this.#redoStack.set([]);
+    });
   }
 
   updateFields() {
-    this.#saveToUndoStack();
+    const previousState = structuredClone(this.$fields());
     this.$fields.update((fields) => [...fields]);
-    this.#clearRedoStack();
+    // Defer undo stack updates to avoid ExpressionChangedAfterItHasBeenCheckedError
+    queueMicrotask(() => {
+      this.#undoStack.update((stack) => [...stack, previousState]);
+      this.#redoStack.set([]);
+    });
   }
 
   duplicateField(field: FormlyFieldConfig) {
@@ -35,7 +44,8 @@ export class FormBuilderService {
       return;
     }
 
-    this.#saveToUndoStack();
+    // Save state before making the change
+    const previousState = structuredClone(this.$fields());
 
     // Deep copy the field to avoid shared references
     const duplicatedField: FormlyFieldConfig = structuredClone(field);
@@ -46,7 +56,11 @@ export class FormBuilderService {
     this.$fields.update((fields) => [...fields, duplicatedField]);
     this.$selectedField.set(duplicatedField);
 
-    this.#clearRedoStack();
+    // Defer undo stack updates to avoid ExpressionChangedAfterItHasBeenCheckedError
+    queueMicrotask(() => {
+      this.#undoStack.update((stack) => [...stack, previousState]);
+      this.#redoStack.set([]);
+    });
   }
 
   undo() {

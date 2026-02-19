@@ -5,6 +5,9 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
 describe('FormBuilderService', () => {
   let service: FormBuilderService;
 
+  // Helper to flush microtasks
+  const flushMicrotasks = () => new Promise((resolve) => setTimeout(resolve, 0));
+
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(FormBuilderService);
@@ -20,26 +23,28 @@ describe('FormBuilderService', () => {
       expect(service.$canRedo()).toBe(false);
     });
 
-    it('should add field and enable undo', () => {
+    it('should add field and enable undo', async () => {
       const field: FormlyFieldConfig = {
         key: 'testField',
         type: 'input',
       };
 
       service.addField(field);
+      await flushMicrotasks();
 
       expect(service.$fields().length).toBe(1);
       expect(service.$canUndo()).toBe(true);
       expect(service.$canRedo()).toBe(false);
     });
 
-    it('should undo field addition', () => {
+    it('should undo field addition', async () => {
       const field: FormlyFieldConfig = {
         key: 'testField',
         type: 'input',
       };
 
       service.addField(field);
+      await flushMicrotasks();
       expect(service.$fields().length).toBe(1);
 
       service.undo();
@@ -48,13 +53,14 @@ describe('FormBuilderService', () => {
       expect(service.$canRedo()).toBe(true);
     });
 
-    it('should redo field addition', () => {
+    it('should redo field addition', async () => {
       const field: FormlyFieldConfig = {
         key: 'testField',
         type: 'input',
       };
 
       service.addField(field);
+      await flushMicrotasks();
       service.undo();
       expect(service.$fields().length).toBe(0);
 
@@ -64,7 +70,7 @@ describe('FormBuilderService', () => {
       expect(service.$canRedo()).toBe(false);
     });
 
-    it('should clear redo stack on new change', () => {
+    it('should clear redo stack on new change', async () => {
       const field1: FormlyFieldConfig = {
         key: 'field1',
         type: 'input',
@@ -75,14 +81,16 @@ describe('FormBuilderService', () => {
       };
 
       service.addField(field1);
+      await flushMicrotasks();
       service.undo();
       expect(service.$canRedo()).toBe(true);
 
       service.addField(field2);
+      await flushMicrotasks();
       expect(service.$canRedo()).toBe(false);
     });
 
-    it('should handle multiple undo operations', () => {
+    it('should handle multiple undo operations', async () => {
       const field1: FormlyFieldConfig = {
         key: 'field1',
         type: 'input',
@@ -93,7 +101,9 @@ describe('FormBuilderService', () => {
       };
 
       service.addField(field1);
+      await flushMicrotasks();
       service.addField(field2);
+      await flushMicrotasks();
 
       expect(service.$fields().length).toBe(2);
 
@@ -106,7 +116,7 @@ describe('FormBuilderService', () => {
       expect(service.$canUndo()).toBe(false);
     });
 
-    it('should handle multiple redo operations', () => {
+    it('should handle multiple redo operations', async () => {
       const field1: FormlyFieldConfig = {
         key: 'field1',
         type: 'input',
@@ -117,7 +127,9 @@ describe('FormBuilderService', () => {
       };
 
       service.addField(field1);
+      await flushMicrotasks();
       service.addField(field2);
+      await flushMicrotasks();
       service.undo();
       service.undo();
 
@@ -142,14 +154,16 @@ describe('FormBuilderService', () => {
       expect(service.$fields().length).toBe(0);
     });
 
-    it('should work with duplicateField', () => {
+    it('should work with duplicateField', async () => {
       const field: FormlyFieldConfig = {
         key: 'testField',
         type: 'input',
       };
 
       service.addField(field);
+      await flushMicrotasks();
       service.duplicateField(field);
+      await flushMicrotasks();
 
       expect(service.$fields().length).toBe(2);
       expect(service.$canUndo()).toBe(true);
