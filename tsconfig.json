@@ -21,6 +21,12 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": true
   },
+  "baseUrl": "./",
+  "paths": {
+    "@components/*": ["src/app/components/*"],
+    "@core/*": ["src/app/core/*"],
+    "@services/*": ["src/app/services/*"]
+  },
   "files": [],
   "references": [
     {
