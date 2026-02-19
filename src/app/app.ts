@@ -4,7 +4,7 @@ import { FieldPaletteComponent } from './components/field-palette/field-palette.
 import { FormPreviewComponent } from './components/form-preview/form-preview.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { PropertiesPanelComponent } from './components/properties-panel/properties-panel.component';
-import { SCREEN_SIZE } from './core/token';
+import { PREVIEW_MODE, SCREEN_SIZE } from './core/token';
 import { FormBuilderService } from './services/form-builder.service';
 
 @Component({
@@ -15,6 +15,7 @@ import { FormBuilderService } from './services/form-builder.service';
 })
 export class App {
   readonly $screenSize = inject(SCREEN_SIZE);
+  readonly $previewMode = inject(PREVIEW_MODE);
   readonly #formBuilderService = inject(FormBuilderService);
 
   // Expose service signals for template use

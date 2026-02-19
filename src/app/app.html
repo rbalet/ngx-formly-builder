@@ -2,21 +2,25 @@
   <app-navbar></app-navbar>
 
   <div class="main-content">
-    <div class="palette-section">
-      <app-field-palette (fieldSelect)="onFieldSelect($event)"></app-field-palette>
-    </div>
-    <div class="preview-section">
+    @if (!$previewMode()) {
+      <div class="palette-section">
+        <app-field-palette (fieldSelect)="onFieldSelect($event)"></app-field-palette>
+      </div>
+    }
+    <div class="preview-section" [class.preview-fullwidth]="$previewMode()">
       <app-form-preview
         [$fields]="$fields()"
         [($selectedField)]="$selectedField"
         [$screenSize]="$screenSize()"
       ></app-form-preview>
     </div>
-    <div class="properties-section">
-      <app-properties-panel
-        [$selectedField]="$selectedField()"
-        (fieldUpdated)="onFieldUpdated()"
-      ></app-properties-panel>
-    </div>
+    @if (!$previewMode()) {
+      <div class="properties-section">
+        <app-properties-panel
+          [$selectedField]="$selectedField()"
+          (fieldUpdated)="onFieldUpdated()"
+        ></app-properties-panel>
+      </div>
+    }
   </div>
 </div>
