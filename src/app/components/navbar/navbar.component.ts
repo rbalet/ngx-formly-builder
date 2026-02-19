@@ -6,6 +6,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { PREVIEW_MODE, SCREEN_SIZE } from '../../core/token';
 import { ExportService } from '../../services/export.service';
 import { FormBuilderService } from '../../services/form-builder.service';
+import { ImportService } from '../../services/import.service';
 import { ColorScheme, ThemeService } from '../../services/theme.service';
 
 @Component({
@@ -24,7 +25,13 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
       <div class="navbar-center">
         @if (!$previewMode()) {
           <div class="menu-items">
-            <button mat-button class="menu-item">File</button>
+            <button mat-button class="menu-item" [matMenuTriggerFor]="fileMenu">File</button>
+            <mat-menu #fileMenu="matMenu">
+              <button mat-menu-item (click)="onOpen()">
+                <mat-icon>folder_open</mat-icon>
+                <span>Open</span>
+              </button>
+            </mat-menu>
             <button mat-button class="menu-item" [matMenuTriggerFor]="editMenu">Edit</button>
             <mat-menu #editMenu="matMenu">
               <button
@@ -269,6 +276,7 @@ export class NavbarComponent {
   readonly formBuilderService = inject(FormBuilderService);
   readonly themeService = inject(ThemeService);
   readonly exportService = inject(ExportService);
+  readonly importService = inject(ImportService);
   readonly $screenSize = inject(SCREEN_SIZE);
   readonly $previewMode = inject(PREVIEW_MODE);
 
@@ -320,5 +328,12 @@ export class NavbarComponent {
 
   onRedo() {
     this.formBuilderService.redo();
+  }
+
+  async onOpen() {
+    const fields = await this.importService.import();
+    if (fields) {
+      this.formBuilderService.importFields(fields);
+    }
   }
 }
