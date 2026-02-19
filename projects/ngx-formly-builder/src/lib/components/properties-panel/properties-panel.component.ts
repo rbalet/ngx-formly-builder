@@ -10,8 +10,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { ValidationCondition, ValidationConditionType } from '../../core/type';
 import { FormlyFieldConfig } from '@ngx-formly/core';
+import { ValidationCondition, ValidationConditionType } from '../../core/type';
 import {
   OptionItem,
   OptionsEditorDialogComponent,
@@ -23,7 +23,7 @@ interface ExtendedFieldProps {
 }
 
 @Component({
-  selector: 'app-properties-panel',
+  selector: 'formly-builder-properties-panel',
   imports: [
     JsonPipe,
     FormsModule,

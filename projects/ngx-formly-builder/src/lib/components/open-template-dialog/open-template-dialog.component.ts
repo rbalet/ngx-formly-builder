@@ -11,7 +11,7 @@ import { TemplateService } from '../../services/template.service';
 type ViewMode = 'categories' | 'templates';
 
 @Component({
-  selector: 'app-open-template-dialog',
+  selector: 'formly-builder-open-template-dialog',
   imports: [
     MatDialogModule,
     MatButtonModule,

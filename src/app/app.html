@@ -1,29 +1,31 @@
 <div class="app-container h-100">
-  <app-navbar></app-navbar>
+  <formly-builder-navbar></formly-builder-navbar>
 
   <div class="main-content" cdkDropListGroup>
     @if (!$previewMode()) {
       <div class="palette-section">
-        <app-field-palette (fieldSelect)="onFieldSelect($event)"></app-field-palette>
+        <formly-builder-field-palette
+          (fieldSelect)="onFieldSelect($event)"
+        ></formly-builder-field-palette>
       </div>
     }
     <div class="preview-section" [class.preview-fullWidth]="$previewMode()">
-      <app-form-preview
+      <formly-builder-form-preview
         [$fields]="$fields()"
         [($selectedField)]="$selectedField"
         [$screenSize]="$screenSize()"
         (fieldsReordered)="onFieldsReordered($event)"
         (fieldDropped)="onFieldDropped($event)"
-      ></app-form-preview>
+      ></formly-builder-form-preview>
 
       <div class="app-background"></div>
     </div>
     @if (!$previewMode()) {
       <div class="properties-section">
-        <app-properties-panel
+        <formly-builder-properties-panel
           [$selectedField]="$selectedField()"
           (fieldUpdated)="onFieldUpdated()"
-        ></app-properties-panel>
+        ></formly-builder-properties-panel>
       </div>
     }
   </div>

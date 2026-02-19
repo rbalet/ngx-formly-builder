@@ -17,7 +17,7 @@ export interface OptionsEditorDialogData {
 }
 
 @Component({
-  selector: 'app-options-editor-dialog',
+  selector: 'formly-builder-options-editor-dialog',
   imports: [
     FormsModule,
     MatDialogModule,
@@ -109,10 +109,6 @@ export interface OptionsEditorDialogData {
 
       .field-input {
         width: 100%;
-      }
-
-      .delete-btn {
-        color: rgba(0, 0, 0, 0.54);
       }
 
       .delete-btn:hover {

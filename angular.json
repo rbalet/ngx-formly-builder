@@ -11,7 +11,7 @@
       "schematics": {},
       "root": "",
       "sourceRoot": "src",
-      "prefix": "app",
+      "prefix": "formly-builder",
       "architect": {
         "build": {
           "builder": "@angular/build:application",

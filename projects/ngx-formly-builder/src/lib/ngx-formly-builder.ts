@@ -1,13 +1,13 @@
-import { Component, inject, input, signal } from '@angular/core';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { Component, inject, input } from '@angular/core';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { FieldPaletteComponent } from './components/field-palette/field-palette.component';
 import { FormPreviewComponent } from './components/form-preview/form-preview.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { PropertiesPanelComponent } from './components/properties-panel/properties-panel.component';
 import { PREVIEW_MODE, SCREEN_SIZE } from './core/token';
-import { FormBuilderService } from './services/form-builder.service';
 import { FieldGroup } from './models/field-group.model';
+import { FormBuilderService } from './services/form-builder.service';
 
 @Component({
   selector: 'formly-builder',
@@ -20,34 +20,34 @@ import { FieldGroup } from './models/field-group.model';
   ],
   template: `
     <div class="app-container h-100">
-      <app-navbar></app-navbar>
+      <formly-builder-navbar></formly-builder-navbar>
 
       <div class="main-content" cdkDropListGroup>
         @if (!$previewMode()) {
           <div class="palette-section">
-            <app-field-palette
+            <formly-builder-field-palette
               [fieldGroups]="fieldGroups()"
               (fieldSelect)="onFieldSelect($event)"
-            ></app-field-palette>
+            ></formly-builder-field-palette>
           </div>
         }
         <div class="preview-section" [class.preview-fullWidth]="$previewMode()">
-          <app-form-preview
+          <formly-builder-form-preview
             [$fields]="$fields()"
             [($selectedField)]="$selectedField"
             [$screenSize]="$screenSize()"
             (fieldsReordered)="onFieldsReordered($event)"
             (fieldDropped)="onFieldDropped($event)"
-          ></app-form-preview>
+          ></formly-builder-form-preview>
 
           <div class="app-background"></div>
         </div>
         @if (!$previewMode()) {
           <div class="properties-section">
-            <app-properties-panel
+            <formly-builder-properties-panel
               [$selectedField]="$selectedField()"
               (fieldUpdated)="onFieldUpdated()"
-            ></app-properties-panel>
+            ></formly-builder-properties-panel>
           </div>
         }
       </div>
@@ -230,4 +230,3 @@ export class FormlyBuilder {
     return newField;
   }
 }
-

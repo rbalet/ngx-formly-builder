@@ -72,7 +72,7 @@ const DEFAULT_FIELD_GROUPS: FieldGroup[] = [
 ];
 
 @Component({
-  selector: 'app-field-palette',
+  selector: 'formly-builder-field-palette',
   imports: [MatListModule, MatIconModule, DragDropModule],
   template: `
     <div class="field-palette">
