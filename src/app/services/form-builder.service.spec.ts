@@ -175,4 +175,66 @@ describe('FormBuilderService', () => {
       expect(service.$fields().length).toBe(0);
     });
   });
+
+  describe('importFields', () => {
+    it('should import fields and enable undo', async () => {
+      const fields: FormlyFieldConfig[] = [
+        { key: 'field1', type: 'input' },
+        { key: 'field2', type: 'select' },
+      ];
+
+      service.importFields(fields);
+      await flushMicrotasks();
+
+      expect(service.$fields().length).toBe(2);
+      expect(service.$canUndo()).toBe(true);
+      expect(service.$canRedo()).toBe(false);
+    });
+
+    it('should clear selected field on import', async () => {
+      const field: FormlyFieldConfig = { key: 'testField', type: 'input' };
+      service.addField(field);
+      await flushMicrotasks();
+      service.$selectedField.set(field);
+
+      const newFields: FormlyFieldConfig[] = [{ key: 'newField', type: 'textarea' }];
+      service.importFields(newFields);
+      await flushMicrotasks();
+
+      expect(service.$selectedField()).toBeNull();
+    });
+
+    it('should save previous state for undo', async () => {
+      const initialFields: FormlyFieldConfig[] = [{ key: 'field1', type: 'input' }];
+      service.importFields(initialFields);
+      await flushMicrotasks();
+
+      const newFields: FormlyFieldConfig[] = [
+        { key: 'field2', type: 'select' },
+        { key: 'field3', type: 'textarea' },
+      ];
+      service.importFields(newFields);
+      await flushMicrotasks();
+
+      expect(service.$fields().length).toBe(2);
+
+      service.undo();
+      expect(service.$fields().length).toBe(1);
+      expect(service.$fields()[0].key).toBe('field1');
+    });
+
+    it('should clear redo stack on import', async () => {
+      const field: FormlyFieldConfig = { key: 'field1', type: 'input' };
+      service.addField(field);
+      await flushMicrotasks();
+      service.undo();
+      expect(service.$canRedo()).toBe(true);
+
+      const newFields: FormlyFieldConfig[] = [{ key: 'field2', type: 'select' }];
+      service.importFields(newFields);
+      await flushMicrotasks();
+
+      expect(service.$canRedo()).toBe(false);
+    });
+  });
 });

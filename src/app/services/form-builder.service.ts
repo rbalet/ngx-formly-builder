@@ -101,4 +101,17 @@ export class FormBuilderService {
   #clearRedoStack() {
     this.#$redoStack.set([]);
   }
+
+  importFields(fields: FormlyFieldConfig[]) {
+    // Save state before making the change
+    const previousState = structuredClone(this.$fields());
+    this.$fields.set(fields);
+    // Clear selected field as it may not exist in imported data
+    this.$selectedField.set(null);
+    // Defer undo stack updates to avoid ExpressionChangedAfterItHasBeenCheckedError
+    queueMicrotask(() => {
+      this.#$undoStack.update((stack) => [...stack, previousState]);
+      this.#$redoStack.set([]);
+    });
+  }
 }
