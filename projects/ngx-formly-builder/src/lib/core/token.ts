@@ -1,4 +1,4 @@
-import { InjectionToken, WritableSignal } from '@angular/core';
+import { inject, InjectionToken, WritableSignal } from '@angular/core';
 import { ScreenSize } from './type';
 import { ExportService } from '../services/export.service';
 
@@ -12,4 +12,8 @@ export const PREVIEW_MODE = new InjectionToken<WritableSignal<boolean>>(
 
 export const EXPORT_SERVICE = new InjectionToken<ExportService>(
   'formly.builder.export.service',
+  {
+    providedIn: 'root',
+    factory: () => inject(ExportService),
+  },
 );

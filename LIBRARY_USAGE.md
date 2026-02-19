@@ -265,7 +265,9 @@ customFieldGroups: FieldGroup[] = [
 
 ### Customizing Export Functionality
 
-You can provide a custom export service to change how forms are exported (e.g., as YAML, XML, or to a backend API):
+You can provide a custom export service to change how forms are exported (e.g., as YAML, XML, or to a backend API).
+
+**Note**: The `EXPORT_SERVICE` token has a default factory that provides the standard JSON export. You only need to provide a custom implementation if you want different behavior.
 
 ```typescript
 import { Injectable } from '@angular/core';

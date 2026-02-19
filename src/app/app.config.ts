@@ -23,14 +23,9 @@ import { FormlyMatSelectModule } from '@ngx-formly/material/select';
 import { FormlyMatTextAreaModule } from '@ngx-formly/material/textarea';
 import { FormlyMatToggleModule } from '@ngx-formly/material/toggle';
 import { provideMarkdown } from 'ngx-markdown';
-import { PREVIEW_MODE, SCREEN_SIZE, EXPORT_SERVICE } from 'projects/ngx-formly-builder/src/lib/core/token';
+import { PREVIEW_MODE, SCREEN_SIZE } from 'projects/ngx-formly-builder/src/lib/core/token';
 import { MarkdownFieldComponent } from 'projects/ngx-formly-builder/src/lib/types/markdown-field.component';
 import { FieldWrapperComponent } from 'projects/ngx-formly-builder/src/lib/wrappers/field-wrapper.component';
-import { ExportService } from 'projects/ngx-formly-builder/src/lib/services/export.service';
-import { ImportService } from 'projects/ngx-formly-builder/src/lib/services/import.service';
-import { TemplateService } from 'projects/ngx-formly-builder/src/lib/services/template.service';
-import { FormBuilderService } from 'projects/ngx-formly-builder/src/lib/services/form-builder.service';
-import { ThemeService } from 'projects/ngx-formly-builder/src/lib/services/theme.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -42,12 +37,6 @@ export const appConfig: ApplicationConfig = {
 
     { provide: SCREEN_SIZE, useValue: signal('lg') },
     { provide: PREVIEW_MODE, useValue: signal(false) },
-    { provide: EXPORT_SERVICE, useClass: ExportService },
-
-    FormBuilderService,
-    ThemeService,
-    ImportService,
-    TemplateService,
 
     provideZonelessChangeDetection(),
     provideBrowserGlobalErrorListeners(),

@@ -154,7 +154,7 @@ The `ExportService` is responsible for exporting form data. You can extend or re
 
 #### Default Implementation
 
-By default, the service exports form data as JSON files.
+By default, the service exports form data as JSON files. The `EXPORT_SERVICE` injection token automatically provides the default `ExportService` implementation, so no explicit configuration is required.
 
 #### Custom Export Service
 
@@ -182,7 +182,7 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-**Note**: When providing a custom export service, make sure to provide it **after** `provideFormlyBuilder()` so it overrides the default implementation.
+**Note**: The `EXPORT_SERVICE` token has a default factory that provides the `ExportService` class. You can override this by providing your custom service after `provideFormlyBuilder()`.
 
 ### Types
 

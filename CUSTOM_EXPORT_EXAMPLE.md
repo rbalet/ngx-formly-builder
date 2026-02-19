@@ -2,6 +2,8 @@
 
 This document demonstrates how to create a custom export service for ngx-formly-builder.
 
+**Note**: The `EXPORT_SERVICE` injection token has a default factory that automatically provides the `ExportService` class. You only need to provide your custom implementation if you want to override the default JSON export behavior.
+
 ## Basic Example: YAML Export
 
 ```typescript
@@ -165,8 +167,9 @@ export const appConfig: ApplicationConfig = {
 1. **Extend the ExportService class** - Your custom service should extend `ExportService` to maintain compatibility
 2. **Override the export method** - Implement your custom export logic
 3. **Provide via EXPORT_SERVICE token** - Use the injection token to replace the default implementation
-4. **Provide after provideFormlyBuilder()** - Ensure your custom service is provided after the library configuration
+4. **Provide after provideFormlyBuilder()** - Ensure your custom service is provided after the library configuration to override the default
 5. **Use super.export()** - You can call the parent implementation as a fallback
+6. **Default factory** - The `EXPORT_SERVICE` token has a factory that automatically provides `ExportService`, so no explicit configuration is needed unless overriding
 
 ## Testing Your Custom Export Service
 
