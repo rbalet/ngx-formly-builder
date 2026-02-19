@@ -2,6 +2,10 @@
 
 A visual form builder for arranging ngx-formly fields, inspired by shadcn-builder. Built with Angular v21 (standalone, zoneless, no NgModules).
 
+## Demo
+
+[Try it on StackBlitz](https://stackblitz.com/~/github.com/rbalet/ngx-formly-builder)
+
 ## Features
 
 - **3-Column Layout**: Field palette | Formly preview | Properties panel
