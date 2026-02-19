@@ -38,11 +38,7 @@ import { App } from '../app';
         </div>
       </div>
     } @else {
-      <div
-        class="field-wrapper"
-        [class.selected]="isSelected()"
-        (click)="onFieldClick($event)"
-      >
+      <div class="field-wrapper" [class.selected]="isSelected()" (click)="onFieldClick($event)">
         <div class="field-content">
           <div class="field-header">
             <div class="field-type-container">
