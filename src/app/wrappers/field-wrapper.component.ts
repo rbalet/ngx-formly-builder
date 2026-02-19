@@ -47,8 +47,8 @@ import { App } from '../app';
         }
 
         &.selected {
-          border-color: #0d6efd;
-          background-color: rgba(13, 110, 253, 0.05);
+          border-color: var(--mat-sys-primary);
+          background-color: var(--mat-sys-on-primary);
           .field-type {
             opacity: 1;
           }

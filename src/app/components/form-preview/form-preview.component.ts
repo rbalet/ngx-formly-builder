@@ -70,7 +70,6 @@ import { FormlyMaterialModule } from '@ngx-formly/material';
       }
 
       .info-message {
-        color: #1976d2;
         padding: 1rem;
       }
 
