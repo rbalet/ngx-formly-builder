@@ -263,6 +263,48 @@ customFieldGroups: FieldGroup[] = [
 ];
 ```
 
+### Customizing Export Functionality
+
+You can provide a custom export service to change how forms are exported (e.g., as YAML, XML, or to a backend API):
+
+```typescript
+import { Injectable } from '@angular/core';
+import { ExportService, EXPORT_SERVICE, provideFormlyBuilder } from 'ngx-formly-builder';
+
+@Injectable()
+export class YamlExportService extends ExportService {
+  override export(data: unknown, filename: string = 'form-settings'): void {
+    // Example: Convert to YAML format
+    const yamlString = this.convertToYaml(data);
+    const blob = new Blob([yamlString], { type: 'text/yaml' });
+    
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${filename}.yaml`;
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+  
+  private convertToYaml(data: unknown): string {
+    // Your YAML conversion logic
+    return ''; // Implement using a YAML library
+  }
+}
+
+// In app.config.ts
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideAnimationsAsync(),
+    provideFormlyBuilder(),
+    { provide: EXPORT_SERVICE, useClass: YamlExportService },
+  ],
+};
+```
+
 ### Material Icons
 
 You can use any Material Symbol icon. Browse available icons at:
