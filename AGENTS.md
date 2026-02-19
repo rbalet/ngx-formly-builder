@@ -8,6 +8,16 @@
 
 ## Service Injection Pattern
 
+## Signal Naming Convention
+
+- **Private signals** should be named with a `#$` prefix (e.g., `readonly #$undoStack = signal<T>([])`).
+- This distinguishes private signals from public signals and other private fields.
+
+### Example:
+```ts
+readonly #$undoStack = signal<FormlyFieldConfig[][]>([]);
+```
+
 **Inject services using Angular's inject() function:**
 ```ts
 readonly #uiStateService = inject(UiStateService);
