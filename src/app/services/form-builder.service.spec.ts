@@ -237,4 +237,77 @@ describe('FormBuilderService', () => {
       expect(service.$canRedo()).toBe(false);
     });
   });
+
+  describe('clearForm', () => {
+    it('should clear all fields', async () => {
+      const fields: FormlyFieldConfig[] = [
+        { key: 'field1', type: 'input' },
+        { key: 'field2', type: 'select' },
+      ];
+
+      service.importFields(fields);
+      await flushMicrotasks();
+      expect(service.$fields().length).toBe(2);
+
+      service.clearForm();
+      expect(service.$fields().length).toBe(0);
+    });
+
+    it('should clear selected field', async () => {
+      const field: FormlyFieldConfig = { key: 'testField', type: 'input' };
+      service.addField(field);
+      await flushMicrotasks();
+      service.$selectedField.set(field);
+
+      service.clearForm();
+      expect(service.$selectedField()).toBeNull();
+    });
+
+    it('should enable undo after clearing', async () => {
+      const fields: FormlyFieldConfig[] = [
+        { key: 'field1', type: 'input' },
+        { key: 'field2', type: 'select' },
+      ];
+
+      service.importFields(fields);
+      await flushMicrotasks();
+
+      service.clearForm();
+      await flushMicrotasks();
+
+      expect(service.$canUndo()).toBe(true);
+    });
+
+    it('should allow undoing a clear operation', async () => {
+      const fields: FormlyFieldConfig[] = [
+        { key: 'field1', type: 'input' },
+        { key: 'field2', type: 'select' },
+      ];
+
+      service.importFields(fields);
+      await flushMicrotasks();
+
+      service.clearForm();
+      await flushMicrotasks();
+      expect(service.$fields().length).toBe(0);
+
+      service.undo();
+      expect(service.$fields().length).toBe(2);
+      expect(service.$fields()[0].key).toBe('field1');
+      expect(service.$fields()[1].key).toBe('field2');
+    });
+
+    it('should clear redo stack on clear', async () => {
+      const field: FormlyFieldConfig = { key: 'field1', type: 'input' };
+      service.addField(field);
+      await flushMicrotasks();
+      service.undo();
+      expect(service.$canRedo()).toBe(true);
+
+      service.clearForm();
+      await flushMicrotasks();
+
+      expect(service.$canRedo()).toBe(false);
+    });
+  });
 });
