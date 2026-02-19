@@ -15,10 +15,8 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
       <!-- Left Section -->
       <div class="navbar-left">
         <mat-icon class="logo-icon">grid_view</mat-icon>
-        <div class="title-section">
-          <h1 class="app-title">Formly Builder</h1>
-          <span class="alpha-badge">Alpha</span>
-        </div>
+        <h1 class="app-title">Formly Builder</h1>
+        <span class="alpha-badge">Alpha</span>
       </div>
 
       <!-- Center Section -->
@@ -136,6 +134,32 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
         box-sizing: border-box;
         border-right: 1px solid var(--mat-sys-outline-variant);
         height: 64px;
+        position: relative;
+
+        .logo-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+
+        .app-title {
+          margin: 0;
+          white-space: nowrap;
+        }
+
+        .alpha-badge {
+          background-color: #444;
+          color: #fff;
+          padding: 0.1rem 0.3rem;
+          border-radius: 3px;
+          font-size: 0.65rem;
+          font-weight: 500;
+          text-transform: uppercase;
+          border-radius: 0 0 0 3px;
+          position: absolute;
+          top: 0;
+          right: 0;
+        }
       }
 
       .navbar-center {
@@ -160,33 +184,6 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
         box-sizing: border-box;
         border-left: 1px solid var(--mat-sys-outline-variant);
         height: 64px;
-      }
-
-      .logo-icon {
-        font-size: 20px;
-        width: 20px;
-        height: 20px;
-      }
-
-      .title-section {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .app-title {
-        margin: 0;
-        white-space: nowrap;
-      }
-
-      .alpha-badge {
-        background-color: #444;
-        color: #aaa;
-        padding: 0.1rem 0.3rem;
-        border-radius: 3px;
-        font-size: 0.65rem;
-        font-weight: 500;
-        text-transform: uppercase;
       }
 
       .menu-items {
