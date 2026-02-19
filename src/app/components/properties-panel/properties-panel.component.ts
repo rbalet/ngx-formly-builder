@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -23,73 +24,123 @@ import {
     MatFormFieldModule,
     MatButtonModule,
     MatIconModule,
+    MatExpansionModule,
   ],
   template: `
     <div class="properties-panel">
       <h5 class="mb-3">Field Properties</h5>
       @if ($selectedField()) {
-        @if (hasOptions()) {
-          <div class="data-options-section mb-4">
-            <h6 class="section-title">Data Options</h6>
-            <div class="options-table">
-              <div class="table-header">
-                <div class="table-cell">Label</div>
-                <div class="table-cell">Value</div>
-              </div>
-              @for (option of getOptions(); track $index) {
-                <div class="table-row">
-                  <div class="table-cell">{{ option.label }}</div>
-                  <div class="table-cell">{{ option.value }}</div>
+        <mat-accordion [multi]="true">
+          @if (hasOptions()) {
+            <mat-expansion-panel [expanded]="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title>Data Options</mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="panel-content">
+                <div class="options-table">
+                  <div class="table-header">
+                    <div class="table-cell">Label</div>
+                    <div class="table-cell">Value</div>
+                  </div>
+                  @for (option of getOptions(); track $index) {
+                    <div class="table-row">
+                      <div class="table-cell">{{ option.label }}</div>
+                      <div class="table-cell">{{ option.value }}</div>
+                    </div>
+                  }
                 </div>
-              }
+                <button
+                  mat-stroked-button
+                  class="full-width mt-2 manage-options-btn"
+                  (click)="openOptionsEditor()"
+                >
+                  <mat-icon>list</mat-icon>
+                  Manage Options
+                </button>
+              </div>
+            </mat-expansion-panel>
+          }
+
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>Input</mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="panel-content">
+              <mat-form-field class="full-width mb-3">
+                <mat-label>Value</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  [ngModel]="getDefaultValue()"
+                  (ngModelChange)="updateDefaultValue($event)"
+                />
+              </mat-form-field>
+              <mat-form-field class="full-width mb-3">
+                <mat-label>Placeholder</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  [ngModel]="getPlaceholder()"
+                  (ngModelChange)="updatePlaceholder($event)"
+                />
+              </mat-form-field>
+              <mat-form-field class="full-width mb-3">
+                <mat-label>Description</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  [ngModel]="getDescription()"
+                  (ngModelChange)="updateDescription($event)"
+                />
+              </mat-form-field>
             </div>
-            <button
-              mat-stroked-button
-              class="full-width mt-2 manage-options-btn"
-              (click)="openOptionsEditor()"
-            >
-              <mat-icon>list</mat-icon>
-              Manage Options
-            </button>
-          </div>
-          <hr />
-        }
-        <mat-form-field class="full-width mb-3">
-          <mat-label>Label</mat-label>
-          <input
-            matInput
-            type="text"
-            [ngModel]="getLabel()"
-            (ngModelChange)="updateLabel($event)"
-          />
-        </mat-form-field>
-        <mat-form-field class="full-width mb-3">
-          <mat-label>Placeholder</mat-label>
-          <input
-            matInput
-            type="text"
-            [ngModel]="getPlaceholder()"
-            (ngModelChange)="updatePlaceholder($event)"
-          />
-        </mat-form-field>
-        <mat-form-field class="full-width mb-3">
-          <mat-label>Description</mat-label>
-          <input
-            matInput
-            type="text"
-            [ngModel]="getDescription()"
-            (ngModelChange)="updateDescription($event)"
-          />
-        </mat-form-field>
-        <mat-form-field class="full-width mb-3">
-          <mat-label>Default Value</mat-label>
-          <input
-            matInput
-            type="text"
-            [ngModel]="getDefaultValue()"
-            (ngModelChange)="updateDefaultValue($event)"
-          />
-        </mat-form-field>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>Label & Description</mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="panel-content">
+              <mat-form-field class="full-width mb-3">
+                <mat-label>Label</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  [ngModel]="getLabel()"
+                  (ngModelChange)="updateLabel($event)"
+                />
+              </mat-form-field>
+            </div>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>Appearance</mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="panel-content">
+              <p class="placeholder-text">Appearance options coming soon...</p>
+            </div>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>HTML Attributes</mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="panel-content">
+              <p class="placeholder-text">HTML attributes options coming soon...</p>
+            </div>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>Validation</mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="panel-content">
+              <p class="placeholder-text">Validation options coming soon...</p>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+
         <hr />
         <mat-card>
           <mat-card-header>
@@ -143,16 +194,8 @@ import {
         border-top: 1px solid #e0e0e0;
       }
 
-      .data-options-section {
-        padding: 1rem;
-        border-radius: 0.25rem;
-        border: 1px solid #e0e0e0;
-      }
-
-      .section-title {
-        margin: 0 0 1rem 0;
-        font-size: 1rem;
-        font-weight: 500;
+      .panel-content {
+        padding-top: 1rem;
       }
 
       .options-table {
@@ -205,16 +248,17 @@ import {
         gap: 0.5rem;
       }
 
+      .placeholder-text {
+        color: var(--mat-sys-on-surface-variant);
+        margin: 0;
+      }
+
       .mt-2 {
         margin-top: 0.5rem;
       }
 
       .mb-3 {
         margin-bottom: 1rem;
-      }
-
-      .mb-4 {
-        margin-bottom: 1.5rem;
       }
     `,
   ],
