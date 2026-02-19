@@ -95,11 +95,11 @@ import { FormlyMaterialModule } from '@ngx-formly/material';
       }
 
       .preview-container.size-md {
-        max-width: 768px;
+        width: 768px;
       }
 
       .preview-container.size-lg {
-        max-width: 100%;
+        width: 1074px;
       }
 
       .info-message {
