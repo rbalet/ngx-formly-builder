@@ -122,6 +122,17 @@ import {
                   <mat-button-toggle value="no">no</mat-button-toggle>
                 </mat-button-toggle-group>
               </div>
+              <div class="validation-row">
+                <label class="validation-label">Disabled</label>
+                <mat-button-toggle-group
+                  [value]="getDisabled() ? 'yes' : 'no'"
+                  (change)="updateDisabled($event.value === 'yes')"
+                  class="validation-toggle"
+                >
+                  <mat-button-toggle value="yes">yes</mat-button-toggle>
+                  <mat-button-toggle value="no">no</mat-button-toggle>
+                </mat-button-toggle-group>
+              </div>
             </div>
           </mat-expansion-panel>
         </mat-accordion>
@@ -372,6 +383,25 @@ export class PropertiesPanelComponent {
         field.props = {};
       }
       field.props.required = value;
+      this.fieldUpdated.emit();
+    }
+  }
+
+  getDisabled(): boolean {
+    const field = this.$selectedField();
+    if (!field || !field.props) {
+      return false;
+    }
+    return field.props.disabled === true;
+  }
+
+  updateDisabled(value: boolean) {
+    const field = this.$selectedField();
+    if (field) {
+      if (!field.props) {
+        field.props = {};
+      }
+      field.props.disabled = value;
       this.fieldUpdated.emit();
     }
   }
