@@ -23,9 +23,9 @@ import { FormlyMaterialModule } from '@ngx-formly/material';
       <div [class]="previewContainerClass()">
         <form [formGroup]="form" class="mb-4">
           @if (!$previewMode()) {
-            <div 
-              cdkDropList 
-              (cdkDropListDropped)="onDrop($event)" 
+            <div
+              cdkDropList
+              (cdkDropListDropped)="onDrop($event)"
               class="field-list"
               id="form-preview-list"
             >
@@ -115,6 +115,10 @@ import { FormlyMaterialModule } from '@ngx-formly/material';
 
       .field-list {
         min-height: 50px;
+        background: var(--mat-sys-surface-container-low);
+        border-radius: var(--mat-card-elevated-container-shape, var(--mat-sys-corner-medium));
+        border: 1px solid var(--mat-sys-outline-variant);
+        padding: 1rem;
       }
 
       .field-item {
