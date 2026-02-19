@@ -1,16 +1,16 @@
 import { Component, computed, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatDialog } from '@angular/material/dialog';
 import { PREVIEW_MODE, SCREEN_SIZE } from '../../core/token';
+import { Template } from '../../models/template.model';
 import { ExportService } from '../../services/export.service';
 import { FormBuilderService } from '../../services/form-builder.service';
 import { ImportService } from '../../services/import.service';
 import { ColorScheme, ThemeService } from '../../services/theme.service';
 import { OpenTemplateDialogComponent } from '../open-template-dialog/open-template-dialog.component';
-import { Template } from '../../models/template.model';
 
 @Component({
   selector: 'app-navbar',
@@ -30,13 +30,13 @@ import { Template } from '../../models/template.model';
           <div class="menu-items">
             <button mat-button class="menu-item" [matMenuTriggerFor]="fileMenu">File</button>
             <mat-menu #fileMenu="matMenu">
+              <button mat-menu-item (click)="onUpload()">
+                <mat-icon>upload_file</mat-icon>
+                <span>Upload</span>
+              </button>
               <button mat-menu-item (click)="onOpenTemplate()">
                 <mat-icon>folder_open</mat-icon>
                 <span>Open Template</span>
-              </button>
-              <button mat-menu-item (click)="onOpen()">
-                <mat-icon>upload_file</mat-icon>
-                <span>Open</span>
               </button>
             </mat-menu>
             <button mat-button class="menu-item" [matMenuTriggerFor]="editMenu">Edit</button>
@@ -338,7 +338,7 @@ export class NavbarComponent {
     this.formBuilderService.redo();
   }
 
-  async onOpen() {
+  async onUpload() {
     const fields = await this.importService.import();
     if (fields) {
       this.formBuilderService.importFields(fields);
