@@ -1,5 +1,5 @@
-import { Component, output } from '@angular/core';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { Component, output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 
@@ -26,8 +26,7 @@ interface FieldGroup {
           <div class="group-header">{{ group.category }}</div>
           <mat-action-list cdkDropList [cdkDropListSortingDisabled]="true">
             @for (field of group.fields; track field.type) {
-              <div
-                mat-list-item
+              <mat-list-item
                 cdkDrag
                 [cdkDragData]="field.type"
                 (click)="onFieldSelect(field.type)"
@@ -38,7 +37,7 @@ interface FieldGroup {
                   <div class="field-label">{{ field.label }}</div>
                   <div class="field-description">{{ field.description }}</div>
                 </div>
-              </div>
+              </mat-list-item>
             }
           </mat-action-list>
         </div>
@@ -111,10 +110,10 @@ interface FieldGroup {
 
       .field-palette-item {
         cursor: pointer;
-      }
 
-      .field-palette-item:hover {
-        background-color: var(--mat-sys-surface-container-highest);
+        &:hover {
+          background-color: var(--mat-sys-surface-container-highest);
+        }
       }
     `,
   ],

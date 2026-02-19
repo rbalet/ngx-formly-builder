@@ -106,13 +106,17 @@ const screenSize = inject(SCREEN_SIZE);
 - **Use Angular Material CSS variables for colors in components instead of hardcoded values.**
 - Reference variables like `var(--md-sys-color-primary)` and `var(--md-sys-color-primary-container)` for theming consistency. See https://material.angular.dev/guide/theming-your-components for the full list of available variables.
 
-### Example:
-```css
-.field-item.selected {
-  border-color: var(--md-sys-color-primary);
-  background-color: var(--md-sys-color-primary-container);
+
+### Example (SCSS nesting):
+```scss
+.field-palette-item {
+  &:hover {
+    background-color: var(--mat-sys-surface-container-highest);
+  }
 }
 ```
+
+This ensures proper SCSS nesting for pseudo-classes like :hover, following the codebase convention.
 
 This ensures your components automatically adapt to the active Material theme (light/dark/custom).
 
