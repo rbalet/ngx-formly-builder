@@ -45,10 +45,20 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
         <div class="navbar-controls">
           @if (!$previewMode()) {
             <div class="left-controls">
-              <button mat-icon-button title="Undo">
+              <button
+                mat-icon-button
+                title="Undo"
+                [disabled]="!formBuilderService.$canUndo()"
+                (click)="onUndo()"
+              >
                 <mat-icon>undo</mat-icon>
               </button>
-              <button mat-icon-button title="Redo">
+              <button
+                mat-icon-button
+                title="Redo"
+                [disabled]="!formBuilderService.$canRedo()"
+                (click)="onRedo()"
+              >
                 <mat-icon>redo</mat-icon>
               </button>
             </div>
@@ -298,5 +308,13 @@ export class NavbarComponent {
 
   togglePreviewMode() {
     this.$previewMode.set(!this.$previewMode());
+  }
+
+  onUndo() {
+    this.formBuilderService.undo();
+  }
+
+  onRedo() {
+    this.formBuilderService.redo();
   }
 }
