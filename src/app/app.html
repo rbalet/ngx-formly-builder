@@ -8,8 +8,6 @@
       </div>
     }
     <div class="preview-section" [class.preview-fullWidth]="$previewMode()">
-      <div class="app-background"></div>
-
       <app-form-preview
         [$fields]="$fields()"
         [($selectedField)]="$selectedField"
@@ -17,6 +15,8 @@
         (fieldsReordered)="onFieldsReordered($event)"
         (fieldDropped)="onFieldDropped($event)"
       ></app-form-preview>
+
+      <div class="app-background"></div>
     </div>
     @if (!$previewMode()) {
       <div class="properties-section">

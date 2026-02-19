@@ -25,16 +25,18 @@
 .preview-section {
   flex: 1;
   height: calc(100vh - 56px);
+  position: relative;
 
   .app-background {
     position: absolute;
     inset: 0;
-    opacity: 0.3;
+    opacity: 0.05;
     pointer-events: none;
     background-image:
-      linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+      linear-gradient(var(--mat-sys-on-secondary-fixed) 1px, transparent 1px),
+      linear-gradient(90deg, var(--mat-sys-on-secondary-fixed) 1px, transparent 1px);
     background-size: 60px 60px;
+    z-index: -1;
   }
 }
 
