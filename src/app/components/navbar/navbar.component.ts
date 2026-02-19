@@ -92,6 +92,10 @@ import { Template } from 'src/app/models/template.model';
             </div>
           }
 
+          <div class="center-controls">
+            <!-- Additional controls can be added here in the future -->
+          </div>
+
           <div class="right-controls">
             <mat-button-toggle-group
               [value]="$screenSize()"
@@ -137,11 +141,16 @@ import { Template } from 'src/app/models/template.model';
       <!-- Right Section -->
       <div class="navbar-right">
         @if (!$previewMode()) {
-          <button mat-button class="preview-button" (click)="togglePreviewMode()">
+          <button
+            matButton="outlined"
+            color="secondary"
+            class="preview-button"
+            (click)="togglePreviewMode()"
+          >
             <mat-icon>play_arrow</mat-icon>
             Preview
           </button>
-          <button mat-raised-button color="primary" class="export-button" (click)="onExport()">
+          <button matButton="filled" color="primary" class="export-button" (click)="onExport()">
             <mat-icon>open_in_new</mat-icon>
             Export
           </button>
@@ -232,9 +241,7 @@ import { Template } from 'src/app/models/template.model';
       }
 
       .menu-item {
-        font-size: 0.813rem;
-        min-width: auto;
-        padding: 0 0.75rem;
+        font-size: 1rem;
       }
 
       .navbar-controls {
