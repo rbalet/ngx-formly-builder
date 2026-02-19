@@ -2,9 +2,9 @@ import { JsonPipe } from '@angular/common';
 import { Component, computed, input, model, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
+import { ScreenSize } from '@core/type';
 import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
-import { ScreenSize } from '../../core/type';
 
 @Component({
   selector: 'app-form-preview',

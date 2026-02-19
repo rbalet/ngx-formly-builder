@@ -3,11 +3,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { PREVIEW_MODE, SCREEN_SIZE } from '../../core/token';
-import { ExportService } from '../../services/export.service';
-import { FormBuilderService } from '../../services/form-builder.service';
-import { ImportService } from '../../services/import.service';
-import { ColorScheme, ThemeService } from '../../services/theme.service';
+import { PREVIEW_MODE, SCREEN_SIZE } from '@core/token';
+import { ExportService } from '@services/export.service';
+import { FormBuilderService } from '@services/form-builder.service';
+import { ImportService } from '@services/import.service';
+import { ColorScheme, ThemeService } from '@services/theme.service';
 
 @Component({
   selector: 'app-navbar',
