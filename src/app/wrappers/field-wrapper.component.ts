@@ -155,8 +155,10 @@ import { App } from '../app';
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background-color: transparent;
+        background-color: var(--mat-sys-surface-container-highest);
         transform: translateY(-100%);
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem 0.25rem 0 0;
       }
 
       .field-type-container {
