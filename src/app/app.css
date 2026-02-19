@@ -12,6 +12,7 @@
   flex: 1;
   display: flex;
   overflow: hidden;
+  position: relative;
 }
 
 .palette-section {
@@ -24,13 +25,25 @@
 .preview-section {
   flex: 1;
   height: calc(100vh - 56px);
+
+  .app-background {
+    position: absolute;
+    inset: 0;
+    opacity: 0.3;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
 }
 
-.preview-fullwidth {
+.preview-fullWidth {
   width: 100%;
 }
 
 .properties-section {
+  position: relative;
   width: 25%;
   min-width: 250px;
   height: calc(100vh - 56px);

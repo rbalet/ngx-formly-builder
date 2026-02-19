@@ -7,7 +7,9 @@
         <app-field-palette (fieldSelect)="onFieldSelect($event)"></app-field-palette>
       </div>
     }
-    <div class="preview-section" [class.preview-fullwidth]="$previewMode()">
+    <div class="preview-section" [class.preview-fullWidth]="$previewMode()">
+      <div class="app-background"></div>
+
       <app-form-preview
         [$fields]="$fields()"
         [($selectedField)]="$selectedField"
