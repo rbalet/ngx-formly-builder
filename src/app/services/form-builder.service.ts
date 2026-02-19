@@ -126,4 +126,18 @@ export class FormBuilderService {
       this.#$redoStack.set([]);
     });
   }
+
+  reorderFields(previousIndex: number, currentIndex: number) {
+    // Save state before making the change
+    const previousState = structuredClone(this.$fields());
+    const fields = [...this.$fields()];
+    const [movedField] = fields.splice(previousIndex, 1);
+    fields.splice(currentIndex, 0, movedField);
+    this.$fields.set(fields);
+    // Defer undo stack updates to avoid ExpressionChangedAfterItHasBeenCheckedError
+    queueMicrotask(() => {
+      this.#$undoStack.update((stack) => [...stack, previousState]);
+      this.#$redoStack.set([]);
+    });
+  }
 }

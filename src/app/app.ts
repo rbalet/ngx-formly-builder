@@ -114,4 +114,8 @@ export class App {
     // Force update of fields array to trigger change detection
     this.#formBuilderService.updateFields();
   }
+
+  onFieldsReordered(event: { previousIndex: number; currentIndex: number }) {
+    this.#formBuilderService.reorderFields(event.previousIndex, event.currentIndex);
+  }
 }

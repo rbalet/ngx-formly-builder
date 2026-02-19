@@ -12,6 +12,7 @@
         [$fields]="$fields()"
         [($selectedField)]="$selectedField"
         [$screenSize]="$screenSize()"
+        (fieldsReordered)="onFieldsReordered($event)"
       ></app-form-preview>
     </div>
     @if (!$previewMode()) {
