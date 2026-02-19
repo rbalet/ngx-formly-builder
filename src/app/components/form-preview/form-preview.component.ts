@@ -23,7 +23,12 @@ import { FormlyMaterialModule } from '@ngx-formly/material';
       <div [class]="previewContainerClass()">
         <form [formGroup]="form" class="mb-4">
           @if (!$previewMode()) {
-            <div cdkDropList (cdkDropListDropped)="onDrop($event)" class="field-list">
+            <div 
+              cdkDropList 
+              (cdkDropListDropped)="onDrop($event)" 
+              class="field-list"
+              id="form-preview-list"
+            >
               @for (field of $fields(); track field.key) {
                 <div
                   class="field-item"
@@ -125,6 +130,7 @@ export class FormPreviewComponent {
   $previewMode = inject(PREVIEW_MODE);
 
   fieldsReordered = output<{ previousIndex: number; currentIndex: number }>();
+  fieldDropped = output<{ fieldType: string; index: number }>();
 
   form = new FormGroup({});
   $model = signal<Record<string, unknown>>({});
@@ -142,11 +148,22 @@ export class FormPreviewComponent {
   }
 
   onDrop(event: CdkDragDrop<FormlyFieldConfig[]>) {
-    if (event.previousIndex !== event.currentIndex) {
-      this.fieldsReordered.emit({
-        previousIndex: event.previousIndex,
-        currentIndex: event.currentIndex,
+    // Check if this is an external drop from the palette
+    if (event.previousContainer !== event.container) {
+      // External drop from field palette
+      const fieldType = event.item.data as string;
+      this.fieldDropped.emit({
+        fieldType: fieldType,
+        index: event.currentIndex,
       });
+    } else {
+      // Internal reordering
+      if (event.previousIndex !== event.currentIndex) {
+        this.fieldsReordered.emit({
+          previousIndex: event.previousIndex,
+          currentIndex: event.currentIndex,
+        });
+      }
     }
   }
 
