@@ -10,34 +10,57 @@ import { App } from '../app';
   selector: 'formly-wrapper-field',
   imports: [MatIconModule, MatIconButton, MatButtonModule, DragDropModule],
   template: `
-    <div
-      cdkDrag
-      class="field-wrapper"
-      [class.selected]="isSelected()"
-      (click)="onFieldClick($event)"
-    >
-      <div class="field-content">
-        <div class="field-header">
-          <div class="field-type-container">
-            @if (!$previewMode()) {
+    @if (!$previewMode()) {
+      <div
+        cdkDrag
+        class="field-wrapper"
+        [class.selected]="isSelected()"
+        (click)="onFieldClick($event)"
+      >
+        <div class="field-content">
+          <div class="field-header">
+            <div class="field-type-container">
               <button matIconButton class="drag-handle" cdkDragHandle>
                 <mat-icon>drag_indicator</mat-icon>
               </button>
-            }
-            {{ getFieldType() }}
+              {{ getFieldType() }}
+            </div>
+            <button
+              mat-icon-button
+              type="button"
+              aria-label="Remove field"
+              (click)="onRemove($event)"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
           </div>
-          <button
-            mat-icon-button
-            type="button"
-            aria-label="Remove field"
-            (click)="onRemove($event)"
-          >
-            <mat-icon>close</mat-icon>
-          </button>
+          <ng-container #fieldComponent></ng-container>
         </div>
-        <ng-container #fieldComponent></ng-container>
       </div>
-    </div>
+    } @else {
+      <div
+        class="field-wrapper"
+        [class.selected]="isSelected()"
+        (click)="onFieldClick($event)"
+      >
+        <div class="field-content">
+          <div class="field-header">
+            <div class="field-type-container">
+              {{ getFieldType() }}
+            </div>
+            <button
+              mat-icon-button
+              type="button"
+              aria-label="Remove field"
+              (click)="onRemove($event)"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+          <ng-container #fieldComponent></ng-container>
+        </div>
+      </div>
+    }
   `,
   styles: [
     `
