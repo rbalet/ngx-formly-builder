@@ -3,11 +3,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDialog } from '@angular/material/dialog';
 import { PREVIEW_MODE, SCREEN_SIZE } from '../../core/token';
 import { ExportService } from '../../services/export.service';
 import { FormBuilderService } from '../../services/form-builder.service';
 import { ImportService } from '../../services/import.service';
 import { ColorScheme, ThemeService } from '../../services/theme.service';
+import { OpenTemplateDialogComponent } from '../open-template-dialog/open-template-dialog.component';
+import { Template } from '../../models/template.model';
 
 @Component({
   selector: 'app-navbar',
@@ -27,8 +30,12 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
           <div class="menu-items">
             <button mat-button class="menu-item" [matMenuTriggerFor]="fileMenu">File</button>
             <mat-menu #fileMenu="matMenu">
-              <button mat-menu-item (click)="onOpen()">
+              <button mat-menu-item (click)="onOpenTemplate()">
                 <mat-icon>folder_open</mat-icon>
+                <span>Open Template</span>
+              </button>
+              <button mat-menu-item (click)="onOpen()">
+                <mat-icon>upload_file</mat-icon>
                 <span>Open</span>
               </button>
             </mat-menu>
@@ -277,6 +284,7 @@ export class NavbarComponent {
   readonly themeService = inject(ThemeService);
   readonly exportService = inject(ExportService);
   readonly importService = inject(ImportService);
+  readonly dialog = inject(MatDialog);
   readonly $screenSize = inject(SCREEN_SIZE);
   readonly $previewMode = inject(PREVIEW_MODE);
 
@@ -335,5 +343,20 @@ export class NavbarComponent {
     if (fields) {
       this.formBuilderService.importFields(fields);
     }
+  }
+
+  onOpenTemplate() {
+    const dialogRef = this.dialog.open(OpenTemplateDialogComponent, {
+      width: '1200px',
+      maxWidth: '90vw',
+      height: '700px',
+      maxHeight: '90vh',
+    });
+
+    dialogRef.afterClosed().subscribe((template: Template | null) => {
+      if (template) {
+        this.formBuilderService.importFields(template.fields);
+      }
+    });
   }
 }
