@@ -82,6 +82,14 @@ import { Template } from 'src/app/models/template.model';
           </div>
         }
 
+        <input
+          type="text"
+          class="form-title-input"
+          [(ngModel)]="formTitle"
+          placeholder="Untitled Form"
+          maxlength="100"
+        />
+
         <div class="navbar-controls">
           @if (!$previewMode()) {
             <div class="left-controls">
@@ -103,16 +111,6 @@ import { Template } from 'src/app/models/template.model';
               </button>
             </div>
           }
-
-          <div class="center-controls">
-            <input
-              type="text"
-              class="form-title-input"
-              [(ngModel)]="formTitle"
-              placeholder="Untitled Form"
-              maxlength="100"
-            />
-          </div>
 
           <div class="right-controls">
             <mat-button-toggle-group
@@ -230,7 +228,8 @@ import { Template } from 'src/app/models/template.model';
       }
 
       .navbar-center {
-        display: flex;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
         align-items: center;
         gap: 1rem;
         padding: 0 1rem;
@@ -238,6 +237,65 @@ import { Template } from 'src/app/models/template.model';
         justify-content: space-between;
         flex-grow: 1;
         height: 64px;
+
+        .form-title-input {
+          border: none;
+          background: transparent;
+          font-size: 1rem;
+          font-weight: 500;
+          text-align: center;
+          padding: 0.5rem 1rem;
+          border-radius: 4px;
+          outline: none;
+          transition: background-color 0.2s;
+          color: var(--mat-sys-on-surface);
+          min-width: 200px;
+          max-width: 400px;
+
+          &:hover {
+            background-color: var(--mat-sys-surface-container-highest);
+          }
+
+          &:focus {
+            background-color: var(--mat-sys-surface-container-high);
+          }
+
+          &::placeholder {
+            color: var(--mat-sys-on-surface-variant);
+            opacity: 0.6;
+          }
+        }
+
+        .navbar-controls {
+          display: flex;
+          align-items: center;
+          gap: 0.125rem;
+          justify-content: flex-end;
+
+          @media (max-width: 1700px) {
+            .left-controls {
+              display: none;
+            }
+          }
+
+          .center-controls {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            padding: 0 1rem;
+          }
+
+          .right-controls {
+            display: flex;
+            align-items: center;
+          }
+
+          mat-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+          }
+        }
       }
 
       .navbar-right {
@@ -260,58 +318,6 @@ import { Template } from 'src/app/models/template.model';
 
       .menu-item {
         font-size: 1rem;
-      }
-
-      .navbar-controls {
-        display: flex;
-        align-items: center;
-        gap: 0.125rem;
-
-        .center-controls {
-          flex: 1;
-          display: flex;
-          justify-content: center;
-          padding: 0 1rem;
-
-          .form-title-input {
-            border: none;
-            background: transparent;
-            font-size: 1rem;
-            font-weight: 500;
-            text-align: center;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            outline: none;
-            transition: background-color 0.2s;
-            color: var(--mat-sys-on-surface);
-            min-width: 200px;
-            max-width: 400px;
-
-            &:hover {
-              background-color: var(--mat-sys-surface-container-highest);
-            }
-
-            &:focus {
-              background-color: var(--mat-sys-surface-container-high);
-            }
-
-            &::placeholder {
-              color: var(--mat-sys-on-surface-variant);
-              opacity: 0.6;
-            }
-          }
-        }
-
-        .right-controls {
-          display: flex;
-          align-items: center;
-        }
-
-        mat-icon {
-          font-size: 18px;
-          width: 18px;
-          height: 18px;
-        }
       }
 
       .screen-size-toggle {
