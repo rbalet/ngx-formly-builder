@@ -76,6 +76,15 @@ import {
                 />
               </mat-form-field>
               <mat-form-field class="full-width mb-3">
+                <mat-label>Label</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  [ngModel]="getLabel()"
+                  (ngModelChange)="updateLabel($event)"
+                />
+              </mat-form-field>
+              <mat-form-field class="full-width mb-3">
                 <mat-label>Placeholder</mat-label>
                 <input
                   matInput
@@ -93,41 +102,6 @@ import {
                   (ngModelChange)="updateDescription($event)"
                 />
               </mat-form-field>
-            </div>
-          </mat-expansion-panel>
-
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title>Label & Description</mat-panel-title>
-            </mat-expansion-panel-header>
-            <div class="panel-content">
-              <mat-form-field class="full-width mb-3">
-                <mat-label>Label</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  [ngModel]="getLabel()"
-                  (ngModelChange)="updateLabel($event)"
-                />
-              </mat-form-field>
-            </div>
-          </mat-expansion-panel>
-
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title>Appearance</mat-panel-title>
-            </mat-expansion-panel-header>
-            <div class="panel-content">
-              <p class="placeholder-text">Appearance options coming soon...</p>
-            </div>
-          </mat-expansion-panel>
-
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title>HTML Attributes</mat-panel-title>
-            </mat-expansion-panel-header>
-            <div class="panel-content">
-              <p class="placeholder-text">HTML attributes options coming soon...</p>
             </div>
           </mat-expansion-panel>
 
