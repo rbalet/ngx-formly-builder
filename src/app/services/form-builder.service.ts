@@ -114,4 +114,16 @@ export class FormBuilderService {
       this.#$redoStack.set([]);
     });
   }
+
+  clearForm() {
+    // Save state before making the change
+    const previousState = structuredClone(this.$fields());
+    this.$fields.set([]);
+    this.$selectedField.set(null);
+    // Defer undo stack updates to avoid ExpressionChangedAfterItHasBeenCheckedError
+    queueMicrotask(() => {
+      this.#$undoStack.update((stack) => [...stack, previousState]);
+      this.#$redoStack.set([]);
+    });
+  }
 }

@@ -2,6 +2,7 @@ import { Component, computed, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDialog } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { OpenTemplateDialogComponent } from '@components/open-template-dialog/open-template-dialog.component';
@@ -14,7 +15,7 @@ import { Template } from 'src/app/models/template.model';
 
 @Component({
   selector: 'app-navbar',
-  imports: [MatIconModule, MatButtonModule, MatMenuModule, MatButtonToggleModule],
+  imports: [MatIconModule, MatButtonModule, MatMenuModule, MatButtonToggleModule, MatDividerModule],
   template: `
     <header class="navbar">
       <!-- Left Section -->
@@ -41,6 +42,15 @@ import { Template } from 'src/app/models/template.model';
             </mat-menu>
             <button mat-button class="menu-item" [matMenuTriggerFor]="editMenu">Edit</button>
             <mat-menu #editMenu="matMenu">
+              <button mat-menu-item [disabled]="!formBuilderService.$canUndo()" (click)="onUndo()">
+                <mat-icon>undo</mat-icon>
+                <span>Undo</span>
+              </button>
+              <button mat-menu-item [disabled]="!formBuilderService.$canRedo()" (click)="onRedo()">
+                <mat-icon>redo</mat-icon>
+                <span>Redo</span>
+              </button>
+              <mat-divider></mat-divider>
               <button
                 mat-menu-item
                 [disabled]="!formBuilderService.$selectedField()"
@@ -48,6 +58,11 @@ import { Template } from 'src/app/models/template.model';
               >
                 <mat-icon>content_copy</mat-icon>
                 <span>Duplicate</span>
+              </button>
+              <mat-divider></mat-divider>
+              <button mat-menu-item (click)="onClearForm()">
+                <mat-icon>delete</mat-icon>
+                <span>Clear Form</span>
               </button>
             </mat-menu>
             <!-- <button mat-button class="menu-item">View</button>
@@ -358,5 +373,9 @@ export class NavbarComponent {
         this.formBuilderService.importFields(template.fields);
       }
     });
+  }
+
+  onClearForm() {
+    this.formBuilderService.clearForm();
   }
 }
