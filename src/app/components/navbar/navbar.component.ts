@@ -4,6 +4,7 @@ import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { PREVIEW_MODE, SCREEN_SIZE } from '../../core/token';
+import { ExportService } from '../../services/export.service';
 import { FormBuilderService } from '../../services/form-builder.service';
 import { ColorScheme, ThemeService } from '../../services/theme.service';
 
@@ -111,7 +112,7 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
             <mat-icon>play_arrow</mat-icon>
             Preview
           </button>
-          <button mat-raised-button color="primary" class="export-button">
+          <button mat-raised-button color="primary" class="export-button" (click)="onExport()">
             <mat-icon>open_in_new</mat-icon>
             Export
           </button>
@@ -267,6 +268,7 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
 export class NavbarComponent {
   readonly formBuilderService = inject(FormBuilderService);
   readonly themeService = inject(ThemeService);
+  readonly exportService = inject(ExportService);
   readonly $screenSize = inject(SCREEN_SIZE);
   readonly $previewMode = inject(PREVIEW_MODE);
 
@@ -301,6 +303,11 @@ export class NavbarComponent {
     if (selectedField) {
       this.formBuilderService.duplicateField(selectedField);
     }
+  }
+
+  onExport() {
+    const fields = this.formBuilderService.$fields();
+    this.exportService.export(fields, 'form-settings');
   }
 
   togglePreviewMode() {
