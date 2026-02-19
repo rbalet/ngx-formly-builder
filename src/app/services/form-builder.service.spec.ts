@@ -310,4 +310,81 @@ describe('FormBuilderService', () => {
       expect(service.$canRedo()).toBe(false);
     });
   });
+
+  describe('reorderFields', () => {
+    it('should reorder fields', async () => {
+      const field1: FormlyFieldConfig = { key: 'field1', type: 'input' };
+      const field2: FormlyFieldConfig = { key: 'field2', type: 'textarea' };
+      const field3: FormlyFieldConfig = { key: 'field3', type: 'select' };
+
+      service.addField(field1);
+      await flushMicrotasks();
+      service.addField(field2);
+      await flushMicrotasks();
+      service.addField(field3);
+      await flushMicrotasks();
+
+      // Move field at index 0 to index 2
+      service.reorderFields(0, 2);
+      await flushMicrotasks();
+
+      expect(service.$fields().length).toBe(3);
+      expect(service.$fields()[0].key).toBe('field2');
+      expect(service.$fields()[1].key).toBe('field3');
+      expect(service.$fields()[2].key).toBe('field1');
+    });
+
+    it('should enable undo after reordering', async () => {
+      const field1: FormlyFieldConfig = { key: 'field1', type: 'input' };
+      const field2: FormlyFieldConfig = { key: 'field2', type: 'textarea' };
+
+      service.addField(field1);
+      await flushMicrotasks();
+      service.addField(field2);
+      await flushMicrotasks();
+
+      service.reorderFields(0, 1);
+      await flushMicrotasks();
+
+      expect(service.$canUndo()).toBe(true);
+    });
+
+    it('should allow undoing a reorder operation', async () => {
+      const field1: FormlyFieldConfig = { key: 'field1', type: 'input' };
+      const field2: FormlyFieldConfig = { key: 'field2', type: 'textarea' };
+      const field3: FormlyFieldConfig = { key: 'field3', type: 'select' };
+
+      service.addField(field1);
+      await flushMicrotasks();
+      service.addField(field2);
+      await flushMicrotasks();
+      service.addField(field3);
+      await flushMicrotasks();
+
+      service.reorderFields(0, 2);
+      await flushMicrotasks();
+
+      service.undo();
+      expect(service.$fields()[0].key).toBe('field1');
+      expect(service.$fields()[1].key).toBe('field2');
+      expect(service.$fields()[2].key).toBe('field3');
+    });
+
+    it('should clear redo stack on reorder', async () => {
+      const field1: FormlyFieldConfig = { key: 'field1', type: 'input' };
+      const field2: FormlyFieldConfig = { key: 'field2', type: 'textarea' };
+
+      service.addField(field1);
+      await flushMicrotasks();
+      service.addField(field2);
+      await flushMicrotasks();
+      service.undo();
+      expect(service.$canRedo()).toBe(true);
+
+      service.reorderFields(0, 0);
+      await flushMicrotasks();
+
+      expect(service.$canRedo()).toBe(false);
+    });
+  });
 });

@@ -23,7 +23,6 @@ import { App } from '../app';
       .field-wrapper {
         position: relative;
         padding: 0.25rem;
-        margin-bottom: 1rem;
         border: 2px solid transparent;
         border-radius: 0.25rem;
         cursor: pointer;

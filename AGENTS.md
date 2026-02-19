@@ -100,6 +100,23 @@ const screenSize = inject(SCREEN_SIZE);
   git commit -m "feat(form-builder): add drag and drop support"
   ```
 
+
+## Theming with Angular Material CSS Variables
+
+- **Use Angular Material CSS variables for colors in components instead of hardcoded values.**
+- Reference variables like `var(--md-sys-color-primary)` and `var(--md-sys-color-primary-container)` for theming consistency. See https://material.angular.dev/guide/theming-your-components for the full list of available variables.
+
+### Example:
+```css
+.field-item.selected {
+  border-color: var(--md-sys-color-primary);
+  background-color: var(--md-sys-color-primary-container);
+}
+```
+
+This ensures your components automatically adapt to the active Material theme (light/dark/custom).
+
+---
 ## Key Patterns & Examples
 
 - **Service injection:** See AGENTS.md for the required pattern.
