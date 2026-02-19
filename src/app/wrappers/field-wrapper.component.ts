@@ -1,14 +1,14 @@
-import { Component, inject } from '@angular/core';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { MatButtonModule } from '@angular/material/button';
+import { Component, inject } from '@angular/core';
+import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { FieldWrapper } from '@ngx-formly/core';
 import { PREVIEW_MODE } from '@core/token';
+import { FieldWrapper } from '@ngx-formly/core';
 import { App } from '../app';
 
 @Component({
   selector: 'formly-wrapper-field',
-  imports: [MatIconModule, MatButtonModule, DragDropModule],
+  imports: [MatIconModule, MatIconButton, MatButtonModule, DragDropModule],
   template: `
     <div
       cdkDrag
@@ -16,15 +16,22 @@ import { App } from '../app';
       [class.selected]="isSelected()"
       (click)="onFieldClick($event)"
     >
-      @if (!$previewMode()) {
-        <div class="drag-handle" cdkDragHandle>
-          <mat-icon>drag_indicator</mat-icon>
-        </div>
-      }
       <div class="field-content">
         <div class="field-header">
-          <span class="field-type">{{ getFieldType() }}</span>
-          <button mat-icon-button type="button" aria-label="Remove field" (click)="onRemove($event)">
+          <div class="field-type-container">
+            @if (!$previewMode()) {
+              <button matIconButton class="drag-handle" cdkDragHandle>
+                <mat-icon>drag_indicator</mat-icon>
+              </button>
+            }
+            {{ getFieldType() }}
+          </div>
+          <button
+            mat-icon-button
+            type="button"
+            aria-label="Remove field"
+            (click)="onRemove($event)"
+          >
             <mat-icon>close</mat-icon>
           </button>
         </div>
@@ -45,43 +52,50 @@ import { App } from '../app';
         align-items: center;
         gap: 0.5rem;
         margin-bottom: 1rem;
-      }
 
-      .field-wrapper:hover {
-        border-color: #adb5bd;
-      }
+        &:hover {
+          border-color: #adb5bd;
 
-      .field-wrapper:hover .field-type {
-        opacity: 0.5;
-      }
+          .field-type-container {
+            opacity: 0.5;
+          }
 
-      .field-wrapper:hover button {
-        opacity: 0.5;
-      }
+          button {
+            opacity: 0.5;
 
-      .field-wrapper:hover button:hover {
-        opacity: 1;
-      }
+            &:hover {
+              opacity: 1;
+            }
+          }
 
-      .field-wrapper.selected {
-        border-color: var(--md-sys-color-primary);
-        background-color: var(--md-sys-color-primary-container);
-      }
+          .drag-handle {
+            opacity: 1;
+          }
+        }
 
-      .field-wrapper.selected .field-type {
-        opacity: 1;
-      }
+        &.selected {
+          border-color: var(--md-sys-color-primary);
+          background-color: var(--md-sys-color-primary-container);
 
-      .field-wrapper.selected button {
-        opacity: 0.5;
-      }
+          .field-type-container {
+            opacity: 1;
+          }
 
-      .field-wrapper.selected button:hover {
-        opacity: 1;
-      }
+          button {
+            opacity: 0.5;
 
-      .field-wrapper.cdk-drag-animating {
-        transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+            &:hover {
+              opacity: 1;
+            }
+          }
+
+          .drag-handle {
+            opacity: 1;
+          }
+        }
+        .cdk-drag-animating {
+          transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+        }
       }
 
       .drag-handle {
@@ -92,16 +106,6 @@ import { App } from '../app';
         color: #666;
         opacity: 0;
         transition: opacity 0.2s ease;
-      }
-
-      .field-wrapper:hover .drag-handle {
-        opacity: 1;
-      }
-
-      .drag-handle mat-icon {
-        font-size: 20px;
-        width: 20px;
-        height: 20px;
       }
 
       .field-content {
@@ -121,23 +125,28 @@ import { App } from '../app';
         transform: translateY(-100%);
       }
 
-      .field-type {
+      .field-type-container {
         font-size: 0.75rem;
-        color: #6c757d;
+        color: var(--md-sys-color-on-surface);
         font-weight: 500;
         opacity: 0;
+        display: flex;
+        align-items: center;
       }
 
       button {
         opacity: 0;
         transition: opacity 0.2s ease;
-      }
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
-      button mat-icon {
-        font-size: 1.2rem;
-        width: 1.2rem;
-        height: 1.2rem;
-        line-height: 1.2rem;
+        mat-icon {
+          font-size: 1.2rem;
+          width: 1.2rem;
+          height: 1.2rem;
+          line-height: 1.2rem;
+        }
       }
 
       .cdk-drag-preview {
