@@ -1,26 +1,82 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { Component, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { FieldGroup } from '../../models/field-group.model';
 
-interface FieldType {
-  type: string;
-  label: string;
-  icon: string;
-  description: string;
-}
-
-interface FieldGroup {
-  category: string;
-  fields: FieldType[];
-}
+const DEFAULT_FIELD_GROUPS: FieldGroup[] = [
+  {
+    category: 'Typography',
+    fields: [
+      {
+        type: 'markdown',
+        label: 'Text block',
+        icon: 'article',
+        description: 'WYSIWYG Editor',
+      },
+    ],
+  },
+  {
+    category: 'Input Fields',
+    fields: [
+      {
+        type: 'input',
+        label: 'Text Input',
+        icon: 'input',
+        description: 'Single line text input',
+      },
+      {
+        type: 'textarea',
+        label: 'Textarea',
+        icon: 'description',
+        description: 'Multi-line text input',
+      },
+      { type: 'number', label: 'Number', icon: 'numbers', description: 'Numeric input' },
+      { type: 'email', label: 'Email', icon: 'email', description: 'Email input' },
+      { type: 'password', label: 'Password', icon: 'lock', description: 'Password input' },
+      { type: 'telephone', label: 'Telephone', icon: 'phone', description: 'Phone number input' },
+      { type: 'url', label: 'URL', icon: 'link', description: 'Website URL input' },
+    ],
+  },
+  {
+    category: 'Selection Fields',
+    fields: [
+      { type: 'select', label: 'Select', icon: 'list', description: 'Dropdown select' },
+      { type: 'checkbox', label: 'Checkbox', icon: 'check_box', description: 'Single checkbox' },
+      {
+        type: 'multicheckbox',
+        label: 'Checkbox Group',
+        icon: 'checklist',
+        description: 'Multiple checkboxes',
+      },
+      {
+        type: 'radio',
+        label: 'Radio Group',
+        icon: 'radio_button_checked',
+        description: 'Radio button group',
+      },
+      { type: 'toggle', label: 'Toggle', icon: 'toggle_on', description: 'Toggle switch' },
+    ],
+  },
+  {
+    category: 'Date & Time',
+    fields: [
+      {
+        type: 'datepicker',
+        label: 'Date Picker',
+        icon: 'calendar_today',
+        description: 'Date picker',
+      },
+    ],
+  },
+];
 
 @Component({
-  selector: 'app-field-palette',
+  selector: 'formly-builder-field-palette',
   imports: [MatListModule, MatIconModule, DragDropModule],
   template: `
     <div class="field-palette">
-      @for (group of fieldGroups; track group.category) {
+      @for (group of effectiveFieldGroups(); track group.category) {
         <div class="field-group">
           <div class="group-header">{{ group.category }}</div>
           <mat-action-list cdkDropList [cdkDropListSortingDisabled]="true">
@@ -119,73 +175,12 @@ interface FieldGroup {
 })
 export class FieldPaletteComponent {
   fieldSelect = output<string>();
+  fieldGroups = input<FieldGroup[]>([]);
 
-  fieldGroups: FieldGroup[] = [
-    {
-      category: 'Typography',
-      fields: [
-        {
-          type: 'markdown',
-          label: 'Text block',
-          icon: 'article',
-          description: 'WYSIWYG Editor',
-        },
-      ],
-    },
-    {
-      category: 'Input Fields',
-      fields: [
-        {
-          type: 'input',
-          label: 'Text Input',
-          icon: 'input',
-          description: 'Single line text input',
-        },
-        {
-          type: 'textarea',
-          label: 'Textarea',
-          icon: 'description',
-          description: 'Multi-line text input',
-        },
-        { type: 'number', label: 'Number', icon: 'numbers', description: 'Numeric input' },
-        { type: 'email', label: 'Email', icon: 'email', description: 'Email input' },
-        { type: 'password', label: 'Password', icon: 'lock', description: 'Password input' },
-        { type: 'telephone', label: 'Telephone', icon: 'phone', description: 'Phone number input' },
-        { type: 'url', label: 'URL', icon: 'link', description: 'Website URL input' },
-      ],
-    },
-    {
-      category: 'Selection Fields',
-      fields: [
-        { type: 'select', label: 'Select', icon: 'list', description: 'Dropdown select' },
-        { type: 'checkbox', label: 'Checkbox', icon: 'check_box', description: 'Single checkbox' },
-        {
-          type: 'multicheckbox',
-          label: 'Checkbox Group',
-          icon: 'checklist',
-          description: 'Multiple checkboxes',
-        },
-        {
-          type: 'radio',
-          label: 'Radio Group',
-          icon: 'radio_button_checked',
-          description: 'Radio button group',
-        },
-        { type: 'toggle', label: 'Toggle', icon: 'toggle_on', description: 'Toggle switch' },
-      ],
-    },
-    {
-      category: 'Date & Time',
-      fields: [
-        {
-          type: 'datepicker',
-          label: 'Date Picker',
-          icon: 'calendar_today',
-          description: 'Date picker',
-        },
-      ],
-    },
-  ];
+  effectiveFieldGroups() {
+    const groups = this.fieldGroups();
+    return groups.length > 0 ? groups : DEFAULT_FIELD_GROUPS;
+  }
 
   onFieldSelect(type: string) {
     this.fieldSelect.emit(type);

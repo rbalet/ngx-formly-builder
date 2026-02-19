@@ -2,9 +2,9 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { Component, inject } from '@angular/core';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { PREVIEW_MODE } from '@core/token';
+import { PREVIEW_MODE } from '../core/token';
 import { FieldWrapper } from '@ngx-formly/core';
-import { App } from '../app';
+import { FormBuilderService } from '../services/form-builder.service';
 
 @Component({
   selector: 'formly-wrapper-field',
@@ -198,16 +198,16 @@ import { App } from '../app';
   ],
 })
 export class FieldWrapperComponent extends FieldWrapper {
-  private app = inject(App);
+  private formBuilderService = inject(FormBuilderService);
   readonly $previewMode = inject(PREVIEW_MODE);
 
   isSelected(): boolean {
-    const selectedField = this.app.$selectedField();
+    const selectedField = this.formBuilderService.$selectedField();
     return selectedField === this.field;
   }
 
   isDimmed(): boolean {
-    const selectedField = this.app.$selectedField();
+    const selectedField = this.formBuilderService.$selectedField();
     // Dimmed if there is a selected field and this is not it
     return selectedField !== null && selectedField !== this.field;
   }
@@ -229,19 +229,19 @@ export class FieldWrapperComponent extends FieldWrapper {
 
   onFieldClick(_event: MouseEvent): void {
     // Update selected field when clicking on the wrapper
-    this.app.$selectedField.set(this.field);
+    this.formBuilderService.$selectedField.set(this.field);
   }
 
   onRemove(event: MouseEvent): void {
     event.stopPropagation();
 
     // Remove this field from the fields array
-    this.app.$fields.update((fields) => {
+    this.formBuilderService.$fields.update((fields) => {
       const filtered = fields.filter((f) => f !== this.field);
 
       // If the removed field was selected, clear selection
       if (this.isSelected()) {
-        this.app.$selectedField.set(null);
+        this.formBuilderService.$selectedField.set(null);
       }
 
       return filtered;

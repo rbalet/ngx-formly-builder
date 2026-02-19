@@ -8,16 +8,16 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
-import { OpenTemplateDialogComponent } from '@components/open-template-dialog/open-template-dialog.component';
-import { PREVIEW_MODE, SCREEN_SIZE } from '@core/token';
-import { ExportService } from '@services/export.service';
-import { FormBuilderService } from '@services/form-builder.service';
-import { ImportService } from '@services/import.service';
-import { ColorScheme, ThemeService } from '@services/theme.service';
-import { Template } from 'src/app/models/template.model';
+import { OpenTemplateDialogComponent } from '../../components/open-template-dialog/open-template-dialog.component';
+import { PREVIEW_MODE, SCREEN_SIZE } from '../../core/token';
+import { Template } from '../../models/template.model';
+import { ExportService } from '../../services/export.service';
+import { FormBuilderService } from '../../services/form-builder.service';
+import { ImportService } from '../../services/import.service';
+import { ColorScheme, ThemeService } from '../../services/theme.service';
 
 @Component({
-  selector: 'app-navbar',
+  selector: 'formly-builder-navbar',
   imports: [
     MatIconModule,
     MatButtonModule,

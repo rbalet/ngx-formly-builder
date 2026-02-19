@@ -3,13 +3,13 @@ import { JsonPipe } from '@angular/common';
 import { Component, computed, inject, input, model, output, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
-import { PREVIEW_MODE } from '@core/token';
-import { ScreenSize } from '@core/type';
 import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
+import { PREVIEW_MODE } from '../../core/token';
+import { ScreenSize } from '../../core/type';
 
 @Component({
-  selector: 'app-form-preview',
+  selector: 'formly-builder-form-preview',
   imports: [
     ReactiveFormsModule,
     FormlyModule,

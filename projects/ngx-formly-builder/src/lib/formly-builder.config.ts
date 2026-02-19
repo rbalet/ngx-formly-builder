@@ -1,16 +1,9 @@
-import {
-  ApplicationConfig,
-  importProvidersFrom,
-  provideBrowserGlobalErrorListeners,
-  provideZonelessChangeDetection,
-  signal,
-} from '@angular/core';
+import { EnvironmentProviders, importProvidersFrom, Provider, signal } from '@angular/core';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { MAT_ICON_DEFAULT_OPTIONS } from '@angular/material/icon';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
-import { MAT_ICON_DEFAULT_OPTIONS } from '@angular/material/icon';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideFormlyCore } from '@ngx-formly/core';
 import { FormlyMaterialModule, withFormlyMaterial } from '@ngx-formly/material';
 import { FormlyMatCheckboxModule } from '@ngx-formly/material/checkbox';
@@ -23,12 +16,32 @@ import { FormlyMatSelectModule } from '@ngx-formly/material/select';
 import { FormlyMatTextAreaModule } from '@ngx-formly/material/textarea';
 import { FormlyMatToggleModule } from '@ngx-formly/material/toggle';
 import { provideMarkdown } from 'ngx-markdown';
-import { PREVIEW_MODE, SCREEN_SIZE } from 'projects/ngx-formly-builder/src/lib/core/token';
-import { MarkdownFieldComponent } from 'projects/ngx-formly-builder/src/lib/types/markdown-field.component';
-import { FieldWrapperComponent } from 'projects/ngx-formly-builder/src/lib/wrappers/field-wrapper.component';
+import { PREVIEW_MODE, SCREEN_SIZE } from './core/token';
+import { MarkdownFieldComponent } from './types/markdown-field.component';
+import { FieldWrapperComponent } from './wrappers/field-wrapper.component';
+import { FormBuilderService } from './services/form-builder.service';
+import { ThemeService } from './services/theme.service';
+import { ExportService } from './services/export.service';
+import { ImportService } from './services/import.service';
+import { TemplateService } from './services/template.service';
 
-export const appConfig: ApplicationConfig = {
-  providers: [
+/**
+ * Provides all necessary configuration for ngx-formly-builder.
+ * This includes formly configuration, Material UI configuration, and markdown support.
+ * 
+ * @example
+ * ```ts
+ * export const appConfig: ApplicationConfig = {
+ *   providers: [
+ *     provideFormlyBuilder(),
+ *     provideAnimationsAsync(),
+ *     // ... other providers
+ *   ],
+ * };
+ * ```
+ */
+export function provideFormlyBuilder(): (Provider | EnvironmentProviders)[] {
+  return [
     {
       provide: MAT_ICON_DEFAULT_OPTIONS,
       useValue: { fontSet: 'material-symbols-outlined' },
@@ -38,9 +51,12 @@ export const appConfig: ApplicationConfig = {
     { provide: SCREEN_SIZE, useValue: signal('lg') },
     { provide: PREVIEW_MODE, useValue: signal(false) },
 
-    provideZonelessChangeDetection(),
-    provideBrowserGlobalErrorListeners(),
-    provideAnimationsAsync(),
+    FormBuilderService,
+    ThemeService,
+    ExportService,
+    ImportService,
+    TemplateService,
+
     provideMarkdown(),
 
     importProvidersFrom([
@@ -65,5 +81,5 @@ export const appConfig: ApplicationConfig = {
       types: [{ name: 'markdown', component: MarkdownFieldComponent }],
       ...withFormlyMaterial(),
     }),
-  ],
-};
+  ];
+}

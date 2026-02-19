@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { PREVIEW_MODE } from '@core/token';
+import { PREVIEW_MODE } from '../core/token';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
 import { MarkdownComponent } from 'ngx-markdown';
 

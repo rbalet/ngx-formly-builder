@@ -1,15 +1,16 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { Component, inject } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { FormlyFieldConfig } from '@ngx-formly/core';
-import { FieldPaletteComponent } from 'projects/ngx-formly-builder/src/lib/components/field-palette/field-palette.component';
-import { FormPreviewComponent } from 'projects/ngx-formly-builder/src/lib/components/form-preview/form-preview.component';
-import { NavbarComponent } from 'projects/ngx-formly-builder/src/lib/components/navbar/navbar.component';
-import { PropertiesPanelComponent } from 'projects/ngx-formly-builder/src/lib/components/properties-panel/properties-panel.component';
-import { PREVIEW_MODE, SCREEN_SIZE } from 'projects/ngx-formly-builder/src/lib/core/token';
-import { FormBuilderService } from 'projects/ngx-formly-builder/src/lib/services/form-builder.service';
+import { FieldPaletteComponent } from './components/field-palette/field-palette.component';
+import { FormPreviewComponent } from './components/form-preview/form-preview.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { PropertiesPanelComponent } from './components/properties-panel/properties-panel.component';
+import { PREVIEW_MODE, SCREEN_SIZE } from './core/token';
+import { FieldGroup } from './models/field-group.model';
+import { FormBuilderService } from './services/form-builder.service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'formly-builder',
   imports: [
     NavbarComponent,
     FieldPaletteComponent,
@@ -17,13 +18,99 @@ import { FormBuilderService } from 'projects/ngx-formly-builder/src/lib/services
     PropertiesPanelComponent,
     DragDropModule,
   ],
-  templateUrl: './app.html',
-  styleUrl: './app.css',
+  template: `
+    <div class="app-container h-100">
+      <formly-builder-navbar></formly-builder-navbar>
+
+      <div class="main-content" cdkDropListGroup>
+        @if (!$previewMode()) {
+          <div class="palette-section">
+            <formly-builder-field-palette
+              [fieldGroups]="fieldGroups()"
+              (fieldSelect)="onFieldSelect($event)"
+            ></formly-builder-field-palette>
+          </div>
+        }
+        <div class="preview-section" [class.preview-fullWidth]="$previewMode()">
+          <formly-builder-form-preview
+            [$fields]="$fields()"
+            [($selectedField)]="$selectedField"
+            [$screenSize]="$screenSize()"
+            (fieldsReordered)="onFieldsReordered($event)"
+            (fieldDropped)="onFieldDropped($event)"
+          ></formly-builder-form-preview>
+
+          <div class="app-background"></div>
+        </div>
+        @if (!$previewMode()) {
+          <div class="properties-section">
+            <formly-builder-properties-panel
+              [$selectedField]="$selectedField()"
+              (fieldUpdated)="onFieldUpdated()"
+            ></formly-builder-properties-panel>
+          </div>
+        }
+      </div>
+    </div>
+  `,
+  styles: `
+    .app-container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .main-content {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .palette-section {
+      width: 280px;
+      flex-shrink: 0;
+      overflow-y: auto;
+    }
+
+    .preview-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      position: relative;
+    }
+
+    .preview-fullWidth {
+      width: 100%;
+    }
+
+    .properties-section {
+      width: 320px;
+      flex-shrink: 0;
+      overflow-y: auto;
+    }
+
+    .app-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--mat-sys-surface-container-low);
+      z-index: -1;
+    }
+
+    .h-100 {
+      height: 100%;
+    }
+  `,
 })
-export class App {
+export class FormlyBuilder {
   readonly $screenSize = inject(SCREEN_SIZE);
   readonly $previewMode = inject(PREVIEW_MODE);
   readonly #formBuilderService = inject(FormBuilderService);
+
+  // Input for custom field groups
+  fieldGroups = input<FieldGroup[]>([]);
 
   // Expose service signals for template use
   $fields;

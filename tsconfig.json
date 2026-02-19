@@ -14,12 +14,7 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "preserve",
-    "baseUrl": "./",
-    "paths": {
-      "@components/*": ["src/app/components/*"],
-      "@core/*": ["src/app/core/*"],
-      "@services/*": ["src/app/services/*"]
-    }
+    "baseUrl": "./"
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -34,6 +29,12 @@
     },
     {
       "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/ngx-formly-builder/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/ngx-formly-builder/tsconfig.spec.json"
     }
   ]
 }
