@@ -11,7 +11,6 @@ import { FormlyMaterialModule } from '@ngx-formly/material';
   imports: [ReactiveFormsModule, FormlyModule, FormlyMaterialModule, JsonPipe, MatCardModule],
   template: `
     <div class="form-preview">
-      <h5 class="mb-3">Form Preview</h5>
       <div [class]="previewContainerClass()">
         <form [formGroup]="form" class="mb-4">
           <formly-form
@@ -44,6 +43,7 @@ import { FormlyMaterialModule } from '@ngx-formly/material';
   styles: [
     `
       .form-preview {
+        margin-top: 1rem;
         padding: 1.5rem;
         height: 100%;
         overflow-y: auto;
