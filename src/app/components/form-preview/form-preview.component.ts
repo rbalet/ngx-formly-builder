@@ -1,13 +1,13 @@
+import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { JsonPipe } from '@angular/common';
 import { Component, computed, inject, input, model, output, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
+import { PREVIEW_MODE } from '@core/token';
 import { ScreenSize } from '@core/type';
 import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
-import { PREVIEW_MODE } from '@core/token';
 
 @Component({
   selector: 'app-form-preview',
@@ -46,7 +46,6 @@ import { PREVIEW_MODE } from '@core/token';
                       ></formly-form>
                     </div>
                   </div>
-                  <div class="cdk-drag-placeholder"></div>
                 </div>
               }
             </div>
@@ -137,8 +136,8 @@ import { PREVIEW_MODE } from '@core/token';
       }
 
       .field-item.selected {
-        border-color: #1976d2;
-        background-color: #e3f2fd;
+        border-color: var(--md-sys-color-primary);
+        background-color: var(--md-sys-color-primary-container);
       }
 
       .field-item.cdk-drag-animating {
@@ -147,7 +146,7 @@ import { PREVIEW_MODE } from '@core/token';
 
       .field-content {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         gap: 0.5rem;
       }
 
@@ -178,26 +177,11 @@ import { PREVIEW_MODE } from '@core/token';
       .cdk-drag-preview {
         box-sizing: border-box;
         border-radius: 4px;
-        box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+        box-shadow:
+          0 5px 5px -3px rgba(0, 0, 0, 0.2),
+          0 8px 10px 1px rgba(0, 0, 0, 0.14),
           0 3px 14px 2px rgba(0, 0, 0, 0.12);
         opacity: 0.8;
-      }
-
-      .cdk-drag-placeholder {
-        background: #ccc;
-        border: 2px dashed #999;
-        min-height: 60px;
-        border-radius: 4px;
-        opacity: 0;
-        transition: opacity 200ms cubic-bezier(0, 0, 0.2, 1);
-      }
-
-      .cdk-drag-animating .cdk-drag-placeholder {
-        opacity: 1;
-      }
-
-      .cdk-drop-list-dragging .field-item:not(.cdk-drag-placeholder) {
-        transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
       }
     `,
   ],
