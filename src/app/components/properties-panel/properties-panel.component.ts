@@ -2,6 +2,7 @@ import { JsonPipe } from '@angular/common';
 import { Component, inject, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -23,6 +24,7 @@ import {
     MatInputModule,
     MatFormFieldModule,
     MatButtonModule,
+    MatButtonToggleModule,
     MatIconModule,
     MatExpansionModule,
   ],
@@ -109,7 +111,17 @@ import {
               <mat-panel-title>Validation</mat-panel-title>
             </mat-expansion-panel-header>
             <div class="panel-content">
-              <p class="placeholder-text">Validation options coming soon...</p>
+              <div class="validation-row">
+                <label class="validation-label">Required</label>
+                <mat-button-toggle-group
+                  [value]="getRequired() ? 'yes' : 'no'"
+                  (change)="updateRequired($event.value === 'yes')"
+                  class="validation-toggle"
+                >
+                  <mat-button-toggle value="yes">yes</mat-button-toggle>
+                  <mat-button-toggle value="no">no</mat-button-toggle>
+                </mat-button-toggle-group>
+              </div>
             </div>
           </mat-expansion-panel>
         </mat-accordion>
@@ -229,6 +241,23 @@ import {
       .mb-3 {
         margin-bottom: 1rem;
       }
+
+      .validation-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+      }
+
+      .validation-label {
+        margin: 0;
+        font-size: 0.875rem;
+        color: var(--mat-sys-on-surface);
+      }
+
+      .validation-toggle {
+        flex-shrink: 0;
+      }
     `,
   ],
 })
@@ -324,6 +353,25 @@ export class PropertiesPanelComponent {
     if (field) {
       // Store defaultValue as string from text input; clear field if empty
       field.defaultValue = value === '' ? undefined : value;
+      this.fieldUpdated.emit();
+    }
+  }
+
+  getRequired(): boolean {
+    const field = this.$selectedField();
+    if (!field || !field.props) {
+      return false;
+    }
+    return field.props.required === true;
+  }
+
+  updateRequired(value: boolean) {
+    const field = this.$selectedField();
+    if (field) {
+      if (!field.props) {
+        field.props = {};
+      }
+      field.props.required = value;
       this.fieldUpdated.emit();
     }
   }
