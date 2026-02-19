@@ -127,7 +127,6 @@ import {
       }
 
       .info-message {
-        color: #1976d2;
         padding: 1rem;
       }
 

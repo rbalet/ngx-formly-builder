@@ -5,8 +5,8 @@ html {
   @include mat.theme(
     (
       color: (
-        primary: mat.$azure-palette,
-        tertiary: mat.$blue-palette,
+        primary: mat.$red-palette,
+        tertiary: mat.$orange-palette,
       ),
       typography: Roboto,
       density: 0,
@@ -21,15 +21,15 @@ body {
 
   margin: 0;
   height: 100%;
-  
+
   // Default to light mode, will be overridden by ThemeService
   color-scheme: light;
-  
+
   // Support dark mode
   &.dark-theme {
     color-scheme: dark;
   }
-  
+
   &.light-theme {
     color-scheme: light;
   }
