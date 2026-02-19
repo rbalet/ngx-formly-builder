@@ -1,5 +1,5 @@
 {
-  "name": "ngx-formly-builder",
+  "name": "@ngx-formly/builder",
   "version": "0.0.1",
   "description": "A visual form builder library for Angular v21+ using ngx-formly",
   "keywords": [

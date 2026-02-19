@@ -1,5 +1,5 @@
 {
-  "name": "formly-app",
+  "name": "@ngx-formly/builder",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
