@@ -23,7 +23,9 @@ import { FormlyMatRadioModule } from '@ngx-formly/material/radio';
 import { FormlyMatSelectModule } from '@ngx-formly/material/select';
 import { FormlyMatTextAreaModule } from '@ngx-formly/material/textarea';
 import { FormlyMatToggleModule } from '@ngx-formly/material/toggle';
+import { provideMarkdown } from 'ngx-markdown';
 import { PREVIEW_MODE, SCREEN_SIZE } from './core/token';
+import { MarkdownFieldComponent } from './types/markdown-field.component';
 import { FieldWrapperComponent } from './wrappers/field-wrapper.component';
 
 export const appConfig: ApplicationConfig = {
@@ -40,6 +42,7 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideBrowserGlobalErrorListeners(),
     provideAnimationsAsync(),
+    provideMarkdown(),
 
     importProvidersFrom([
       FormlyMatCheckboxModule,
@@ -60,6 +63,7 @@ export const appConfig: ApplicationConfig = {
     provideFormlyCore({
       validationMessages: [{ name: 'required', message: 'This field is required' }],
       wrappers: [{ name: 'field-wrapper', component: FieldWrapperComponent }],
+      types: [{ name: 'markdown', component: MarkdownFieldComponent }],
       ...withFormlyMaterial(),
     }),
   ],

@@ -122,6 +122,17 @@ export class FieldPaletteComponent {
 
   fieldGroups: FieldGroup[] = [
     {
+      category: 'Typography',
+      fields: [
+        {
+          type: 'markdown',
+          label: 'Text block',
+          icon: 'article',
+          description: 'WYSIWYG Editor',
+        },
+      ],
+    },
+    {
       category: 'Input Fields',
       fields: [
         {
