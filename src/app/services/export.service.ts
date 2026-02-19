@@ -16,20 +16,20 @@ export class ExportService {
   downloadAsJson(data: unknown, filename: string = 'form-settings'): void {
     // Convert data to JSON string with formatting
     const jsonString = JSON.stringify(data, null, 2);
-    
+
     // Create a Blob from the JSON string
     const blob = new Blob([jsonString], { type: 'application/json' });
-    
+
     // Create a temporary anchor element to trigger download
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
     link.download = `${filename}.json`;
-    
+
     // Trigger download
     document.body.appendChild(link);
     link.click();
-    
+
     // Cleanup
     document.body.removeChild(link);
     URL.revokeObjectURL(url);

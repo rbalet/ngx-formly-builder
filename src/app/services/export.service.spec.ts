@@ -18,7 +18,6 @@ describe('ExportService', () => {
     let createElementSpy: ReturnType<typeof vi.spyOn>;
     let appendChildSpy: ReturnType<typeof vi.spyOn>;
     let removeChildSpy: ReturnType<typeof vi.spyOn>;
-    let createObjectURLSpy: ReturnType<typeof vi.spyOn>;
     let revokeObjectURLSpy: ReturnType<typeof vi.spyOn>;
     let mockLink: HTMLAnchorElement;
 
@@ -33,7 +32,7 @@ describe('ExportService', () => {
       removeChildSpy = vi.spyOn(document.body, 'removeChild').mockImplementation(() => mockLink);
 
       // Spy on URL methods
-      createObjectURLSpy = vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:mock-url');
+      vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:mock-url');
       revokeObjectURLSpy = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
     });
 
@@ -71,10 +70,9 @@ describe('ExportService', () => {
 
       service.downloadAsJson(testData);
 
-      expect(blobSpy).toHaveBeenCalledWith(
-        [JSON.stringify(testData, null, 2)],
-        { type: 'application/json' }
-      );
+      expect(blobSpy).toHaveBeenCalledWith([JSON.stringify(testData, null, 2)], {
+        type: 'application/json',
+      });
     });
 
     it('should format JSON with 2-space indentation', () => {
