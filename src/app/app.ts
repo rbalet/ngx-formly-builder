@@ -1,12 +1,12 @@
-import { Component, inject } from '@angular/core';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { Component, inject } from '@angular/core';
 import { FormlyFieldConfig } from '@ngx-formly/core';
-import { FieldPaletteComponent } from './components/field-palette/field-palette.component';
-import { FormPreviewComponent } from './components/form-preview/form-preview.component';
-import { NavbarComponent } from './components/navbar/navbar.component';
-import { PropertiesPanelComponent } from './components/properties-panel/properties-panel.component';
-import { PREVIEW_MODE, SCREEN_SIZE } from './core/token';
-import { FormBuilderService } from './services/form-builder.service';
+import { FieldPaletteComponent } from 'projects/ngx-formly-builder/src/lib/components/field-palette/field-palette.component';
+import { FormPreviewComponent } from 'projects/ngx-formly-builder/src/lib/components/form-preview/form-preview.component';
+import { NavbarComponent } from 'projects/ngx-formly-builder/src/lib/components/navbar/navbar.component';
+import { PropertiesPanelComponent } from 'projects/ngx-formly-builder/src/lib/components/properties-panel/properties-panel.component';
+import { PREVIEW_MODE, SCREEN_SIZE } from 'projects/ngx-formly-builder/src/lib/core/token';
+import { FormBuilderService } from 'projects/ngx-formly-builder/src/lib/services/form-builder.service';
 
 @Component({
   selector: 'app-root',

@@ -8,11 +8,10 @@ import {
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideFormlyCore } from '@ngx-formly/core';
-
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MAT_ICON_DEFAULT_OPTIONS } from '@angular/material/icon';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideFormlyCore } from '@ngx-formly/core';
 import { FormlyMaterialModule, withFormlyMaterial } from '@ngx-formly/material';
 import { FormlyMatCheckboxModule } from '@ngx-formly/material/checkbox';
 import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
@@ -24,9 +23,9 @@ import { FormlyMatSelectModule } from '@ngx-formly/material/select';
 import { FormlyMatTextAreaModule } from '@ngx-formly/material/textarea';
 import { FormlyMatToggleModule } from '@ngx-formly/material/toggle';
 import { provideMarkdown } from 'ngx-markdown';
-import { PREVIEW_MODE, SCREEN_SIZE } from './core/token';
-import { MarkdownFieldComponent } from './types/markdown-field.component';
-import { FieldWrapperComponent } from './wrappers/field-wrapper.component';
+import { PREVIEW_MODE, SCREEN_SIZE } from 'projects/ngx-formly-builder/src/lib/core/token';
+import { MarkdownFieldComponent } from 'projects/ngx-formly-builder/src/lib/types/markdown-field.component';
+import { FieldWrapperComponent } from 'projects/ngx-formly-builder/src/lib/wrappers/field-wrapper.component';
 
 export const appConfig: ApplicationConfig = {
   providers: [

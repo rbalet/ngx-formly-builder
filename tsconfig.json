@@ -14,17 +14,7 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "preserve",
-    "baseUrl": "./",
-    "paths": {
-      "@components/*": ["src/app/components/*"],
-      "@core/*": ["src/app/core/*"],
-      "@services/*": [
-        "src/app/services/*"
-      ],
-      "ngx-formly-builder": [
-        "./dist/ngx-formly-builder"
-      ]
-    }
+    "baseUrl": "./"
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
