@@ -1,0 +1,6 @@
+body {
+  .mat-mdc-card {
+    --mat-card-elevated-container-elevation: 0;
+    border: dashed 1px var(--mat-sys-outline-variant);
+  }
+}

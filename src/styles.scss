@@ -2,6 +2,9 @@
 @use './styles/material-theme.scss';
 @use './styles/typography.scss';
 
+// Components
+@use './styles/components/mat-card.scss';
+
 html,
 body {
   height: 100%;
