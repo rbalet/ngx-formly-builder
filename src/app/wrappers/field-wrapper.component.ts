@@ -28,6 +28,7 @@ import { App } from '../app';
             </div>
             <button
               mat-icon-button
+              class="close-button"
               type="button"
               aria-label="Remove field"
               (click)="onRemove($event)"
@@ -46,19 +47,6 @@ import { App } from '../app';
         (click)="onFieldClick($event)"
       >
         <div class="field-content">
-          <div class="field-header">
-            <div class="field-type-container">
-              {{ getFieldType() }}
-            </div>
-            <button
-              mat-icon-button
-              type="button"
-              aria-label="Remove field"
-              (click)="onRemove($event)"
-            >
-              <mat-icon>close</mat-icon>
-            </button>
-          </div>
           <ng-container #fieldComponent></ng-container>
         </div>
       </div>
@@ -67,6 +55,7 @@ import { App } from '../app';
   styles: [
     `
       .field-wrapper {
+        --mat-icon-button-container-shape: 8px 8px 0 0;
         position: relative;
         padding: 0.25rem;
         border: 2px solid transparent;
@@ -150,14 +139,12 @@ import { App } from '../app';
       .field-header {
         position: absolute;
         top: 0;
-        left: 0;
-        right: 0;
+        left: -0.25rem;
+        right: -0.25rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background-color: var(--mat-sys-surface-container-highest);
         transform: translateY(-100%);
-        padding: 0.25rem 0.5rem;
         border-radius: 0.25rem 0.25rem 0 0;
       }
 
@@ -168,6 +155,18 @@ import { App } from '../app';
         opacity: 0;
         display: flex;
         align-items: center;
+        margin-bottom: 6px;
+        background-color: var(--mat-sys-on-surface);
+        color: var(--mat-sys-surface);
+        padding-right: 1rem;
+        border-radius: var(--mat-icon-button-container-shape);
+        opacity: 0;
+      }
+
+      .close-button {
+        margin-bottom: 6px;
+        background-color: var(--mat-sys-on-surface);
+        color: var(--mat-sys-surface);
       }
 
       button {
@@ -176,12 +175,13 @@ import { App } from '../app';
         display: flex;
         justify-content: center;
         align-items: center;
+        height: 2rem;
 
         mat-icon {
-          font-size: 1.2rem;
-          width: 1.2rem;
-          height: 1.2rem;
-          line-height: 1.2rem;
+          font-size: 1rem;
+          width: 1rem;
+          height: 1rem;
+          line-height: 1rem;
         }
       }
 
