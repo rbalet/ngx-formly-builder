@@ -13,7 +13,7 @@ export class ExportService {
    * @param data - The data to export
    * @param filename - The name of the file (without extension)
    */
-  downloadAsJson(data: unknown, filename: string = 'form-settings'): void {
+  export(data: unknown, filename: string = 'form-settings'): void {
     // Convert data to JSON string with formatting
     const jsonString = JSON.stringify(data, null, 2);
 

@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ExportService } from './export.service';
 
 describe('ExportService', () => {
@@ -14,7 +14,7 @@ describe('ExportService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('downloadAsJson', () => {
+  describe('export', () => {
     let createElementSpy: ReturnType<typeof vi.spyOn>;
     let appendChildSpy: ReturnType<typeof vi.spyOn>;
     let removeChildSpy: ReturnType<typeof vi.spyOn>;
@@ -43,7 +43,7 @@ describe('ExportService', () => {
     it('should download data as JSON with default filename', () => {
       const testData = { field: 'value', nested: { key: 'data' } };
 
-      service.downloadAsJson(testData);
+      service.export(testData);
 
       expect(createElementSpy).toHaveBeenCalledWith('a');
       expect(mockLink.download).toBe('form-settings.json');
@@ -58,7 +58,7 @@ describe('ExportService', () => {
       const testData = [{ id: 1 }, { id: 2 }];
       const customFilename = 'my-custom-export';
 
-      service.downloadAsJson(testData, customFilename);
+      service.export(testData, customFilename);
 
       expect(mockLink.download).toBe(`${customFilename}.json`);
       expect(mockLink.click).toHaveBeenCalled();
@@ -68,7 +68,7 @@ describe('ExportService', () => {
       const testData = { test: 'data' };
       const blobSpy = vi.spyOn(globalThis, 'Blob');
 
-      service.downloadAsJson(testData);
+      service.export(testData);
 
       expect(blobSpy).toHaveBeenCalledWith([JSON.stringify(testData, null, 2)], {
         type: 'application/json',
@@ -80,7 +80,7 @@ describe('ExportService', () => {
       const expectedJson = JSON.stringify(testData, null, 2);
       const blobSpy = vi.spyOn(globalThis, 'Blob');
 
-      service.downloadAsJson(testData);
+      service.export(testData);
 
       expect(blobSpy).toHaveBeenCalledWith([expectedJson], { type: 'application/json' });
     });
@@ -88,7 +88,7 @@ describe('ExportService', () => {
     it('should handle empty objects', () => {
       const testData = {};
 
-      service.downloadAsJson(testData);
+      service.export(testData);
 
       expect(mockLink.click).toHaveBeenCalled();
       expect(mockLink.download).toBe('form-settings.json');
@@ -97,7 +97,7 @@ describe('ExportService', () => {
     it('should handle empty arrays', () => {
       const testData: unknown[] = [];
 
-      service.downloadAsJson(testData);
+      service.export(testData);
 
       expect(mockLink.click).toHaveBeenCalled();
       expect(mockLink.download).toBe('form-settings.json');

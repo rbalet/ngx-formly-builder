@@ -300,7 +300,7 @@ export class NavbarComponent {
 
   onExport() {
     const fields = this.formBuilderService.$fields();
-    this.exportService.downloadAsJson(fields, 'form-settings');
+    this.exportService.export(fields, 'form-settings');
   }
 
   togglePreviewMode() {
