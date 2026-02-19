@@ -27,6 +27,19 @@ export class FormBuilderService {
     });
   }
 
+  addFieldAtIndex(field: FormlyFieldConfig, index: number) {
+    // Save state before making the change
+    const previousState = structuredClone(this.$fields());
+    const fields = [...this.$fields()];
+    fields.splice(index, 0, field);
+    this.$fields.set(fields);
+    // Defer undo stack updates to avoid ExpressionChangedAfterItHasBeenCheckedError
+    queueMicrotask(() => {
+      this.#$undoStack.update((stack) => [...stack, previousState]);
+      this.#$redoStack.set([]);
+    });
+  }
+
   updateFields() {
     const previousState = structuredClone(this.$fields());
     this.$fields.update((fields) => [...fields]);

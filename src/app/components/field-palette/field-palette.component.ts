@@ -1,3 +1,4 @@
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { Component, output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -16,22 +17,27 @@ interface FieldGroup {
 
 @Component({
   selector: 'app-field-palette',
-  imports: [MatListModule, MatIconModule],
+  imports: [MatListModule, MatIconModule, DragDropModule],
   template: `
     <div class="field-palette">
       <h5 class="mb-3">Field Types</h5>
       @for (group of fieldGroups; track group.category) {
         <div class="field-group">
           <div class="group-header">{{ group.category }}</div>
-          <mat-action-list>
+          <mat-action-list cdkDropList [cdkDropListSortingDisabled]="true">
             @for (field of group.fields; track field.type) {
-              <button mat-list-item (click)="onFieldSelect(field.type)">
+              <mat-list-item
+                cdkDrag
+                [cdkDragData]="field.type"
+                (click)="onFieldSelect(field.type)"
+                class="field-palette-item"
+              >
                 <mat-icon matListItemIcon>{{ field.icon }}</mat-icon>
                 <div matListItemTitle>
                   <div class="field-label">{{ field.label }}</div>
                   <div class="field-description">{{ field.description }}</div>
                 </div>
-              </button>
+              </mat-list-item>
             }
           </mat-action-list>
         </div>
@@ -81,6 +87,33 @@ interface FieldGroup {
 
       .me-2 {
         margin-right: 0.5rem;
+      }
+
+      .cdk-drag-preview {
+        box-sizing: border-box;
+        border-radius: 4px;
+        box-shadow:
+          0 5px 5px -3px rgba(0, 0, 0, 0.2),
+          0 8px 10px 1px rgba(0, 0, 0, 0.14),
+          0 3px 14px 2px rgba(0, 0, 0, 0.12);
+        opacity: 0.8;
+        background-color: var(--mat-sys-surface-container);
+        padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .cdk-drag-animating {
+        transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+      }
+
+      .field-palette-item {
+        cursor: pointer;
+
+        &:hover {
+          background-color: var(--mat-sys-surface-container-highest);
+        }
       }
     `,
   ],

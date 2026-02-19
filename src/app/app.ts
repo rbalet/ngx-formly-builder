@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { FieldPaletteComponent } from './components/field-palette/field-palette.component';
 import { FormPreviewComponent } from './components/form-preview/form-preview.component';
@@ -9,7 +10,13 @@ import { FormBuilderService } from './services/form-builder.service';
 
 @Component({
   selector: 'app-root',
-  imports: [NavbarComponent, FieldPaletteComponent, FormPreviewComponent, PropertiesPanelComponent],
+  imports: [
+    NavbarComponent,
+    FieldPaletteComponent,
+    FormPreviewComponent,
+    PropertiesPanelComponent,
+    DragDropModule,
+  ],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
@@ -52,6 +59,27 @@ export class App {
   }
 
   onFieldSelect(fieldType: string) {
+    const newField = this.createFieldConfig(fieldType);
+    this.#formBuilderService.addField(newField);
+    this.#formBuilderService.$selectedField.set(newField);
+  }
+
+  onFieldUpdated() {
+    // Force update of fields array to trigger change detection
+    this.#formBuilderService.updateFields();
+  }
+
+  onFieldsReordered(event: { previousIndex: number; currentIndex: number }) {
+    this.#formBuilderService.reorderFields(event.previousIndex, event.currentIndex);
+  }
+
+  onFieldDropped(event: { fieldType: string; index: number }) {
+    const newField = this.createFieldConfig(event.fieldType);
+    this.#formBuilderService.addFieldAtIndex(newField, event.index);
+    this.#formBuilderService.$selectedField.set(newField);
+  }
+
+  private createFieldConfig(fieldType: string): FormlyFieldConfig {
     // Field types that use the 'input' Formly type with specific HTML input types
     const inputFieldTypes = ['number', 'email', 'password', 'telephone', 'url'];
 
@@ -106,16 +134,6 @@ export class App {
       newField.props!.placeholder = 'Select a date';
     }
 
-    this.#formBuilderService.addField(newField);
-    this.#formBuilderService.$selectedField.set(newField);
-  }
-
-  onFieldUpdated() {
-    // Force update of fields array to trigger change detection
-    this.#formBuilderService.updateFields();
-  }
-
-  onFieldsReordered(event: { previousIndex: number; currentIndex: number }) {
-    this.#formBuilderService.reorderFields(event.previousIndex, event.currentIndex);
+    return newField;
   }
 }
