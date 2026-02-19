@@ -9,11 +9,18 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { ValidationCondition, ValidationConditionType } from '@core/type';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import {
   OptionItem,
   OptionsEditorDialogComponent,
 } from '../options-editor-dialog/options-editor-dialog.component';
+
+interface ExtendedFieldProps {
+  validationConditions?: ValidationCondition[];
+  [key: string]: unknown;
+}
 
 @Component({
   selector: 'app-properties-panel',
@@ -27,6 +34,7 @@ import {
     MatButtonToggleModule,
     MatIconModule,
     MatExpansionModule,
+    MatSelectModule,
   ],
   template: `
     <div class="properties-panel">
@@ -133,6 +141,57 @@ import {
                   <mat-button-toggle value="no">no</mat-button-toggle>
                 </mat-button-toggle-group>
               </div>
+
+              @if (getValidationConditions().length > 0) {
+                <div class="conditions-container">
+                  @for (condition of getValidationConditions(); track $index) {
+                    <div class="condition-row">
+                      <mat-form-field class="condition-type" subscriptSizing="dynamic">
+                        <mat-select
+                          [value]="condition.type"
+                          (selectionChange)="updateConditionType($index, $event.value)"
+                        >
+                          <mat-option value="contains">Contains</mat-option>
+                          <mat-option value="notContains">Does not contain</mat-option>
+                          <mat-option value="minLength">Min length</mat-option>
+                          <mat-option value="maxLength">Max length</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+
+                      <mat-form-field class="condition-value" subscriptSizing="dynamic">
+                        <input
+                          matInput
+                          type="text"
+                          placeholder="Value"
+                          [ngModel]="condition.value"
+                          (ngModelChange)="updateConditionValue($index, $event)"
+                        />
+                      </mat-form-field>
+
+                      <button
+                        mat-icon-button
+                        class="delete-condition-btn"
+                        (click)="deleteCondition($index)"
+                        aria-label="Delete condition"
+                      >
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+                    @if ($index < getValidationConditions().length - 1) {
+                      <div class="condition-separator">AND</div>
+                    }
+                  }
+                </div>
+              }
+
+              <button
+                mat-stroked-button
+                class="full-width add-condition-btn"
+                (click)="addCondition()"
+              >
+                <mat-icon>add</mat-icon>
+                Add condition
+              </button>
             </div>
           </mat-expansion-panel>
         </mat-accordion>
@@ -268,6 +327,49 @@ import {
 
       .validation-toggle {
         flex-shrink: 0;
+      }
+
+      .conditions-container {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .condition-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .condition-type {
+        flex: 1;
+        min-width: 150px;
+      }
+
+      .condition-value {
+        flex: 1;
+      }
+
+      .delete-condition-btn {
+        flex-shrink: 0;
+        color: var(--mat-sys-error);
+      }
+
+      .condition-separator {
+        text-align: center;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--mat-sys-on-surface-variant);
+        margin: 0.5rem 0;
+        padding: 0.25rem 0;
+      }
+
+      .add-condition-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
       }
     `,
   ],
@@ -425,5 +527,65 @@ export class PropertiesPanelComponent {
         this.fieldUpdated.emit();
       }
     });
+  }
+
+  getValidationConditions(): ValidationCondition[] {
+    const field = this.$selectedField();
+    if (!field || !field.props) {
+      return [];
+    }
+    // Store validation conditions in a custom property
+    const props = field.props as ExtendedFieldProps;
+    return props.validationConditions || [];
+  }
+
+  addCondition() {
+    const field = this.$selectedField();
+    if (field) {
+      if (!field.props) {
+        field.props = {};
+      }
+      const conditions = this.getValidationConditions();
+      const newCondition: ValidationCondition = {
+        type: 'contains',
+        value: '',
+      };
+      (field.props as ExtendedFieldProps).validationConditions = [...conditions, newCondition];
+      this.fieldUpdated.emit();
+    }
+  }
+
+  updateConditionType(index: number, type: ValidationConditionType) {
+    const field = this.$selectedField();
+    if (field && field.props) {
+      const conditions = this.getValidationConditions();
+      if (conditions[index]) {
+        conditions[index].type = type;
+        (field.props as ExtendedFieldProps).validationConditions = [...conditions];
+        this.fieldUpdated.emit();
+      }
+    }
+  }
+
+  updateConditionValue(index: number, value: string) {
+    const field = this.$selectedField();
+    if (field && field.props) {
+      const conditions = this.getValidationConditions();
+      if (conditions[index]) {
+        conditions[index].value = value;
+        (field.props as ExtendedFieldProps).validationConditions = [...conditions];
+        this.fieldUpdated.emit();
+      }
+    }
+  }
+
+  deleteCondition(index: number) {
+    const field = this.$selectedField();
+    if (field && field.props) {
+      const conditions = this.getValidationConditions();
+      conditions.splice(index, 1);
+      (field.props as ExtendedFieldProps).validationConditions = [...conditions];
+      this.fieldUpdated.emit();
+    }
   }
 }
