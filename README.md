@@ -22,26 +22,26 @@ A visual form builder for arranging ngx-formly fields, inspired by shadcn-builde
 - ngx-formly v7 (form management)
 - Bootstrap 5 (styling)
 - TypeScript
-- npm (package manager)
+- pnpm (package manager)
 - Vitest (testing)
 
 ## Prerequisites
 
 - Node.js (v18 or higher)
-- npm v11.6.2 or higher
+- pnpm v8 or higher
 
 ## Getting Started
 
 ### Installation
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### Development Server
 
 ```bash
-npm start
+pnpm start
 ```
 
 Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
@@ -49,7 +49,7 @@ Navigate to `http://localhost:4200/`. The application will automatically reload 
 ### Build
 
 ```bash
-npm run build
+pnpm run build
 ```
 
 Build artifacts will be stored in the `dist/` directory.
@@ -57,7 +57,7 @@ Build artifacts will be stored in the `dist/` directory.
 ### Testing
 
 ```bash
-npm test
+pnpm test
 ```
 
 Run unit tests using Vitest.
@@ -67,15 +67,15 @@ Run unit tests using Vitest.
 #### Linting
 
 ```bash
-npm run lint          # Check for linting errors
-npm run lint:fix      # Fix linting errors automatically
+pnpm run lint          # Check for linting errors
+pnpm run lint:fix      # Fix linting errors automatically
 ```
 
 #### Formatting
 
 ```bash
-npm run format        # Format code with Prettier
-npm run format:check  # Check code formatting
+pnpm run format        # Format code with Prettier
+pnpm run format:check  # Check code formatting
 ```
 
 ## Project Structure
