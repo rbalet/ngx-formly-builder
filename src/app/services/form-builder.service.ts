@@ -7,6 +7,7 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
 export class FormBuilderService {
   $fields = signal<FormlyFieldConfig[]>([]);
   $selectedField = signal<FormlyFieldConfig | null>(null);
+  $formTitle = signal<string>('Untitled Form');
 
   // Undo/Redo state
   readonly #$undoStack = signal<FormlyFieldConfig[][]>([]);
@@ -115,12 +116,16 @@ export class FormBuilderService {
     this.#$redoStack.set([]);
   }
 
-  importFields(fields: FormlyFieldConfig[]) {
+  importFields(fields: FormlyFieldConfig[], formTitle?: string) {
     // Save state before making the change
     const previousState = structuredClone(this.$fields());
     this.$fields.set(fields);
     // Clear selected field as it may not exist in imported data
     this.$selectedField.set(null);
+    // Set form title if provided
+    if (formTitle) {
+      this.$formTitle.set(formTitle);
+    }
     // Defer undo stack updates to avoid ExpressionChangedAfterItHasBeenCheckedError
     queueMicrotask(() => {
       this.#$undoStack.update((stack) => [...stack, previousState]);
