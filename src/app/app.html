@@ -1,7 +1,7 @@
 <div class="app-container h-100">
   <app-navbar></app-navbar>
 
-  <div class="main-content">
+  <div class="main-content" cdkDropListGroup>
     @if (!$previewMode()) {
       <div class="palette-section">
         <app-field-palette (fieldSelect)="onFieldSelect($event)"></app-field-palette>
@@ -13,6 +13,7 @@
         [($selectedField)]="$selectedField"
         [$screenSize]="$screenSize()"
         (fieldsReordered)="onFieldsReordered($event)"
+        (fieldDropped)="onFieldDropped($event)"
       ></app-form-preview>
     </div>
     @if (!$previewMode()) {
