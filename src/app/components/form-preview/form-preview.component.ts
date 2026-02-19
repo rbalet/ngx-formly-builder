@@ -119,6 +119,7 @@ import { FormlyMaterialModule } from '@ngx-formly/material';
         border-radius: var(--mat-card-elevated-container-shape, var(--mat-sys-corner-medium));
         border: 1px solid var(--mat-sys-outline-variant);
         padding: 1rem;
+        gap: 1.4rem;
       }
 
       .field-item {
