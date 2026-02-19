@@ -49,10 +49,57 @@ Navigate to `http://localhost:4200/`. The application will automatically reload 
 ### Build
 
 ```bash
-pnpm run build
+pnpm run build      # Build the application
+pnpm run build:lib  # Build the library for npm publishing
 ```
 
 Build artifacts will be stored in the `dist/` directory.
+
+## Library
+
+This repository also contains a publishable Angular library (`ngx-formly-builder`) that can be used in other Angular projects.
+
+### Building the Library
+
+```bash
+pnpm run build:lib
+```
+
+The library will be built to `dist/ngx-formly-builder/`.
+
+### Using the Library
+
+To use this library in another Angular project:
+
+1. Install the library (after publishing):
+   ```bash
+   npm install ngx-formly-builder
+   ```
+
+2. Import and configure in your `app.config.ts`:
+   ```typescript
+   import { provideFormlyBuilder } from 'ngx-formly-builder';
+
+   export const appConfig: ApplicationConfig = {
+     providers: [
+       provideAnimationsAsync(),
+       provideFormlyBuilder(),
+     ],
+   };
+   ```
+
+3. Use the component:
+   ```typescript
+   import { FormlyBuilder } from 'ngx-formly-builder';
+
+   @Component({
+     template: '<formly-builder></formly-builder>',
+     imports: [FormlyBuilder]
+   })
+   export class AppComponent {}
+   ```
+
+See the [library README](projects/ngx-formly-builder/README.md) for detailed usage instructions.
 
 ### Testing
 

@@ -1,6 +1,27 @@
 {
   "name": "ngx-formly-builder",
   "version": "0.0.1",
+  "description": "A visual form builder library for Angular v21+ using ngx-formly",
+  "keywords": [
+    "angular",
+    "formly",
+    "form-builder",
+    "drag-and-drop",
+    "forms",
+    "angular21",
+    "material",
+    "ngx-formly"
+  ],
+  "author": "rbalet",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rbalet/ngx-formly-builder.git"
+  },
+  "homepage": "https://github.com/rbalet/ngx-formly-builder#readme",
+  "bugs": {
+    "url": "https://github.com/rbalet/ngx-formly-builder/issues"
+  },
   "peerDependencies": {
     "@angular/animations": "^21.0.0",
     "@angular/cdk": "^21.0.0",
