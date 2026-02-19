@@ -95,11 +95,11 @@ import { ScreenSize } from '../../core/type';
       }
 
       .preview-container.size-md {
-        width: 768px;
+        max-width: 768px;
       }
 
       .preview-container.size-lg {
-        width: 1074px;
+        max-width: 1074px;
       }
 
       .info-message {
