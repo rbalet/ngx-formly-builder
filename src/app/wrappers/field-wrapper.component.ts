@@ -15,6 +15,7 @@ import { App } from '../app';
         cdkDrag
         class="field-wrapper"
         [class.selected]="isSelected()"
+        [class.dimmed]="isDimmed()"
         (click)="onFieldClick($event)"
       >
         <div class="field-content">
@@ -41,6 +42,7 @@ import { App } from '../app';
       <div
         class="field-wrapper"
         [class.selected]="isSelected()"
+        [class.dimmed]="isDimmed()"
         (click)="onFieldClick($event)"
       >
         <div class="field-content">
@@ -114,6 +116,15 @@ import { App } from '../app';
 
           .drag-handle {
             opacity: 1;
+          }
+        }
+
+        &.dimmed {
+          opacity: 0.3;
+          transition: opacity 0.2s ease;
+
+          &:hover {
+            opacity: 0.6;
           }
         }
         .cdk-drag-animating {
@@ -191,6 +202,12 @@ export class FieldWrapperComponent extends FieldWrapper {
   isSelected(): boolean {
     const selectedField = this.app.$selectedField();
     return selectedField === this.field;
+  }
+
+  isDimmed(): boolean {
+    const selectedField = this.app.$selectedField();
+    // Dimmed if there is a selected field and this is not it
+    return selectedField !== null && selectedField !== this.field;
   }
 
   getFieldType(): string {
