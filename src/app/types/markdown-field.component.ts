@@ -2,9 +2,9 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { PREVIEW_MODE } from '@core/token';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
 import { MarkdownComponent } from 'ngx-markdown';
-import { PREVIEW_MODE } from '@core/token';
 
 @Component({
   selector: 'formly-field-markdown',
@@ -17,7 +17,7 @@ import { PREVIEW_MODE } from '@core/token';
   ],
   template: `
     @if (!$previewMode()) {
-      <mat-form-field class="w-100">
+      <mat-form-field class="w-100" subscriptSizing="dynamic">
         <mat-label>{{ props.label }}</mat-label>
         <textarea
           matInput
