@@ -1,10 +1,10 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { FormlyModule } from '@ngx-formly/core';
-import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { Template, TemplateCategory } from '../../models/template.model';
 import { TemplateService } from '../../services/template.service';
 
@@ -32,88 +32,86 @@ type ViewMode = 'categories' | 'templates';
     </div>
 
     <mat-dialog-content>
-      <div class="template-browser">
-        @if ($viewMode() === 'categories') {
-          <!-- Categories List View -->
-          <div class="categories-view">
-            <div class="categories-header">
-              <div class="header-cell">Category</div>
-              <div class="header-cell-count">Total Templates</div>
-            </div>
-            <mat-list class="categories-list">
-              @for (category of categories; track category.id) {
-                <mat-list-item
-                  class="category-item"
-                  (click)="selectCategory(category)"
-                  [class.selected]="$selectedCategory()?.id === category.id"
-                >
-                  <mat-icon matListItemIcon class="category-icon">{{ category.icon }}</mat-icon>
-                  <div matListItemTitle class="category-name">{{ category.name }}</div>
-                  <div matListItemMeta class="category-count">{{ category.templates.length }}</div>
-                </mat-list-item>
-              }
-            </mat-list>
+      @if ($viewMode() === 'categories') {
+        <!-- Categories List View -->
+        <div class="categories-view">
+          <div class="categories-header">
+            <div class="header-cell">Category</div>
+            <div class="header-cell-count">Total Templates</div>
           </div>
-        } @else {
-          <!-- Templates List View -->
-          <div class="templates-view">
-            <!-- Back navigation -->
-            <div class="templates-header">
-              <button mat-button class="back-button" (click)="backToCategories()">
-                <mat-icon>arrow_back</mat-icon>
-                <span>...</span>
-              </button>
-              <div class="header-cell">Name</div>
-            </div>
+          <mat-list class="categories-list">
+            @for (category of categories; track category.id) {
+              <mat-list-item
+                class="category-item"
+                (click)="selectCategory(category)"
+                [class.selected]="$selectedCategory()?.id === category.id"
+              >
+                <mat-icon matListItemIcon class="category-icon">{{ category.icon }}</mat-icon>
+                <div matListItemTitle class="category-name">{{ category.name }}</div>
+                <div matListItemMeta class="category-count">{{ category.templates.length }}</div>
+              </mat-list-item>
+            }
+          </mat-list>
+        </div>
+      } @else {
+        <!-- Templates List View -->
+        <div class="templates-view">
+          <!-- Back navigation -->
+          <div class="templates-header">
+            <button mat-button class="back-button" (click)="backToCategories()">
+              <mat-icon>arrow_back</mat-icon>
+              <span>...</span>
+            </button>
+            <div class="header-cell">Name</div>
+          </div>
 
-            <div class="templates-content">
-              <!-- Templates List -->
-              <div class="templates-list-container">
-                <mat-list class="templates-list">
-                  @for (template of $selectedCategory()?.templates; track template.id) {
-                    <mat-list-item
-                      class="template-item"
-                      (click)="selectTemplate(template)"
-                      [class.selected]="$selectedTemplate()?.id === template.id"
-                    >
-                      <mat-icon matListItemIcon class="template-icon">description</mat-icon>
-                      <div matListItemTitle class="template-name">{{ template.name }}</div>
-                    </mat-list-item>
-                  }
-                </mat-list>
-              </div>
-
-              <!-- Template Preview -->
-              <div class="template-preview">
-                @if ($selectedTemplate(); as template) {
-                  <div class="preview-content">
-                    <div class="preview-header">
-                      <h3>{{ template.name }}</h3>
-                      @if (template.description) {
-                        <p class="preview-description">{{ template.description }}</p>
-                      }
-                    </div>
-                    <div class="preview-form">
-                      <form [formGroup]="previewForm">
-                        <formly-form
-                          [form]="previewForm"
-                          [fields]="template.fields"
-                          [model]="previewModel"
-                        ></formly-form>
-                      </form>
-                    </div>
-                  </div>
-                } @else {
-                  <div class="preview-placeholder">
-                    <mat-icon class="placeholder-icon">search</mat-icon>
-                    <p>Select a template from the list to preview it</p>
-                  </div>
+          <div class="templates-content">
+            <!-- Templates List -->
+            <div class="templates-list-container">
+              <mat-list class="templates-list">
+                @for (template of $selectedCategory()?.templates; track template.id) {
+                  <mat-list-item
+                    class="template-item"
+                    (click)="selectTemplate(template)"
+                    [class.selected]="$selectedTemplate()?.id === template.id"
+                  >
+                    <mat-icon matListItemIcon class="template-icon">description</mat-icon>
+                    <div matListItemTitle class="template-name">{{ template.name }}</div>
+                  </mat-list-item>
                 }
-              </div>
+              </mat-list>
+            </div>
+
+            <!-- Template Preview -->
+            <div class="template-preview">
+              @if ($selectedTemplate(); as template) {
+                <div class="preview-content">
+                  <div class="preview-header">
+                    <h3>{{ template.name }}</h3>
+                    @if (template.description) {
+                      <p class="preview-description">{{ template.description }}</p>
+                    }
+                  </div>
+                  <div class="preview-form">
+                    <form [formGroup]="previewForm">
+                      <formly-form
+                        [form]="previewForm"
+                        [fields]="template.fields"
+                        [model]="previewModel"
+                      ></formly-form>
+                    </form>
+                  </div>
+                </div>
+              } @else {
+                <div class="preview-placeholder">
+                  <mat-icon class="placeholder-icon">search</mat-icon>
+                  <p>Select a template from the list to preview it</p>
+                </div>
+              }
             </div>
           </div>
-        }
-      </div>
+        </div>
+      }
     </mat-dialog-content>
 
     <mat-dialog-actions align="end">
@@ -150,20 +148,6 @@ type ViewMode = 'categories' | 'templates';
 
       h2 {
         margin: 0;
-      }
-
-      mat-dialog-content {
-        padding: 0;
-        margin: 0;
-        min-height: 400px;
-        max-height: 600px;
-        overflow: hidden;
-      }
-
-      .template-browser {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
       }
 
       /* Categories View */
