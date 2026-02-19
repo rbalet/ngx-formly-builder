@@ -10,8 +10,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { FormlyFieldConfig } from '@ngx-formly/core';
 import { ValidationCondition, ValidationConditionType } from '@core/type';
+import { FormlyFieldConfig } from '@ngx-formly/core';
 import {
   OptionItem,
   OptionsEditorDialogComponent,
@@ -146,7 +146,7 @@ interface ExtendedFieldProps {
                 <div class="conditions-container">
                   @for (condition of getValidationConditions(); track $index) {
                     <div class="condition-row">
-                      <mat-form-field class="condition-type">
+                      <mat-form-field class="condition-type" subscriptSizing="dynamic">
                         <mat-select
                           [value]="condition.type"
                           (selectionChange)="updateConditionType($index, $event.value)"
@@ -158,7 +158,7 @@ interface ExtendedFieldProps {
                         </mat-select>
                       </mat-form-field>
 
-                      <mat-form-field class="condition-value">
+                      <mat-form-field class="condition-value" subscriptSizing="dynamic">
                         <input
                           matInput
                           type="text"
