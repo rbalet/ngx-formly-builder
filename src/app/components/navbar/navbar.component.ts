@@ -1,13 +1,16 @@
 import { Component, computed, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { OpenTemplateDialogComponent } from '@components/open-template-dialog/open-template-dialog.component';
 import { PREVIEW_MODE, SCREEN_SIZE } from '@core/token';
 import { ExportService } from '@services/export.service';
 import { FormBuilderService } from '@services/form-builder.service';
 import { ImportService } from '@services/import.service';
 import { ColorScheme, ThemeService } from '@services/theme.service';
+import { Template } from 'src/app/models/template.model';
 
 @Component({
   selector: 'app-navbar',
@@ -27,9 +30,13 @@ import { ColorScheme, ThemeService } from '@services/theme.service';
           <div class="menu-items">
             <button mat-button class="menu-item" [matMenuTriggerFor]="fileMenu">File</button>
             <mat-menu #fileMenu="matMenu">
-              <button mat-menu-item (click)="onOpen()">
+              <button mat-menu-item (click)="onUpload()">
+                <mat-icon>upload_file</mat-icon>
+                <span>Upload</span>
+              </button>
+              <button mat-menu-item (click)="onOpenTemplate()">
                 <mat-icon>folder_open</mat-icon>
-                <span>Open</span>
+                <span>Open Template</span>
               </button>
             </mat-menu>
             <button mat-button class="menu-item" [matMenuTriggerFor]="editMenu">Edit</button>
@@ -277,6 +284,7 @@ export class NavbarComponent {
   readonly themeService = inject(ThemeService);
   readonly exportService = inject(ExportService);
   readonly importService = inject(ImportService);
+  readonly dialog = inject(MatDialog);
   readonly $screenSize = inject(SCREEN_SIZE);
   readonly $previewMode = inject(PREVIEW_MODE);
 
@@ -330,10 +338,25 @@ export class NavbarComponent {
     this.formBuilderService.redo();
   }
 
-  async onOpen() {
+  async onUpload() {
     const fields = await this.importService.import();
     if (fields) {
       this.formBuilderService.importFields(fields);
     }
+  }
+
+  onOpenTemplate() {
+    const dialogRef = this.dialog.open(OpenTemplateDialogComponent, {
+      width: '1200px',
+      maxWidth: '90vw',
+      height: '700px',
+      maxHeight: '90vh',
+    });
+
+    dialogRef.afterClosed().subscribe((template: Template | null) => {
+      if (template) {
+        this.formBuilderService.importFields(template.fields);
+      }
+    });
   }
 }
