@@ -1,0 +1,14 @@
+{
+  "autorun": true,
+  "autokill": true,
+  "terminals": [
+    {
+      "name": "CLI",
+      "description": "CLI",
+      "icon": "terminal",
+      "command": "",
+      "open": true,
+      "execute": false
+    }
+  ]
+}

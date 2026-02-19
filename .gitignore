@@ -29,6 +29,7 @@ package-lock.json
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/mcp.json
+!.vscode/terminals.json
 .history/*
 
 # Miscellaneous

@@ -18,11 +18,25 @@
 readonly #$undoStack = signal<FormlyFieldConfig[][]>([]);
 ```
 
+
 **Inject services using Angular's inject() function:**
 ```ts
 readonly #uiStateService = inject(UiStateService);
 ```
 - Do **not** use constructor injection for services. See AGENTS.md for rationale and examples.
+
+**Path Aliases:**
+You can use the following path aliases in your imports, as configured in `tsconfig.json`:
+- `@components` → `src/app/components/`
+- `@services` → `src/app/services/`
+- `@core` → `src/app/core/`
+
+**Example:**
+```ts
+import { PREVIEW_MODE, SCREEN_SIZE } from '@core/token';
+import { FormBuilderService } from '@services/form-builder.service';
+import { NavbarComponent } from '@components/navbar/navbar.component';
+```
 
 **If a service only exposes a single signal, prefer using an InjectionToken instead of a service.**
 
@@ -31,7 +45,7 @@ readonly #uiStateService = inject(UiStateService);
 Define the token (see `src/app/core/token.ts`):
 ```ts
 import { InjectionToken, WritableSignal } from '@angular/core';
-import { ScreenSize } from './type';
+import { ScreenSize } from '@core/type';
 
 export const SCREEN_SIZE = new InjectionToken<WritableSignal<ScreenSize>>(
   'formly.builder.screen.size',
@@ -40,7 +54,7 @@ export const SCREEN_SIZE = new InjectionToken<WritableSignal<ScreenSize>>(
 
 Provide the token in your app config (see `src/app/app.config.ts`):
 ```ts
-import { SCREEN_SIZE } from './core/token';
+import { SCREEN_SIZE } from '@core/token';
 import { signal } from '@angular/core';
 
 export const appConfig = {
@@ -54,7 +68,7 @@ export const appConfig = {
 Inject the signal where needed:
 ```ts
 import { inject } from '@angular/core';
-import { SCREEN_SIZE } from './core/token';
+import { SCREEN_SIZE } from '@core/token';
 
 const screenSize = inject(SCREEN_SIZE);
 ```
