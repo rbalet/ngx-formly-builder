@@ -20,7 +20,6 @@ interface FieldGroup {
   imports: [MatListModule, MatIconModule, DragDropModule],
   template: `
     <div class="field-palette">
-      <h5 class="mb-3">Field Types</h5>
       @for (group of fieldGroups; track group.category) {
         <div class="field-group">
           <div class="group-header">{{ group.category }}</div>

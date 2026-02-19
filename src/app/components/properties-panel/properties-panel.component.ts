@@ -28,7 +28,6 @@ import {
   ],
   template: `
     <div class="properties-panel">
-      <h5 class="mb-3">Field Properties</h5>
       @if ($selectedField()) {
         <mat-accordion [multi]="true">
           @if (hasOptions()) {
@@ -127,11 +126,7 @@ import {
           </mat-card-content>
         </mat-card>
       } @else {
-        <mat-card>
-          <mat-card-content class="info-message">
-            Select a component to configure its properties
-          </mat-card-content>
-        </mat-card>
+        <p class="info-text">Select a component to configure its properties</p>
       }
     </div>
   `,
@@ -141,7 +136,7 @@ import {
         padding: 1rem;
         height: 100%;
         background-color: var(--mat-sys-surface-container-lowest);
-        border-left: 1px solid #e0e0e0;
+        border-left: 1px solid var(--mat-sys-outline-variant);
         overflow-y: auto;
         min-height: 100%;
         box-sizing: border-box;
