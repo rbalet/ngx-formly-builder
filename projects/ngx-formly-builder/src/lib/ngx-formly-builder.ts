@@ -119,30 +119,6 @@ export class FormlyBuilder {
   constructor() {
     this.$fields = this.#formBuilderService.$fields;
     this.$selectedField = this.#formBuilderService.$selectedField;
-
-    // Initialize with default fields
-    this.#formBuilderService.$fields.set([
-      {
-        key: 'firstName',
-        type: 'input',
-        wrappers: ['field-wrapper'],
-        props: {
-          label: 'First Name',
-          placeholder: 'Enter your first name',
-          required: true,
-        },
-      },
-      {
-        key: 'email',
-        type: 'input',
-        wrappers: ['field-wrapper'],
-        props: {
-          label: 'Email',
-          placeholder: 'Enter your email',
-          type: 'email',
-        },
-      },
-    ]);
   }
 
   onFieldSelect(fieldType: string) {

@@ -148,6 +148,42 @@ Configuration function that provides all necessary services and configuration fo
 
 **Returns**: `(Provider | EnvironmentProviders)[]`
 
+### ExportService
+
+The `ExportService` is responsible for exporting form data. You can extend or replace it to support different export formats.
+
+#### Default Implementation
+
+By default, the service exports form data as JSON files. The `EXPORT_SERVICE` injection token automatically provides the default `ExportService` implementation, so no explicit configuration is required.
+
+#### Custom Export Service
+
+To provide a custom export service, extend the `ExportService` class and override the `export` method:
+
+```typescript
+import { Injectable } from '@angular/core';
+import { ExportService, EXPORT_SERVICE } from 'ngx-formly-builder';
+
+@Injectable()
+export class CustomExportService extends ExportService {
+  override export(data: unknown, filename: string = 'form-settings'): void {
+    // Your custom export logic here
+    // Example: Export as YAML, XML, CSV, etc.
+  }
+}
+
+// In your app.config.ts
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideAnimationsAsync(),
+    provideFormlyBuilder(),
+    { provide: EXPORT_SERVICE, useClass: CustomExportService },
+  ],
+};
+```
+
+**Note**: The `EXPORT_SERVICE` token has a default factory that provides the `ExportService` class. You can override this by providing your custom service after `provideFormlyBuilder()`.
+
 ### Types
 
 #### FieldGroup
