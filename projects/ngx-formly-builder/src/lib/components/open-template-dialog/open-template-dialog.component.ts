@@ -62,7 +62,7 @@ type ViewMode = 'categories' | 'templates';
               <mat-icon>arrow_back</mat-icon>
               <span>...</span>
             </button>
-            <div class="header-cell">Name</div>
+            <div class="header-cell">{{ $selectedCategory()?.name }}</div>
           </div>
 
           <div class="templates-content">
