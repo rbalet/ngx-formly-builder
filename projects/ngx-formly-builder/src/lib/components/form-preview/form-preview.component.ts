@@ -259,8 +259,11 @@ export class FormPreviewComponent {
     
     // Only update if changed to minimize re-renders
     if (this.$hoveredField() !== field || this.$hoveredSide() !== side) {
-      this.$hoveredField.set(field);
-      this.$hoveredSide.set(side);
+      // Defer updates to avoid ExpressionChangedAfterItHasBeenCheckedError
+      queueMicrotask(() => {
+        this.$hoveredField.set(field);
+        this.$hoveredSide.set(side);
+      });
     }
   }
 
