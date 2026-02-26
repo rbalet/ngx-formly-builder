@@ -1,4 +1,4 @@
-import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { JsonPipe } from '@angular/common';
 import { Component, computed, inject, input, model, output, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -34,7 +34,21 @@ import { ScreenSize } from '../../core/type';
                   class="field-item"
                   [class.selected]="field === $selectedField()"
                   (click)="onFieldClick(field)"
+                  (dragover)="onFieldDragOver($event, field)"
+                  (dragleave)="onFieldDragLeave($event)"
                 >
+                  <!-- Left drop zone indicator -->
+                  <div
+                    class="drop-zone drop-zone-left"
+                    [class.drop-zone-active]="$hoveredField() === field && $hoveredSide() === 'left'"
+                  ></div>
+                  
+                  <!-- Right drop zone indicator -->
+                  <div
+                    class="drop-zone drop-zone-right"
+                    [class.drop-zone-active]="$hoveredField() === field && $hoveredSide() === 'right'"
+                  ></div>
+                  
                   <formly-form
                     [model]="$model()"
                     [fields]="[field]"
@@ -125,6 +139,38 @@ import { ScreenSize } from '../../core/type';
       .field-item {
         position: relative;
       }
+
+      .drop-zone {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 50%;
+        z-index: 10;
+        pointer-events: none;
+        transition: background-color 0.2s ease;
+      }
+
+      .drop-zone-left {
+        left: 0;
+        border-left: 3px solid transparent;
+      }
+
+      .drop-zone-right {
+        right: 0;
+        border-right: 3px solid transparent;
+      }
+
+      .drop-zone-active {
+        background-color: rgba(var(--md-sys-color-primary-rgb, 103, 80, 164), 0.1);
+      }
+
+      .drop-zone-left.drop-zone-active {
+        border-left-color: var(--md-sys-color-primary);
+      }
+
+      .drop-zone-right.drop-zone-active {
+        border-right-color: var(--md-sys-color-primary);
+      }
     `,
   ],
 })
@@ -136,10 +182,15 @@ export class FormPreviewComponent {
 
   fieldsReordered = output<{ previousIndex: number; currentIndex: number }>();
   fieldDropped = output<{ fieldType: string; index: number }>();
+  fieldDroppedBeside = output<{ fieldType: string; targetField: FormlyFieldConfig; side: 'left' | 'right' }>();
 
   form = new FormGroup({});
   $model = signal<Record<string, unknown>>({});
   options = {};
+
+  // Track which field and which side (left/right) is being hovered during drag
+  $hoveredField = signal<FormlyFieldConfig | null>(null);
+  $hoveredSide = signal<'left' | 'right' | null>(null);
 
   previewContainerClass = computed(() => {
     return `preview-container size-${this.$screenSize()}`;
@@ -157,10 +208,29 @@ export class FormPreviewComponent {
     if (event.previousContainer !== event.container) {
       // External drop from field palette
       const fieldType = event.item.data as string;
-      this.fieldDropped.emit({
-        fieldType: fieldType,
-        index: event.currentIndex,
-      });
+      
+      // Check if we're hovering over a drop zone (left or right side of a field)
+      const hoveredField = this.$hoveredField();
+      const hoveredSide = this.$hoveredSide();
+      
+      if (hoveredField && hoveredSide) {
+        // Drop beside an existing field to create two-column layout
+        this.fieldDroppedBeside.emit({
+          fieldType: fieldType,
+          targetField: hoveredField,
+          side: hoveredSide,
+        });
+      } else {
+        // Regular drop at a specific index
+        this.fieldDropped.emit({
+          fieldType: fieldType,
+          index: event.currentIndex,
+        });
+      }
+      
+      // Clear hover state after drop
+      this.$hoveredField.set(null);
+      this.$hoveredSide.set(null);
     } else {
       // Internal reordering
       if (event.previousIndex !== event.currentIndex) {
@@ -174,5 +244,34 @@ export class FormPreviewComponent {
 
   onFieldClick(field: FormlyFieldConfig) {
     this.$selectedField.set(field);
+  }
+
+  onFieldDragOver(event: DragEvent, field: FormlyFieldConfig) {
+    event.preventDefault(); // Allow drop
+    
+    // Determine which side of the field we're hovering over
+    const target = event.currentTarget as HTMLElement;
+    const rect = target.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const midpoint = rect.width / 2;
+    
+    const side = x < midpoint ? 'left' : 'right';
+    
+    // Only update if changed to minimize re-renders
+    if (this.$hoveredField() !== field || this.$hoveredSide() !== side) {
+      this.$hoveredField.set(field);
+      this.$hoveredSide.set(side);
+    }
+  }
+
+  onFieldDragLeave(event: DragEvent) {
+    // Only clear if we're actually leaving the field-item (not entering a child)
+    const relatedTarget = event.relatedTarget as HTMLElement;
+    const currentTarget = event.currentTarget as HTMLElement;
+    
+    if (!currentTarget.contains(relatedTarget)) {
+      this.$hoveredField.set(null);
+      this.$hoveredSide.set(null);
+    }
   }
 }

@@ -38,6 +38,7 @@ import { FormBuilderService } from './services/form-builder.service';
             [$screenSize]="$screenSize()"
             (fieldsReordered)="onFieldsReordered($event)"
             (fieldDropped)="onFieldDropped($event)"
+            (fieldDroppedBeside)="onFieldDroppedBeside($event)"
           ></formly-builder-form-preview>
 
           <div class="app-background"></div>
@@ -139,6 +140,12 @@ export class FormlyBuilder {
   onFieldDropped(event: { fieldType: string; index: number }) {
     const newField = this.createFieldConfig(event.fieldType);
     this.#formBuilderService.addFieldAtIndex(newField, event.index);
+    this.#formBuilderService.$selectedField.set(newField);
+  }
+
+  onFieldDroppedBeside(event: { fieldType: string; targetField: FormlyFieldConfig; side: 'left' | 'right' }) {
+    const newField = this.createFieldConfig(event.fieldType);
+    this.#formBuilderService.addFieldBeside(event.targetField, newField, event.side);
     this.#formBuilderService.$selectedField.set(newField);
   }
 
