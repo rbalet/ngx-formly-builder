@@ -172,7 +172,7 @@ export class FormBuilderService {
     const targetIndex = fields.findIndex(f => f === targetField);
     
     if (targetIndex === -1) {
-      console.error('Target field not found');
+      console.error('Target field not found. Cannot add field beside a field that does not exist in the fields array.');
       return;
     }
 
@@ -182,8 +182,10 @@ export class FormBuilderService {
     if (targetFieldData.fieldGroup && targetFieldData.fieldGroupClassName === 'row') {
       // Already a row layout - add the new field to the fieldGroup
       const updatedFieldGroup = structuredClone(targetFieldData);
+      
+      // TypeScript guard: we know fieldGroup exists here due to the check above
       if (!updatedFieldGroup.fieldGroup) {
-        updatedFieldGroup.fieldGroup = [];
+        return;
       }
       
       // Add className to the new field

@@ -63,18 +63,15 @@ body {
   max-width: 50%;
 }
 
-/* Formly field group styling for horizontal layouts */
+/* Formly field group styling */
 formly-group {
   display: flex;
   flex-direction: column;
-  
-  &.formly-group-horizontal {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
 }
 
-/* Box-sizing for consistent layout */
-* {
+/* Box-sizing for grid elements */
+.row,
+.col,
+.col-6 {
   box-sizing: border-box;
 }
