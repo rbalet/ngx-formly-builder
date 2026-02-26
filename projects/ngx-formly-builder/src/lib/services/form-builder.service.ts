@@ -158,4 +158,73 @@ export class FormBuilderService {
       this.#$redoStack.set([]);
     });
   }
+
+  /**
+   * Adds a new field beside an existing field, creating a two-column layout
+   * @param targetField The field to add beside
+   * @param newField The new field to add
+   * @param position Whether to add to the left or right
+   */
+  addFieldBeside(targetField: FormlyFieldConfig, newField: FormlyFieldConfig, position: 'left' | 'right') {
+    // Save state before making the change
+    const previousState = structuredClone(this.$fields());
+    const fields = [...this.$fields()];
+    const targetIndex = fields.findIndex(f => f === targetField);
+    
+    if (targetIndex === -1) {
+      console.error('Target field not found');
+      return;
+    }
+
+    // Check if target field is already in a fieldGroup
+    const targetFieldData = fields[targetIndex];
+    
+    if (targetFieldData.fieldGroup && targetFieldData.fieldGroupClassName === 'row') {
+      // Already a row layout - add the new field to the fieldGroup
+      const updatedFieldGroup = structuredClone(targetFieldData);
+      if (!updatedFieldGroup.fieldGroup) {
+        updatedFieldGroup.fieldGroup = [];
+      }
+      
+      // Add className to the new field
+      newField.className = 'col-6';
+      
+      if (position === 'left') {
+        updatedFieldGroup.fieldGroup.unshift(newField);
+      } else {
+        updatedFieldGroup.fieldGroup.push(newField);
+      }
+      
+      fields[targetIndex] = updatedFieldGroup;
+    } else {
+      // Create a new row layout with both fields
+      const rowField: FormlyFieldConfig = {
+        fieldGroupClassName: 'row',
+        fieldGroup: []
+      };
+      
+      // Clone the target field and add className
+      const clonedTarget = structuredClone(targetFieldData);
+      clonedTarget.className = 'col-6';
+      newField.className = 'col-6';
+      
+      if (position === 'left') {
+        rowField.fieldGroup = [newField, clonedTarget];
+      } else {
+        rowField.fieldGroup = [clonedTarget, newField];
+      }
+      
+      // Replace the target field with the new row
+      fields[targetIndex] = rowField;
+    }
+    
+    this.$fields.set(fields);
+    this.$selectedField.set(newField);
+    
+    // Defer undo stack updates to avoid ExpressionChangedAfterItHasBeenCheckedError
+    queueMicrotask(() => {
+      this.#$undoStack.update((stack) => [...stack, previousState]);
+      this.#$redoStack.set([]);
+    });
+  }
 }
