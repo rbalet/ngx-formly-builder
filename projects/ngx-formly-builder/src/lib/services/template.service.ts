@@ -2427,6 +2427,82 @@ export class TemplateService {
         },
       ],
     },
+    {
+      id: 'examples',
+      name: 'Examples',
+      icon: 'folder',
+      templates: [
+        {
+          id: 'job-application',
+          name: 'Job Application',
+          description: 'Job application form with two-column layout example.',
+          categoryId: 'examples',
+          fields: [
+            {
+              fieldGroupClassName: 'row',
+              fieldGroup: [
+                {
+                  key: 'firstName',
+                  type: 'input',
+                  className: 'col-6',
+                  props: {
+                    label: 'First Name',
+                    placeholder: 'John',
+                    required: true,
+                  },
+                },
+                {
+                  key: 'lastName',
+                  type: 'input',
+                  className: 'col-6',
+                  props: {
+                    label: 'Last Name',
+                    placeholder: 'Doe',
+                    required: true,
+                  },
+                },
+              ],
+            },
+            {
+              key: 'email',
+              type: 'input',
+              props: {
+                label: 'Email',
+                type: 'email',
+                placeholder: 'john@example.com',
+                required: true,
+              },
+            },
+            {
+              key: 'phone',
+              type: 'input',
+              props: {
+                label: 'Phone Number',
+                placeholder: '+1 (555) 000-0000',
+              },
+            },
+            {
+              key: 'position',
+              type: 'input',
+              props: {
+                label: 'Position Applied For',
+                placeholder: 'Software Engineer',
+                required: true,
+              },
+            },
+            {
+              key: 'coverLetter',
+              type: 'textarea',
+              props: {
+                label: 'Cover Letter',
+                placeholder: 'Tell us why you want to join us...',
+                rows: 5,
+              },
+            },
+          ],
+        },
+      ],
+    },
   ];
 
   getCategories(): TemplateCategory[] {
