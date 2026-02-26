@@ -26,7 +26,7 @@ import { ScreenSize } from '../../core/type';
             <div
               cdkDropList
               (cdkDropListDropped)="onDrop($event)"
-              class="field-list"
+              class="field-list row"
               id="form-preview-list"
             >
               @for (field of $fields(); track field.key) {
@@ -45,12 +45,14 @@ import { ScreenSize } from '../../core/type';
               }
             </div>
           } @else {
-            <formly-form
-              [model]="$model()"
-              [fields]="$fields()"
-              [options]="options"
-              [form]="form"
-            ></formly-form>
+            <div class="row">
+              <formly-form
+                [model]="$model()"
+                [fields]="$fields()"
+                [options]="options"
+                [form]="form"
+              ></formly-form>
+            </div>
           }
         </form>
 

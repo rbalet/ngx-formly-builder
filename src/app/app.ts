@@ -21,12 +21,23 @@ export class App {
   readonly #formBuilderService = inject(FormBuilderService);
 
   constructor() {
-    // Initialize with default fields
+    // Initialize with default fields demonstrating two-column layout
     this.#formBuilderService.$fields.set([
+      {
+        key: 'title',
+        type: 'input',
+        wrappers: ['field-wrapper'],
+        props: {
+          label: 'Job Application',
+          placeholder: 'Apply for the position and join our team.',
+          description: 'Fill out the form below to apply',
+        },
+      },
       {
         key: 'firstName',
         type: 'input',
         wrappers: ['field-wrapper'],
+        className: 'col-6',
         props: {
           label: 'First Name',
           placeholder: 'Enter your first name',
@@ -34,13 +45,46 @@ export class App {
         },
       },
       {
+        key: 'lastName',
+        type: 'input',
+        wrappers: ['field-wrapper'],
+        className: 'col-6',
+        props: {
+          label: 'Last Name',
+          placeholder: 'Enter your last name',
+          required: true,
+        },
+      },
+      {
         key: 'email',
         type: 'input',
         wrappers: ['field-wrapper'],
+        className: 'col-6',
         props: {
           label: 'Email',
           placeholder: 'Enter your email',
           type: 'email',
+          required: true,
+        },
+      },
+      {
+        key: 'phone',
+        type: 'input',
+        wrappers: ['field-wrapper'],
+        className: 'col-6',
+        props: {
+          label: 'Phone Number',
+          placeholder: 'Enter your phone number',
+          type: 'tel',
+        },
+      },
+      {
+        key: 'position',
+        type: 'input',
+        wrappers: ['field-wrapper'],
+        props: {
+          label: 'Position Applied For',
+          placeholder: 'Enter the position you are applying for',
         },
       },
     ]);

@@ -116,6 +116,25 @@ interface ExtendedFieldProps {
 
           <mat-expansion-panel>
             <mat-expansion-panel-header>
+              <mat-panel-title>Layout</mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="panel-content">
+              <mat-form-field class="full-width mb-3">
+                <mat-label>CSS Class</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  [ngModel]="getClassName()"
+                  (ngModelChange)="updateClassName($event)"
+                  placeholder="e.g., col-6, col-md-4"
+                />
+                <mat-hint>Bootstrap grid classes for layout control</mat-hint>
+              </mat-form-field>
+            </div>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
               <mat-panel-title>Validation</mat-panel-title>
             </mat-expansion-panel-header>
             <div class="panel-content">
@@ -585,6 +604,22 @@ export class PropertiesPanelComponent {
       const conditions = this.getValidationConditions();
       conditions.splice(index, 1);
       (field.props as ExtendedFieldProps).validationConditions = [...conditions];
+      this.fieldUpdated.emit();
+    }
+  }
+
+  getClassName(): string {
+    const field = this.$selectedField();
+    if (!field) {
+      return '';
+    }
+    return field.className || '';
+  }
+
+  updateClassName(value: string) {
+    const field = this.$selectedField();
+    if (field) {
+      field.className = value === '' ? undefined : value;
       this.fieldUpdated.emit();
     }
   }
