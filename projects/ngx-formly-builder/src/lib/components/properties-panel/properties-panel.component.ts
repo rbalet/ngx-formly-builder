@@ -619,7 +619,7 @@ export class PropertiesPanelComponent {
   updateClassName(value: string) {
     const field = this.$selectedField();
     if (field) {
-      field.className = value === '' ? undefined : value;
+      field.className = value || undefined;
       this.fieldUpdated.emit();
     }
   }

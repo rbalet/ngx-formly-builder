@@ -25,13 +25,9 @@ export class App {
     this.#formBuilderService.$fields.set([
       {
         key: 'title',
-        type: 'input',
+        type: 'markdown',
         wrappers: ['field-wrapper'],
-        props: {
-          label: 'Job Application',
-          placeholder: 'Apply for the position and join our team.',
-          description: 'Fill out the form below to apply',
-        },
+        defaultValue: '# Job Application\n\nApply for the position and join our team.',
       },
       {
         key: 'firstName',
