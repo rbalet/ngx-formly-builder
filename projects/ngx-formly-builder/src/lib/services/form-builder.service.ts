@@ -190,6 +190,7 @@ export class FormBuilderService {
       
       // Duplicate className from existing fields in the group
       // Use the first field's className as the reference
+      // Default to col-span-12 (full-width) if no className exists
       const existingFieldClassName = updatedFieldGroup.fieldGroup[0]?.className || 'col-span-12';
       newField.className = existingFieldClassName;
       
@@ -208,6 +209,7 @@ export class FormBuilderService {
       };
       
       // Extract className from target field to duplicate it
+      // Default to col-span-12 (full-width) if no className exists
       const targetClassName = targetFieldData.className || 'col-span-12';
       
       // Clone the target field and duplicate its className to both fields
