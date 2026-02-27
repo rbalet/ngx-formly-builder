@@ -26,13 +26,12 @@ import { ScreenSize } from '../../core/type';
             <div
               cdkDropList
               (cdkDropListDropped)="onDrop($event)"
-              class="field-list"
+              class="field-list grid grid-cols-12 gap-4"
               id="form-preview-list"
             >
               @for (field of $fields(); track field.key) {
                 <div
-                  class="field-item"
-                  [class.selected]="field === $selectedField()"
+                  [class]="getFieldItemClass(field)"
                   (click)="onFieldClick(field)"
                 >
                   <formly-form
@@ -45,12 +44,14 @@ import { ScreenSize } from '../../core/type';
               }
             </div>
           } @else {
-            <formly-form
-              [model]="$model()"
-              [fields]="$fields()"
-              [options]="options"
-              [form]="form"
-            ></formly-form>
+            <div class="field-list grid grid-cols-12 gap-4">
+              <formly-form
+                [model]="$model()"
+                [fields]="$fields()"
+                [options]="options"
+                [form]="form"
+              ></formly-form>
+            </div>
           }
         </form>
 
@@ -119,7 +120,6 @@ import { ScreenSize } from '../../core/type';
         border-radius: var(--mat-card-elevated-container-shape, var(--mat-sys-corner-medium));
         border: 1px solid var(--mat-sys-outline-variant);
         padding: 1rem;
-        gap: 1.4rem;
       }
 
       .field-item {
@@ -144,6 +144,37 @@ export class FormPreviewComponent {
   previewContainerClass = computed(() => {
     return `preview-container size-${this.$screenSize()}`;
   });
+
+  getFieldItemClass(field: FormlyFieldConfig): string {
+    const classes = ['field-item'];
+    
+    // Add selected class if this is the selected field
+    if (field === this.$selectedField()) {
+      classes.push('selected');
+    }
+    
+    // Check if field has a className property
+    if (field.className) {
+      // Split className into individual classes, filtering out empty strings
+      const fieldClasses = field.className.split(' ').filter(cls => cls.trim() !== '');
+      
+      // Check if any class is a col-span-* class
+      const hasColSpan = fieldClasses.some(cls => cls.match(/col-span-\d+/));
+      
+      // Add all field classes
+      classes.push(...fieldClasses);
+      
+      // If no col-span class found, add default
+      if (!hasColSpan) {
+        classes.push('col-span-12');
+      }
+    } else {
+      // No className at all - add default
+      classes.push('col-span-12');
+    }
+    
+    return classes.join(' ');
+  }
 
   constructor() {
     // Watch for form value changes

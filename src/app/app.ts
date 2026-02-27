@@ -27,9 +27,21 @@ export class App {
         key: 'firstName',
         type: 'input',
         wrappers: ['field-wrapper'],
+        className: 'col-span-6',
         props: {
           label: 'First Name',
           placeholder: 'Enter your first name',
+          required: true,
+        },
+      },
+      {
+        key: 'lastName',
+        type: 'input',
+        wrappers: ['field-wrapper'],
+        className: 'col-span-6',
+        props: {
+          label: 'Last Name',
+          placeholder: 'Enter your last name',
           required: true,
         },
       },

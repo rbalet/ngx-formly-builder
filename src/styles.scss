@@ -70,9 +70,74 @@ formly-group {
   flex-direction: column;
 }
 
+/* Formly field group in grid context should use grid */
+.grid formly-group {
+  display: grid;
+  grid-column: 1 / -1;
+}
+
 /* Box-sizing for grid elements */
 .row,
 .col,
 .col-6 {
+  box-sizing: border-box;
+}
+
+/* CSS Grid System - 12 Column Layout */
+.grid {
+  display: grid;
+  box-sizing: border-box;
+}
+
+.grid-cols-12 {
+  grid-template-columns: repeat(12, 1fr);
+}
+
+/* Gap utilities */
+.gap-0 {
+  gap: 0;
+}
+
+.gap-1 {
+  gap: 0.25rem;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.gap-3 {
+  gap: 1rem;
+}
+
+.gap-4 {
+  gap: 1.5rem;
+}
+
+/* Column span utilities - generated for 1-12 columns */
+@for $i from 1 through 12 {
+  .col-span-#{$i} {
+    grid-column: span #{$i} / span #{$i};
+  }
+}
+
+/* Formly field items in grid should have full width */
+.grid > * {
+  box-sizing: border-box;
+}
+
+/* Formly form in grid should display as grid contents */
+.grid > formly-form {
+  display: grid;
+  grid-column: 1 / -1;
+}
+
+/* Formly field should support grid column spanning */
+.grid > formly-form > formly-field {
+  display: contents;
+}
+
+/* Formly wrapper should preserve grid column class */
+.grid formly-wrapper-mat-form-field {
   box-sizing: border-box;
 }

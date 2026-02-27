@@ -2439,12 +2439,12 @@ export class TemplateService {
           categoryId: 'examples',
           fields: [
             {
-              fieldGroupClassName: 'row',
+              fieldGroupClassName: 'grid grid-cols-12 gap-4',
               fieldGroup: [
                 {
                   key: 'firstName',
                   type: 'input',
-                  className: 'col-6',
+                  className: 'col-span-6',
                   props: {
                     label: 'First Name',
                     placeholder: 'John',
@@ -2454,7 +2454,7 @@ export class TemplateService {
                 {
                   key: 'lastName',
                   type: 'input',
-                  className: 'col-6',
+                  className: 'col-span-6',
                   props: {
                     label: 'Last Name',
                     placeholder: 'Doe',
