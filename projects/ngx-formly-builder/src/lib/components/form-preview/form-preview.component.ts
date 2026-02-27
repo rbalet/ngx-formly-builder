@@ -260,6 +260,7 @@ export class FormPreviewComponent {
   onDragLeave() {
     this.$isDraggingExternal.set(false);
     this.$hoveredFieldIndex.set(null);
+    this.$dropPosition.set('full');
   }
 
   onDropListDragOver(event: DragEvent) {
