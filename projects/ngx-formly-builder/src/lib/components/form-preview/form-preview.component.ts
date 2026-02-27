@@ -155,10 +155,17 @@ export class FormPreviewComponent {
     
     // Check if field has a className property
     if (field.className) {
-      classes.push(field.className);
+      // Split className into individual classes
+      const fieldClasses = field.className.split(' ').filter(c => c.trim());
       
-      // If className doesn't contain a col-span-* class, add default
-      if (!field.className.match(/col-span-\d+/)) {
+      // Check if any class is a col-span-* class
+      const hasColSpan = fieldClasses.some(c => c.match(/col-span-\d+/));
+      
+      // Add all field classes
+      classes.push(...fieldClasses);
+      
+      // If no col-span class found, add default
+      if (!hasColSpan) {
         classes.push('col-span-12');
       }
     } else {

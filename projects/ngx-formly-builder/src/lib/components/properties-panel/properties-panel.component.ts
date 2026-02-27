@@ -640,7 +640,7 @@ export class PropertiesPanelComponent {
       const existingClasses = field.className ? field.className.split(' ') : [];
       const filteredClasses = existingClasses.filter(cls => !cls.startsWith('col-span-'));
       filteredClasses.push(`col-span-${span}`);
-      field.className = filteredClasses.join(' ').trim();
+      field.className = filteredClasses.join(' ');
       this.fieldUpdated.emit();
     }
   }
