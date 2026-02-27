@@ -28,7 +28,7 @@ import { ScreenSize } from '../../core/type';
               (cdkDropListDropped)="onDrop($event)"
               (cdkDropListEntered)="onDragEntered()"
               (cdkDropListExited)="onDragExited()"
-              [cdkDropListSortPredicate]="sortPredicate"
+              [cdkDropListSortPredicate]="shouldAllowSort"
               class="field-list"
               id="form-preview-list"
             >
@@ -37,7 +37,7 @@ import { ScreenSize } from '../../core/type';
                   class="field-item"
                   [class.selected]="field === $selectedField()"
                   (click)="onFieldClick(field)"
-                  (dragover)="$isDragging() && onFieldDragOver($event, field)"
+                  (dragover)="onFieldDragOver($event, field)"
                 >
                   <!-- Left drop zone indicator - only show during external drag -->
                   @if ($isDragging()) {
@@ -255,6 +255,11 @@ export class FormPreviewComponent {
   }
 
   onFieldDragOver(event: DragEvent, field: FormlyFieldConfig) {
+    // Only handle dragover during external drag operations
+    if (!this.$isDragging()) {
+      return;
+    }
+    
     event.preventDefault(); // Allow drop
     
     // Determine which side of the field we're hovering over
@@ -285,10 +290,10 @@ export class FormPreviewComponent {
     this.$hoveredSide.set(null);
   }
 
-  // Sort predicate that prevents automatic sorting when we have an active drop zone
-  sortPredicate = (): boolean => {
-    // If we're hovering over a drop zone, don't allow CDK sorting
-    // This prevents the automatic "insert at index" behavior
+  // Controls whether CDK should allow automatic sorting/reordering
+  shouldAllowSort = (): boolean => {
+    // Don't allow CDK sorting when hovering over a drop zone
+    // This prevents automatic "insert at index" behavior and lets drop zones handle the drop
     return this.$hoveredField() === null;
   };
 }
