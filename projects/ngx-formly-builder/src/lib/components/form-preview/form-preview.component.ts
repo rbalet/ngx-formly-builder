@@ -32,7 +32,7 @@ import { ScreenSize } from '../../core/type';
               class="field-list"
               id="form-preview-list"
             >
-              @for (field of $fields(); track field.key || $index) {
+              @for (field of $fields(); track field.key ?? $index) {
                 <div
                   class="field-item"
                   [class.selected]="field === $selectedField()"
