@@ -179,8 +179,8 @@ export class FormBuilderService {
     // Check if target field is already in a fieldGroup
     const targetFieldData = fields[targetIndex];
     
-    if (targetFieldData.fieldGroup && targetFieldData.fieldGroupClassName === 'row') {
-      // Already a row layout - add the new field to the fieldGroup
+    if (targetFieldData.fieldGroup && targetFieldData.fieldGroupClassName === 'grid grid-cols-12 gap-4') {
+      // Already a grid layout - add the new field to the fieldGroup
       const updatedFieldGroup = structuredClone(targetFieldData);
       
       // TypeScript guard: we know fieldGroup exists here due to the check above
@@ -199,9 +199,9 @@ export class FormBuilderService {
       
       fields[targetIndex] = updatedFieldGroup;
     } else {
-      // Create a new row layout with both fields
-      const rowField: FormlyFieldConfig = {
-        fieldGroupClassName: 'row',
+      // Create a new grid layout with both fields
+      const gridField: FormlyFieldConfig = {
+        fieldGroupClassName: 'grid grid-cols-12 gap-4',
         fieldGroup: []
       };
       
@@ -211,13 +211,13 @@ export class FormBuilderService {
       newField.className = 'col-span-6';
       
       if (position === 'left') {
-        rowField.fieldGroup = [newField, clonedTarget];
+        gridField.fieldGroup = [newField, clonedTarget];
       } else {
-        rowField.fieldGroup = [clonedTarget, newField];
+        gridField.fieldGroup = [clonedTarget, newField];
       }
       
-      // Replace the target field with the new row
-      fields[targetIndex] = rowField;
+      // Replace the target field with the new grid
+      fields[targetIndex] = gridField;
     }
     
     this.$fields.set(fields);
