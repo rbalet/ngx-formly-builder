@@ -21,17 +21,34 @@ export class App {
   readonly #formBuilderService = inject(FormBuilderService);
 
   constructor() {
-    // Initialize with default fields
+    // Initialize with default fields including a two-column layout example
     this.#formBuilderService.$fields.set([
       {
-        key: 'firstName',
-        type: 'input',
-        wrappers: ['field-wrapper'],
-        props: {
-          label: 'First Name',
-          placeholder: 'Enter your first name',
-          required: true,
-        },
+        fieldGroupClassName: 'row',
+        fieldGroup: [
+          {
+            key: 'firstName',
+            type: 'input',
+            className: 'col-6',
+            wrappers: ['field-wrapper'],
+            props: {
+              label: 'First Name',
+              placeholder: 'Enter your first name',
+              required: true,
+            },
+          },
+          {
+            key: 'lastName',
+            type: 'input',
+            className: 'col-6',
+            wrappers: ['field-wrapper'],
+            props: {
+              label: 'Last Name',
+              placeholder: 'Enter your last name',
+              required: true,
+            },
+          },
+        ],
       },
       {
         key: 'email',

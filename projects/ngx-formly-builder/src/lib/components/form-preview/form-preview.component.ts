@@ -26,6 +26,9 @@ import { ScreenSize } from '../../core/type';
             <div
               cdkDropList
               (cdkDropListDropped)="onDrop($event)"
+              (cdkDropListEntered)="onDragEntered()"
+              (cdkDropListExited)="onDragExited()"
+              [cdkDropListSortPredicate]="sortPredicate"
               class="field-list"
               id="form-preview-list"
             >
@@ -34,20 +37,23 @@ import { ScreenSize } from '../../core/type';
                   class="field-item"
                   [class.selected]="field === $selectedField()"
                   (click)="onFieldClick(field)"
-                  (dragover)="onFieldDragOver($event, field)"
-                  (dragleave)="onFieldDragLeave($event)"
+                  (dragover)="$isDragging() && onFieldDragOver($event, field)"
                 >
-                  <!-- Left drop zone indicator -->
-                  <div
-                    class="drop-zone drop-zone-left"
-                    [class.drop-zone-active]="$hoveredField() === field && $hoveredSide() === 'left'"
-                  ></div>
+                  <!-- Left drop zone indicator - only show during external drag -->
+                  @if ($isDragging()) {
+                    <div
+                      class="drop-zone drop-zone-left"
+                      [class.drop-zone-active]="$hoveredField() === field && $hoveredSide() === 'left'"
+                    ></div>
+                  }
                   
-                  <!-- Right drop zone indicator -->
-                  <div
-                    class="drop-zone drop-zone-right"
-                    [class.drop-zone-active]="$hoveredField() === field && $hoveredSide() === 'right'"
-                  ></div>
+                  <!-- Right drop zone indicator - only show during external drag -->
+                  @if ($isDragging()) {
+                    <div
+                      class="drop-zone drop-zone-right"
+                      [class.drop-zone-active]="$hoveredField() === field && $hoveredSide() === 'right'"
+                    ></div>
+                  }
                   
                   <formly-form
                     [model]="$model()"
@@ -191,6 +197,7 @@ export class FormPreviewComponent {
   // Track which field and which side (left/right) is being hovered during drag
   $hoveredField = signal<FormlyFieldConfig | null>(null);
   $hoveredSide = signal<'left' | 'right' | null>(null);
+  $isDragging = signal<boolean>(false);
 
   previewContainerClass = computed(() => {
     return `preview-container size-${this.$screenSize()}`;
@@ -227,10 +234,6 @@ export class FormPreviewComponent {
           index: event.currentIndex,
         });
       }
-      
-      // Clear hover state after drop
-      this.$hoveredField.set(null);
-      this.$hoveredSide.set(null);
     } else {
       // Internal reordering
       if (event.previousIndex !== event.currentIndex) {
@@ -240,6 +243,11 @@ export class FormPreviewComponent {
         });
       }
     }
+    
+    // Clear drag state after drop
+    this.$isDragging.set(false);
+    this.$hoveredField.set(null);
+    this.$hoveredSide.set(null);
   }
 
   onFieldClick(field: FormlyFieldConfig) {
@@ -267,14 +275,20 @@ export class FormPreviewComponent {
     }
   }
 
-  onFieldDragLeave(event: DragEvent) {
-    // Only clear if we're actually leaving the field-item (not entering a child)
-    const relatedTarget = event.relatedTarget as HTMLElement;
-    const currentTarget = event.currentTarget as HTMLElement;
-    
-    if (!currentTarget.contains(relatedTarget)) {
-      this.$hoveredField.set(null);
-      this.$hoveredSide.set(null);
-    }
+  onDragEntered() {
+    this.$isDragging.set(true);
   }
+
+  onDragExited() {
+    this.$isDragging.set(false);
+    this.$hoveredField.set(null);
+    this.$hoveredSide.set(null);
+  }
+
+  // Sort predicate that prevents automatic sorting when we have an active drop zone
+  sortPredicate = (): boolean => {
+    // If we're hovering over a drop zone, don't allow CDK sorting
+    // This prevents the automatic "insert at index" behavior
+    return this.$hoveredField() === null;
+  };
 }
