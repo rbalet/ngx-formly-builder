@@ -636,8 +636,11 @@ export class PropertiesPanelComponent {
   updateColumnSpan(span: number) {
     const field = this.$selectedField();
     if (field) {
-      // Update className with the new column span
-      field.className = `col-span-${span}`;
+      // Preserve existing classes, replace only col-span-* class
+      const existingClasses = field.className ? field.className.split(' ') : [];
+      const filteredClasses = existingClasses.filter(cls => !cls.startsWith('col-span-'));
+      filteredClasses.push(`col-span-${span}`);
+      field.className = filteredClasses.join(' ').trim();
       this.fieldUpdated.emit();
     }
   }

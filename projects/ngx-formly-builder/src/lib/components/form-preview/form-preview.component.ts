@@ -31,9 +31,7 @@ import { ScreenSize } from '../../core/type';
             >
               @for (field of $fields(); track field.key) {
                 <div
-                  class="field-item"
                   [class]="getFieldItemClass(field)"
-                  [class.selected]="field === $selectedField()"
                   (click)="onFieldClick(field)"
                 >
                   <formly-form
@@ -148,12 +146,21 @@ export class FormPreviewComponent {
   });
 
   getFieldItemClass(field: FormlyFieldConfig): string {
-    // Check if field has a className property
-    if (field.className) {
-      return field.className;
+    const classes = ['field-item'];
+    
+    // Add selected class if this is the selected field
+    if (field === this.$selectedField()) {
+      classes.push('selected');
     }
-    // Default to full width (12 columns)
-    return 'col-span-12';
+    
+    // Add column span class if present, otherwise default to full width
+    if (field.className) {
+      classes.push(field.className);
+    } else {
+      classes.push('col-span-12');
+    }
+    
+    return classes.join(' ');
   }
 
   constructor() {
