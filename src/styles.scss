@@ -74,7 +74,6 @@ formly-group {
 .grid formly-group {
   display: grid;
   grid-column: 1 / -1;
-  grid-template-columns: subgrid;
 }
 
 /* Box-sizing for grid elements */
@@ -131,7 +130,6 @@ formly-group {
 .grid > formly-form {
   display: grid;
   grid-column: 1 / -1;
-  grid-template-columns: subgrid;
 }
 
 /* Formly field should support grid column spanning */
