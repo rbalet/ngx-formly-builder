@@ -153,10 +153,16 @@ export class FormPreviewComponent {
       classes.push('selected');
     }
     
-    // Add column span class if present, otherwise default to full width
+    // Check if field has a className property
     if (field.className) {
       classes.push(field.className);
+      
+      // If className doesn't contain a col-span-* class, add default
+      if (!field.className.match(/col-span-\d+/)) {
+        classes.push('col-span-12');
+      }
     } else {
+      // No className at all - add default
       classes.push('col-span-12');
     }
     
