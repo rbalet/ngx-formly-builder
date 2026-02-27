@@ -200,7 +200,7 @@ export class FormPreviewComponent {
   $model = signal<Record<string, unknown>>({});
   options = {};
 
-  // Drag-and-drop state (protected for template access)
+  // Drag-and-drop state (protected for template access - signals must be accessible in @if/@for directives)
   protected $isDraggingExternal = signal(false);
   protected $hoveredFieldIndex = signal<number | null>(null);
   protected $dropPosition = signal<'left' | 'right' | 'full'>('full');
@@ -236,10 +236,12 @@ export class FormPreviewComponent {
         targetField: targetField,
       });
       
-      // Reset drag state
-      this.$isDraggingExternal.set(false);
-      this.$hoveredFieldIndex.set(null);
-      this.$dropPosition.set('full');
+      // Reset drag state (wrapped in queueMicrotask for consistency with other signal updates)
+      queueMicrotask(() => {
+        this.$isDraggingExternal.set(false);
+        this.$hoveredFieldIndex.set(null);
+        this.$dropPosition.set('full');
+      });
     } else {
       // Internal reordering
       if (event.previousIndex !== event.currentIndex) {

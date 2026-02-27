@@ -139,7 +139,7 @@ export class FormlyBuilder {
   onFieldDropped(event: { fieldType: string; index: number; position?: 'left' | 'right' | 'full'; targetField?: FormlyFieldConfig }) {
     const newField = this.createFieldConfig(event.fieldType);
     
-    // Check if dropping beside an existing field
+    // Check if dropping beside an existing field (left or right position)
     if (event.position && event.position !== 'full' && event.targetField) {
       // Use addFieldBeside for left/right drops
       this.#formBuilderService.addFieldBeside(event.targetField, newField, event.position);
