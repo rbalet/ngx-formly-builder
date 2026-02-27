@@ -156,10 +156,10 @@ export class FormPreviewComponent {
     // Check if field has a className property
     if (field.className) {
       // Split className into individual classes, filtering out empty strings
-      const fieldClasses = field.className.split(' ').filter(c => c.trim() !== '');
+      const fieldClasses = field.className.split(' ').filter(cls => cls.trim() !== '');
       
       // Check if any class is a col-span-* class
-      const hasColSpan = fieldClasses.some(c => c.match(/col-span-\d+/));
+      const hasColSpan = fieldClasses.some(cls => cls.match(/col-span-\d+/));
       
       // Add all field classes
       classes.push(...fieldClasses);
