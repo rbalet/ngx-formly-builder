@@ -194,6 +194,34 @@ interface ExtendedFieldProps {
               </button>
             </div>
           </mat-expansion-panel>
+
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>Layout</mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="panel-content">
+              <mat-form-field class="full-width">
+                <mat-label>Column Span</mat-label>
+                <mat-select
+                  [value]="getColumnSpan()"
+                  (selectionChange)="updateColumnSpan($event.value)"
+                >
+                  <mat-option [value]="1">1/12 (8.33%)</mat-option>
+                  <mat-option [value]="2">2/12 (16.67%)</mat-option>
+                  <mat-option [value]="3">3/12 (25%)</mat-option>
+                  <mat-option [value]="4">4/12 (33.33%)</mat-option>
+                  <mat-option [value]="5">5/12 (41.67%)</mat-option>
+                  <mat-option [value]="6">6/12 (50%)</mat-option>
+                  <mat-option [value]="7">7/12 (58.33%)</mat-option>
+                  <mat-option [value]="8">8/12 (66.67%)</mat-option>
+                  <mat-option [value]="9">9/12 (75%)</mat-option>
+                  <mat-option [value]="10">10/12 (83.33%)</mat-option>
+                  <mat-option [value]="11">11/12 (91.67%)</mat-option>
+                  <mat-option [value]="12">12/12 (100%)</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </mat-expansion-panel>
         </mat-accordion>
 
         <hr />
@@ -585,6 +613,31 @@ export class PropertiesPanelComponent {
       const conditions = this.getValidationConditions();
       conditions.splice(index, 1);
       (field.props as ExtendedFieldProps).validationConditions = [...conditions];
+      this.fieldUpdated.emit();
+    }
+  }
+
+  getColumnSpan(): number {
+    const field = this.$selectedField();
+    if (!field) {
+      return 12;
+    }
+    // Extract column span from className (e.g., 'col-span-6' -> 6)
+    if (field.className) {
+      const match = field.className.match(/col-span-(\d+)/);
+      if (match) {
+        return parseInt(match[1], 10);
+      }
+    }
+    // Default to full width
+    return 12;
+  }
+
+  updateColumnSpan(span: number) {
+    const field = this.$selectedField();
+    if (field) {
+      // Update className with the new column span
+      field.className = `col-span-${span}`;
       this.fieldUpdated.emit();
     }
   }

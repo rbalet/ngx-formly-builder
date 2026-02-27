@@ -189,7 +189,7 @@ export class FormBuilderService {
       }
       
       // Add className to the new field
-      newField.className = 'col-6';
+      newField.className = 'col-span-6';
       
       if (position === 'left') {
         updatedFieldGroup.fieldGroup.unshift(newField);
@@ -207,8 +207,8 @@ export class FormBuilderService {
       
       // Clone the target field and add className
       const clonedTarget = structuredClone(targetFieldData);
-      clonedTarget.className = 'col-6';
-      newField.className = 'col-6';
+      clonedTarget.className = 'col-span-6';
+      newField.className = 'col-span-6';
       
       if (position === 'left') {
         rowField.fieldGroup = [newField, clonedTarget];

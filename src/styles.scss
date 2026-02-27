@@ -70,6 +70,13 @@ formly-group {
   flex-direction: column;
 }
 
+/* Formly field group in grid context should use grid */
+.grid formly-group {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+}
+
 /* Box-sizing for grid elements */
 .row,
 .col,
