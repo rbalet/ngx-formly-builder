@@ -179,6 +179,9 @@ export class FormBuilderService {
     // Check if target field is already in a fieldGroup
     const targetFieldData = fields[targetIndex];
     
+    // Extract className from target field to duplicate it
+    const targetClassName = targetFieldData.className || 'col-span-12';
+    
     if (targetFieldData.fieldGroup && targetFieldData.fieldGroupClassName === 'grid grid-cols-12 gap-4') {
       // Already a grid layout - add the new field to the fieldGroup
       const updatedFieldGroup = structuredClone(targetFieldData);
@@ -188,8 +191,8 @@ export class FormBuilderService {
         return;
       }
       
-      // Add className to the new field
-      newField.className = 'col-span-6';
+      // Duplicate the className from target field to the new field
+      newField.className = targetClassName;
       
       if (position === 'left') {
         updatedFieldGroup.fieldGroup.unshift(newField);
@@ -205,10 +208,10 @@ export class FormBuilderService {
         fieldGroup: []
       };
       
-      // Clone the target field and add className
+      // Clone the target field and duplicate its className to both fields
       const clonedTarget = structuredClone(targetFieldData);
-      clonedTarget.className = 'col-span-6';
-      newField.className = 'col-span-6';
+      clonedTarget.className = targetClassName;
+      newField.className = targetClassName;
       
       if (position === 'left') {
         gridField.fieldGroup = [newField, clonedTarget];
