@@ -224,9 +224,10 @@ export class FormPreviewComponent {
       const dropIndex = event.currentIndex;
       const fields = this.$fields();
       
-      // Determine if we're dropping beside a field
-      const targetField = fields[dropIndex];
+      // Use the hovered field index and position we tracked during dragover
+      const hoveredIndex = this.$hoveredFieldIndex();
       const position = this.$dropPosition();
+      const targetField = hoveredIndex !== null ? fields[hoveredIndex] : undefined;
       
       this.fieldDropped.emit({
         fieldType: fieldType,
