@@ -637,7 +637,9 @@ export class PropertiesPanelComponent {
     const field = this.$selectedField();
     if (field) {
       // Preserve existing classes, replace only col-span-* class
-      const existingClasses = field.className ? field.className.split(' ') : [];
+      const existingClasses = field.className 
+        ? field.className.split(' ').filter(cls => cls.trim() !== '') 
+        : [];
       const filteredClasses = existingClasses.filter(cls => !cls.startsWith('col-span-'));
       filteredClasses.push(`col-span-${span}`);
       field.className = filteredClasses.join(' ');
