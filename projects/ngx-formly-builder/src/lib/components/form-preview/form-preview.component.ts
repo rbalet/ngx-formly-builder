@@ -26,15 +26,34 @@ import { ScreenSize } from '../../core/type';
             <div
               cdkDropList
               (cdkDropListDropped)="onDrop($event)"
+              (cdkDropListEntered)="onDragEnter()"
+              (cdkDropListExited)="onDragLeave()"
+              (dragover)="onDropListDragOver($event)"
               class="field-list"
               id="form-preview-list"
             >
-              @for (field of $fields(); track field.key) {
+              @for (field of $fields(); track field.key ?? $index; let i = $index) {
                 <div
                   class="field-item"
                   [class.selected]="field === $selectedField()"
                   (click)="onFieldClick(field)"
+                  (dragover)="onFieldDragOver($event, i)"
                 >
+                  <!-- Drop zone overlays -->
+                  @if ($isDraggingExternal() && $hoveredFieldIndex() === i) {
+                    <div class="drop-zone-container">
+                      @if ($dropPosition() === 'left') {
+                        <div class="drop-zone drop-zone-left"></div>
+                      }
+                      @if ($dropPosition() === 'right') {
+                        <div class="drop-zone drop-zone-right"></div>
+                      }
+                      @if ($dropPosition() === 'full') {
+                        <div class="drop-zone drop-zone-full"></div>
+                      }
+                    </div>
+                  }
+                  
                   <formly-form
                     [model]="$model()"
                     [fields]="[field]"
@@ -125,6 +144,46 @@ import { ScreenSize } from '../../core/type';
       .field-item {
         position: relative;
       }
+
+      .drop-zone-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+        z-index: 10;
+      }
+
+      .drop-zone {
+        position: absolute;
+        background-color: var(--mat-sys-primary-container);
+        border: 2px dashed var(--mat-sys-primary);
+        border-radius: 4px;
+        opacity: 0.5;
+        transition: opacity 0.2s;
+      }
+
+      .drop-zone-full {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+
+      .drop-zone-left {
+        top: 0;
+        left: 0;
+        width: 50%;
+        bottom: 0;
+      }
+
+      .drop-zone-right {
+        top: 0;
+        right: 0;
+        width: 50%;
+        bottom: 0;
+      }
     `,
   ],
 })
@@ -135,11 +194,16 @@ export class FormPreviewComponent {
   $previewMode = inject(PREVIEW_MODE);
 
   fieldsReordered = output<{ previousIndex: number; currentIndex: number }>();
-  fieldDropped = output<{ fieldType: string; index: number }>();
+  fieldDropped = output<{ fieldType: string; index: number; position?: 'left' | 'right' | 'full'; targetField?: FormlyFieldConfig }>();
 
   form = new FormGroup({});
   $model = signal<Record<string, unknown>>({});
   options = {};
+
+  // Drag-and-drop state (protected for template access)
+  protected $isDraggingExternal = signal(false);
+  protected $hoveredFieldIndex = signal<number | null>(null);
+  protected $dropPosition = signal<'left' | 'right' | 'full'>('full');
 
   previewContainerClass = computed(() => {
     return `preview-container size-${this.$screenSize()}`;
@@ -157,10 +221,24 @@ export class FormPreviewComponent {
     if (event.previousContainer !== event.container) {
       // External drop from field palette
       const fieldType = event.item.data as string;
+      const dropIndex = event.currentIndex;
+      const fields = this.$fields();
+      
+      // Determine if we're dropping beside a field
+      const targetField = fields[dropIndex];
+      const position = this.$dropPosition();
+      
       this.fieldDropped.emit({
         fieldType: fieldType,
-        index: event.currentIndex,
+        index: dropIndex,
+        position: position,
+        targetField: targetField,
       });
+      
+      // Reset drag state
+      this.$isDraggingExternal.set(false);
+      this.$hoveredFieldIndex.set(null);
+      this.$dropPosition.set('full');
     } else {
       // Internal reordering
       if (event.previousIndex !== event.currentIndex) {
@@ -170,6 +248,53 @@ export class FormPreviewComponent {
         });
       }
     }
+  }
+
+  onDragEnter() {
+    this.$isDraggingExternal.set(true);
+  }
+
+  onDragLeave() {
+    this.$isDraggingExternal.set(false);
+    this.$hoveredFieldIndex.set(null);
+  }
+
+  onDropListDragOver(event: DragEvent) {
+    // This handles dragging over empty space in the drop list
+    // Only reset if not over a field-item
+    const target = event.target as HTMLElement;
+    if (target.classList.contains('field-list')) {
+      event.preventDefault();
+      queueMicrotask(() => {
+        this.$hoveredFieldIndex.set(null);
+        this.$dropPosition.set('full');
+      });
+    }
+  }
+
+  onFieldDragOver(event: DragEvent, fieldIndex: number) {
+    event.preventDefault();
+    
+    const fields = this.$fields();
+    if (fieldIndex >= fields.length) {
+      // Dropping at the end - full width
+      queueMicrotask(() => {
+        this.$hoveredFieldIndex.set(fieldIndex);
+        this.$dropPosition.set('full');
+      });
+      return;
+    }
+
+    // Calculate drop position based on pointer x-coordinate
+    const target = event.currentTarget as HTMLElement;
+    const rect = target.getBoundingClientRect();
+    const relativeX = event.clientX - rect.left;
+    const threshold = rect.width * 0.5;
+
+    queueMicrotask(() => {
+      this.$hoveredFieldIndex.set(fieldIndex);
+      this.$dropPosition.set(relativeX < threshold ? 'left' : 'right');
+    });
   }
 
   onFieldClick(field: FormlyFieldConfig) {

@@ -136,10 +136,18 @@ export class FormlyBuilder {
     this.#formBuilderService.reorderFields(event.previousIndex, event.currentIndex);
   }
 
-  onFieldDropped(event: { fieldType: string; index: number }) {
+  onFieldDropped(event: { fieldType: string; index: number; position?: 'left' | 'right' | 'full'; targetField?: FormlyFieldConfig }) {
     const newField = this.createFieldConfig(event.fieldType);
-    this.#formBuilderService.addFieldAtIndex(newField, event.index);
-    this.#formBuilderService.$selectedField.set(newField);
+    
+    // Check if dropping beside an existing field
+    if (event.position && event.position !== 'full' && event.targetField) {
+      // Use addFieldBeside for left/right drops
+      this.#formBuilderService.addFieldBeside(event.targetField, newField, event.position);
+    } else {
+      // Default to full-width drop
+      this.#formBuilderService.addFieldAtIndex(newField, event.index);
+      this.#formBuilderService.$selectedField.set(newField);
+    }
   }
 
   private createFieldConfig(fieldType: string): FormlyFieldConfig {
