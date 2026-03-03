@@ -1,4 +1,4 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 
 interface QuickStartTemplate {
@@ -128,10 +128,10 @@ export class QuickStartComponent {
   templateSelected = output<string>();
 
   readonly templates: QuickStartTemplate[] = [
-    { id: 'job-application', name: 'Job Application', icon: 'description' },
-    { id: 'vehicle-reservation', name: 'Vehicle Reservation', icon: 'description' },
-    { id: 'contact-us', name: 'Contact Us', icon: 'description' },
-    { id: 'update-profile', name: 'Profile Update', icon: 'description' },
+    { id: 'job-application', name: 'Job Application', icon: 'work' },
+    { id: 'vehicle-reservation', name: 'Vehicle Reservation', icon: 'directions_car' },
+    { id: 'contact-us', name: 'Contact Us', icon: 'mail' },
+    { id: 'update-profile', name: 'Profile Update', icon: 'person' },
   ];
 
   onTemplateClick(templateId: string): void {

@@ -7,6 +7,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { PropertiesPanelComponent } from './components/properties-panel/properties-panel.component';
 import { PREVIEW_MODE, SCREEN_SIZE } from './core/token';
 import { FieldGroup } from './models/field-group.model';
+import { Template } from './models/template.model';
 import { FormBuilderService } from './services/form-builder.service';
 import { TemplateService } from './services/template.service';
 
@@ -148,7 +149,7 @@ export class FormlyBuilder {
   onTemplateSelected(templateId: string) {
     // Find the template by ID
     const categories = this.#templateService.getCategories();
-    let selectedTemplate = null;
+    let selectedTemplate: Template | undefined;
 
     for (const category of categories) {
       selectedTemplate = category.templates.find(t => t.id === templateId);
