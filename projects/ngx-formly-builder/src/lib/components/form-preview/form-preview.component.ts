@@ -5,7 +5,7 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
-import { PREVIEW_MODE } from '../../core/token';
+import { DEBUG_MODE, PREVIEW_MODE } from '../../core/token';
 import { ScreenSize } from '../../core/type';
 
 @Component({
@@ -30,10 +30,7 @@ import { ScreenSize } from '../../core/type';
               id="form-preview-list"
             >
               @for (field of $fields(); track field.key) {
-                <div
-                  [class]="getFieldItemClass(field)"
-                  (click)="onFieldClick(field)"
-                >
+                <div [class]="getFieldItemClass(field)" (click)="onFieldClick(field)">
                   <formly-form
                     [model]="$model()"
                     [fields]="[field]"
@@ -61,7 +58,7 @@ import { ScreenSize } from '../../core/type';
               Please add a new component here
             </mat-card-content>
           </mat-card>
-        } @else {
+        } @else if ($debugMode()) {
           <mat-card>
             <mat-card-header>
               <mat-card-title>Model JSON</mat-card-title>
@@ -129,6 +126,8 @@ import { ScreenSize } from '../../core/type';
   ],
 })
 export class FormPreviewComponent {
+  readonly $debugMode = inject(DEBUG_MODE);
+
   $fields = input.required<FormlyFieldConfig[]>();
   $selectedField = model.required<FormlyFieldConfig | null>();
   $screenSize = input<ScreenSize>('lg');
@@ -147,23 +146,23 @@ export class FormPreviewComponent {
 
   getFieldItemClass(field: FormlyFieldConfig): string {
     const classes = ['field-item'];
-    
+
     // Add selected class if this is the selected field
     if (field === this.$selectedField()) {
       classes.push('selected');
     }
-    
+
     // Check if field has a className property
     if (field.className) {
       // Split className into individual classes, filtering out empty strings
-      const fieldClasses = field.className.split(' ').filter(cls => cls.trim() !== '');
-      
+      const fieldClasses = field.className.split(' ').filter((cls) => cls.trim() !== '');
+
       // Check if any class is a col-span-* class
-      const hasColSpan = fieldClasses.some(cls => cls.match(/col-span-\d+/));
-      
+      const hasColSpan = fieldClasses.some((cls) => cls.match(/col-span-\d+/));
+
       // Add all field classes
       classes.push(...fieldClasses);
-      
+
       // If no col-span class found, add default
       if (!hasColSpan) {
         classes.push('col-span-12');
@@ -172,7 +171,7 @@ export class FormPreviewComponent {
       // No className at all - add default
       classes.push('col-span-12');
     }
-    
+
     return classes.join(' ');
   }
 

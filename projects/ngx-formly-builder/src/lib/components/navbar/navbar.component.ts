@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { OpenTemplateDialogComponent } from '../../components/open-template-dialog/open-template-dialog.component';
-import { PREVIEW_MODE, SCREEN_SIZE, EXPORT_SERVICE } from '../../core/token';
+import { DEBUG_MODE, EXPORT_SERVICE, PREVIEW_MODE, SCREEN_SIZE } from '../../core/token';
 import { Template } from '../../models/template.model';
 import { FormBuilderService } from '../../services/form-builder.service';
 import { ImportService } from '../../services/import.service';
@@ -157,6 +157,16 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
       <div class="navbar-right">
         @if (!$previewMode()) {
           <button
+            mat-icon-button
+            title="Debug"
+            [class.active]="$debugMode()"
+            (click)="$debugMode.set(!$debugMode())"
+            class="active"
+          >
+            <mat-icon>bug_report</mat-icon>
+          </button>
+
+          <button
             matButton="outlined"
             color="secondary"
             class="preview-button"
@@ -225,6 +235,10 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
           top: 0;
           right: 0;
         }
+      }
+
+      .active {
+        --mat-icon-button-icon-color: var(--mat-sys-primary);
       }
 
       .navbar-center {
@@ -369,6 +383,7 @@ export class NavbarComponent {
   readonly dialog = inject(MatDialog);
   readonly $screenSize = inject(SCREEN_SIZE);
   readonly $previewMode = inject(PREVIEW_MODE);
+  readonly $debugMode = inject(DEBUG_MODE);
 
   // Expose color scheme from theme service
   get colorScheme() {
