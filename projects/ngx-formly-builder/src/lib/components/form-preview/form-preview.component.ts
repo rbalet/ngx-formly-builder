@@ -7,6 +7,7 @@ import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { PREVIEW_MODE } from '../../core/token';
 import { ScreenSize } from '../../core/type';
+import { QuickStartComponent } from '../quick-start/quick-start.component';
 
 @Component({
   selector: 'formly-builder-form-preview',
@@ -17,6 +18,7 @@ import { ScreenSize } from '../../core/type';
     JsonPipe,
     MatCardModule,
     DragDropModule,
+    QuickStartComponent,
   ],
   template: `
     <div class="form-preview">
@@ -56,11 +58,9 @@ import { ScreenSize } from '../../core/type';
         </form>
 
         @if (!$fields().length) {
-          <mat-card>
-            <mat-card-content class="info-message">
-              Please add a new component here
-            </mat-card-content>
-          </mat-card>
+          <formly-builder-quick-start
+            (templateSelected)="onTemplateSelected($event)"
+          ></formly-builder-quick-start>
         } @else {
           <mat-card>
             <mat-card-header>
@@ -136,6 +136,7 @@ export class FormPreviewComponent {
 
   fieldsReordered = output<{ previousIndex: number; currentIndex: number }>();
   fieldDropped = output<{ fieldType: string; index: number }>();
+  templateSelected = output<string>();
 
   form = new FormGroup({});
   $model = signal<Record<string, unknown>>({});
@@ -205,5 +206,9 @@ export class FormPreviewComponent {
 
   onFieldClick(field: FormlyFieldConfig) {
     this.$selectedField.set(field);
+  }
+
+  onTemplateSelected(templateId: string) {
+    this.templateSelected.emit(templateId);
   }
 }

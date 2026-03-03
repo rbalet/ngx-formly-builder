@@ -356,6 +356,88 @@ export class TemplateService {
             },
           ],
         },
+        {
+          id: 'vehicle-reservation',
+          name: 'Vehicle Reservation',
+          description: 'Reserve a vehicle for rental.',
+          categoryId: 'service',
+          fields: [
+            {
+              key: 'fullName',
+              type: 'input',
+              props: {
+                label: 'Full Name',
+                required: true,
+              },
+            },
+            {
+              key: 'email',
+              type: 'input',
+              props: {
+                label: 'Email',
+                type: 'email',
+                required: true,
+              },
+            },
+            {
+              key: 'phoneNumber',
+              type: 'input',
+              props: {
+                label: 'Phone Number',
+                required: true,
+              },
+            },
+            {
+              key: 'vehicleType',
+              type: 'select',
+              props: {
+                label: 'Vehicle Type',
+                required: true,
+                options: [
+                  { label: 'Compact Car', value: 'compact' },
+                  { label: 'Sedan', value: 'sedan' },
+                  { label: 'SUV', value: 'suv' },
+                  { label: 'Van', value: 'van' },
+                  { label: 'Truck', value: 'truck' },
+                ],
+              },
+            },
+            {
+              key: 'pickupDate',
+              type: 'input',
+              props: {
+                label: 'Pickup Date',
+                type: 'date',
+                required: true,
+              },
+            },
+            {
+              key: 'returnDate',
+              type: 'input',
+              props: {
+                label: 'Return Date',
+                type: 'date',
+                required: true,
+              },
+            },
+            {
+              key: 'pickupLocation',
+              type: 'input',
+              props: {
+                label: 'Pickup Location',
+                required: true,
+              },
+            },
+            {
+              key: 'additionalRequests',
+              type: 'textarea',
+              props: {
+                label: 'Additional Requests',
+                placeholder: 'Any special requirements or requests...',
+              },
+            },
+          ],
+        },
       ],
     },
     {
