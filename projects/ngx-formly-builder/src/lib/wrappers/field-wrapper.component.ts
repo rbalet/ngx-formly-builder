@@ -2,8 +2,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { Component, inject } from '@angular/core';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { PREVIEW_MODE } from '../core/token';
 import { FieldWrapper } from '@ngx-formly/core';
+import { PREVIEW_MODE } from '../core/token';
 import { FormBuilderService } from '../services/form-builder.service';
 
 @Component({
@@ -61,7 +61,6 @@ import { FormBuilderService } from '../services/form-builder.service';
         border: 2px solid transparent;
         border-radius: 0.25rem;
         cursor: pointer;
-        transition: all 0.2s ease;
         display: flex;
         align-items: center;
         gap: 0.5rem;
