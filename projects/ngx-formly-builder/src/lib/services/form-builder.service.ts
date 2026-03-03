@@ -188,8 +188,11 @@ export class FormBuilderService {
         return;
       }
       
-      // Add className to the new field
-      newField.className = 'col-span-6';
+      // Duplicate className from existing fields in the group
+      // Use the first field's className as the reference
+      // Default to col-span-12 (full-width) if no className exists
+      const existingFieldClassName = updatedFieldGroup.fieldGroup[0]?.className || 'col-span-12';
+      newField.className = existingFieldClassName;
       
       if (position === 'left') {
         updatedFieldGroup.fieldGroup.unshift(newField);
@@ -205,10 +208,14 @@ export class FormBuilderService {
         fieldGroup: []
       };
       
-      // Clone the target field and add className
+      // Extract className from target field to duplicate it
+      // Default to col-span-12 (full-width) if no className exists
+      const targetClassName = targetFieldData.className || 'col-span-12';
+      
+      // Clone the target field and duplicate its className to both fields
       const clonedTarget = structuredClone(targetFieldData);
-      clonedTarget.className = 'col-span-6';
-      newField.className = 'col-span-6';
+      clonedTarget.className = targetClassName;
+      newField.className = targetClassName;
       
       if (position === 'left') {
         gridField.fieldGroup = [newField, clonedTarget];
