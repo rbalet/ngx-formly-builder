@@ -147,16 +147,11 @@ export class FormlyBuilder {
   }
 
   onTemplateSelected(templateId: string) {
-    // Find the template by ID
+    // Find the template by ID across all categories
     const categories = this.#templateService.getCategories();
-    let selectedTemplate: Template | undefined;
-
-    for (const category of categories) {
-      selectedTemplate = category.templates.find(t => t.id === templateId);
-      if (selectedTemplate) {
-        break;
-      }
-    }
+    const selectedTemplate = categories
+      .flatMap(c => c.templates)
+      .find(t => t.id === templateId);
 
     // Load the template if found
     if (selectedTemplate) {
