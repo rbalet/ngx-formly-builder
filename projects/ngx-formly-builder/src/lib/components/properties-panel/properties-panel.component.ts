@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { FormlyFieldConfig } from '@ngx-formly/core';
+import { DEBUG_MODE } from '../../core/token';
 import { ValidationCondition, ValidationConditionType } from '../../core/type';
 import {
   OptionItem,
@@ -224,17 +225,19 @@ interface ExtendedFieldProps {
           </mat-expansion-panel>
         </mat-accordion>
 
-        <hr />
-        <mat-card>
-          <mat-card-header>
-            <mat-card-title>
-              <small class="text-muted">Debug: Field Config</small>
-            </mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <pre class="mb-0"><code>{{ $selectedField() | json }}</code></pre>
-          </mat-card-content>
-        </mat-card>
+        @if ($debugMode()) {
+          <hr />
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>
+                <small class="text-muted">Debug: Field Config</small>
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <pre class="mb-0"><code>{{ $selectedField() | json }}</code></pre>
+            </mat-card-content>
+          </mat-card>
+        }
       } @else {
         <p class="info-text">Select a component to configure its properties</p>
       }
@@ -403,6 +406,8 @@ interface ExtendedFieldProps {
   ],
 })
 export class PropertiesPanelComponent {
+  readonly $debugMode = inject(DEBUG_MODE);
+
   $selectedField = input<FormlyFieldConfig | null>(null);
   fieldUpdated = output<void>();
   private dialog = inject(MatDialog);
@@ -637,10 +642,10 @@ export class PropertiesPanelComponent {
     const field = this.$selectedField();
     if (field) {
       // Preserve existing classes, replace only col-span-* class
-      const existingClasses = field.className 
-        ? field.className.split(' ').filter(cls => cls.trim() !== '') 
+      const existingClasses = field.className
+        ? field.className.split(' ').filter((cls) => cls.trim() !== '')
         : [];
-      const filteredClasses = existingClasses.filter(cls => !cls.startsWith('col-span-'));
+      const filteredClasses = existingClasses.filter((cls) => !cls.startsWith('col-span-'));
       filteredClasses.push(`col-span-${span}`);
       field.className = filteredClasses.join(' ');
       this.fieldUpdated.emit();

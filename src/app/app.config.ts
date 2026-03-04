@@ -23,7 +23,11 @@ import { FormlyMatSelectModule } from '@ngx-formly/material/select';
 import { FormlyMatTextAreaModule } from '@ngx-formly/material/textarea';
 import { FormlyMatToggleModule } from '@ngx-formly/material/toggle';
 import { provideMarkdown } from 'ngx-markdown';
-import { PREVIEW_MODE, SCREEN_SIZE } from 'projects/ngx-formly-builder/src/lib/core/token';
+import {
+  DEBUG_MODE,
+  PREVIEW_MODE,
+  SCREEN_SIZE,
+} from 'projects/ngx-formly-builder/src/lib/core/token';
 import { MarkdownFieldComponent } from 'projects/ngx-formly-builder/src/lib/types/markdown-field.component';
 import { FieldWrapperComponent } from 'projects/ngx-formly-builder/src/lib/wrappers/field-wrapper.component';
 
@@ -37,6 +41,7 @@ export const appConfig: ApplicationConfig = {
 
     { provide: SCREEN_SIZE, useValue: signal('lg') },
     { provide: PREVIEW_MODE, useValue: signal(false) },
+    { provide: DEBUG_MODE, useValue: signal(true) }, // TODO: Set to false when done
 
     provideZonelessChangeDetection(),
     provideBrowserGlobalErrorListeners(),
