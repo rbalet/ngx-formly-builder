@@ -1,13 +1,11 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { Component, inject, input } from '@angular/core';
-import { FormlyFieldConfig } from '@ngx-formly/core';
 import { FieldPaletteComponent } from './components/field-palette/field-palette.component';
 import { FormPreviewComponent } from './components/form-preview/form-preview.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { PropertiesPanelComponent } from './components/properties-panel/properties-panel.component';
 import { PREVIEW_MODE, SCREEN_SIZE } from './core/token';
 import { FieldGroup } from './models/field-group.model';
-import { Template } from './models/template.model';
 import { FormBuilderService } from './services/form-builder.service';
 import { TemplateService } from './services/template.service';
 
@@ -38,8 +36,6 @@ import { TemplateService } from './services/template.service';
             [$fields]="$fields()"
             [($selectedField)]="$selectedField"
             [$screenSize]="$screenSize()"
-            (fieldsReordered)="onFieldsReordered($event)"
-            (fieldDropped)="onFieldDropped($event)"
             (templateSelected)="onTemplateSelected($event)"
           ></formly-builder-form-preview>
 
@@ -126,7 +122,7 @@ export class FormlyBuilder {
   }
 
   onFieldSelect(fieldType: string) {
-    const newField = this.createFieldConfig(fieldType);
+    const newField = this.#formBuilderService.createField(fieldType);
     this.#formBuilderService.addField(newField);
     this.#formBuilderService.$selectedField.set(newField);
   }
@@ -134,16 +130,6 @@ export class FormlyBuilder {
   onFieldUpdated() {
     // Force update of fields array to trigger change detection
     this.#formBuilderService.updateFields();
-  }
-
-  onFieldsReordered(event: { previousIndex: number; currentIndex: number }) {
-    this.#formBuilderService.reorderFields(event.previousIndex, event.currentIndex);
-  }
-
-  onFieldDropped(event: { fieldType: string; index: number }) {
-    const newField = this.createFieldConfig(event.fieldType);
-    this.#formBuilderService.addFieldAtIndex(newField, event.index);
-    this.#formBuilderService.$selectedField.set(newField);
   }
 
   onTemplateSelected(templateId: string) {
@@ -160,69 +146,5 @@ export class FormlyBuilder {
         selectedTemplate.name
       );
     }
-  }
-
-  private createFieldConfig(fieldType: string): FormlyFieldConfig {
-    // Field types that use the 'input' Formly type with specific HTML input types
-    const inputFieldTypes = ['number', 'email', 'password', 'telephone', 'url'];
-
-    // Map field types to Formly type and HTML input type
-    let formlyType = fieldType;
-    let inputType: string | undefined;
-
-    if (inputFieldTypes.includes(fieldType)) {
-      formlyType = 'input';
-      inputType = fieldType === 'telephone' ? 'tel' : fieldType;
-    }
-
-    const newField: FormlyFieldConfig = {
-      key: `field_${Date.now()}`,
-      type: formlyType,
-      wrappers: ['field-wrapper'],
-      props: {
-        label: `New ${fieldType.charAt(0).toUpperCase() + fieldType.slice(1)}`,
-        placeholder: `Enter ${fieldType}`,
-      },
-    };
-
-    if (inputType) {
-      newField.props!.type = inputType;
-    }
-
-    if (fieldType === 'select') {
-      newField.props!.options = [
-        { value: 'option1', label: 'Option 1' },
-        { value: 'option2', label: 'Option 2' },
-      ];
-    }
-
-    if (fieldType === 'textarea') {
-      newField.props!.rows = 5;
-    }
-
-    if (fieldType === 'multicheckbox' || fieldType === 'radio') {
-      newField.props!.options = [
-        { value: 'option1', label: 'Option 1' },
-        { value: 'option2', label: 'Option 2' },
-        { value: 'option3', label: 'Option 3' },
-      ];
-    }
-
-    if (fieldType === 'checkbox' || fieldType === 'toggle') {
-      newField.props!.label = `New ${fieldType.charAt(0).toUpperCase() + fieldType.slice(1)}`;
-      delete newField.props!.placeholder;
-    }
-
-    if (fieldType === 'datepicker') {
-      newField.props!.placeholder = 'Select a date';
-    }
-
-    if (fieldType === 'markdown') {
-      newField.props!.label = 'Text Block';
-      newField.props!.placeholder = 'Enter markdown content...';
-      newField.defaultValue = '# Heading\n\nYour text here...';
-    }
-
-    return newField;
   }
 }

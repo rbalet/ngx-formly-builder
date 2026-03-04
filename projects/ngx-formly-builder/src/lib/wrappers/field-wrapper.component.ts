@@ -1,10 +1,10 @@
-import { DragDropModule } from '@angular/cdk/drag-drop';
-import { Component, inject } from '@angular/core';
+import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
+import { Component, inject, signal } from '@angular/core';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { FieldWrapper } from '@ngx-formly/core';
+import { FieldWrapper, FormlyFieldConfig } from '@ngx-formly/core';
 import { PREVIEW_MODE } from '../core/token';
-import { FormBuilderService } from '../services/form-builder.service';
+import { DropPosition, FormBuilderService } from '../services/form-builder.service';
 
 @Component({
   selector: 'formly-wrapper-field',
@@ -12,31 +12,47 @@ import { FormBuilderService } from '../services/form-builder.service';
   template: `
     @if (!$previewMode()) {
       <div
-        cdkDrag
-        class="field-wrapper"
-        [class.selected]="isSelected()"
-        [class.dimmed]="isDimmed()"
-        (click)="onFieldClick($event)"
+        cdkDropList
+        [cdkDropListData]="field"
+        [cdkDropListSortingDisabled]="true"
+        (cdkDropListDropped)="onDrop($event)"
+        (cdkDropListEntered)="onDragEnter()"
+        (cdkDropListExited)="onDragExit()"
+        (pointermove)="onPointerMove($event)"
+        class="field-drop-zone"
+        [class.drag-over]="$isDragOver()"
       >
-        <div class="field-content">
-          <div class="field-header">
-            <div class="field-type-container">
-              <button matIconButton class="drag-handle" cdkDragHandle>
-                <mat-icon>drag_indicator</mat-icon>
+        @if ($isDragOver() && $dropPosition()) {
+          <div class="drop-indicator" [class]="'drop-indicator--' + $dropPosition()"></div>
+        }
+        <div
+          cdkDrag
+          [cdkDragData]="field"
+          class="field-wrapper"
+          [class.selected]="isSelected()"
+          [class.dimmed]="isDimmed()"
+          (click)="onFieldClick($event)"
+        >
+          <div class="field-content">
+            <div class="field-header">
+              <div class="field-type-container">
+                <button matIconButton class="drag-handle" cdkDragHandle>
+                  <mat-icon>drag_indicator</mat-icon>
+                </button>
+                {{ getFieldType() }}
+              </div>
+              <button
+                mat-icon-button
+                class="close-button"
+                type="button"
+                aria-label="Remove field"
+                (click)="onRemove($event)"
+              >
+                <mat-icon>close</mat-icon>
               </button>
-              {{ getFieldType() }}
             </div>
-            <button
-              mat-icon-button
-              class="close-button"
-              type="button"
-              aria-label="Remove field"
-              (click)="onRemove($event)"
-            >
-              <mat-icon>close</mat-icon>
-            </button>
+            <ng-container #fieldComponent></ng-container>
           </div>
-          <ng-container #fieldComponent></ng-container>
         </div>
       </div>
     } @else {
@@ -54,6 +70,46 @@ import { FormBuilderService } from '../services/form-builder.service';
   `,
   styles: [
     `
+      .field-drop-zone {
+        position: relative;
+      }
+
+      .drop-indicator {
+        position: absolute;
+        background-color: white;
+        z-index: 10;
+        pointer-events: none;
+        border-radius: 2px;
+
+        &.drop-indicator--top {
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 3px;
+        }
+
+        &.drop-indicator--bottom {
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 3px;
+        }
+
+        &.drop-indicator--left {
+          top: 0;
+          left: 0;
+          bottom: 0;
+          width: 3px;
+        }
+
+        &.drop-indicator--right {
+          top: 0;
+          right: 0;
+          bottom: 0;
+          width: 3px;
+        }
+      }
+
       .field-wrapper {
         --mat-icon-button-container-shape: 8px 8px 0 0;
         position: relative;
@@ -200,6 +256,9 @@ export class FieldWrapperComponent extends FieldWrapper {
   private formBuilderService = inject(FormBuilderService);
   readonly $previewMode = inject(PREVIEW_MODE);
 
+  readonly $isDragOver = signal(false);
+  readonly $dropPosition = signal<DropPosition | null>(null);
+
   isSelected(): boolean {
     const selectedField = this.formBuilderService.$selectedField();
     return selectedField === this.field;
@@ -245,5 +304,54 @@ export class FieldWrapperComponent extends FieldWrapper {
 
       return filtered;
     });
+  }
+
+  onDragEnter(): void {
+    this.$isDragOver.set(true);
+  }
+
+  onDragExit(): void {
+    this.$isDragOver.set(false);
+    this.$dropPosition.set(null);
+  }
+
+  onPointerMove(event: PointerEvent): void {
+    if (!this.$isDragOver()) return;
+    const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+    const relX = (event.clientX - rect.left) / rect.width;
+    const relY = (event.clientY - rect.top) / rect.height;
+
+    let position: DropPosition;
+    if (relY < 0.25) {
+      position = 'top';
+    } else if (relY > 0.75) {
+      position = 'bottom';
+    } else if (relX < 0.5) {
+      position = 'left';
+    } else {
+      position = 'right';
+    }
+
+    queueMicrotask(() => this.$dropPosition.set(position));
+  }
+
+  onDrop(event: CdkDragDrop<FormlyFieldConfig>): void {
+    const position = this.$dropPosition() ?? 'bottom';
+    this.$isDragOver.set(false);
+    this.$dropPosition.set(null);
+
+    // Determine if this is a palette drop (data is a field type string) or a field move
+    const isFromPalette = typeof event.item.data === 'string';
+
+    if (isFromPalette) {
+      const fieldType = event.item.data as string;
+      const newField = this.formBuilderService.createField(fieldType);
+      this.formBuilderService.dropNewFieldAtPosition(newField, this.field, position);
+    } else {
+      const sourceField = event.item.data as FormlyFieldConfig;
+      if (sourceField !== this.field) {
+        this.formBuilderService.moveFieldToPosition(sourceField, this.field, position);
+      }
+    }
   }
 }
