@@ -7,7 +7,9 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { PropertiesPanelComponent } from './components/properties-panel/properties-panel.component';
 import { PREVIEW_MODE, SCREEN_SIZE } from './core/token';
 import { FieldGroup } from './models/field-group.model';
+import { Template } from './models/template.model';
 import { FormBuilderService } from './services/form-builder.service';
+import { TemplateService } from './services/template.service';
 
 @Component({
   selector: 'formly-builder',
@@ -38,6 +40,7 @@ import { FormBuilderService } from './services/form-builder.service';
             [$screenSize]="$screenSize()"
             (fieldsReordered)="onFieldsReordered($event)"
             (fieldDropped)="onFieldDropped($event)"
+            (templateSelected)="onTemplateSelected($event)"
           ></formly-builder-form-preview>
 
           <div class="app-background"></div>
@@ -108,6 +111,7 @@ export class FormlyBuilder {
   readonly $screenSize = inject(SCREEN_SIZE);
   readonly $previewMode = inject(PREVIEW_MODE);
   readonly #formBuilderService = inject(FormBuilderService);
+  readonly #templateService = inject(TemplateService);
 
   // Input for custom field groups
   fieldGroups = input<FieldGroup[]>([]);
@@ -140,6 +144,22 @@ export class FormlyBuilder {
     const newField = this.createFieldConfig(event.fieldType);
     this.#formBuilderService.addFieldAtIndex(newField, event.index);
     this.#formBuilderService.$selectedField.set(newField);
+  }
+
+  onTemplateSelected(templateId: string) {
+    // Find the template by ID across all categories
+    const categories = this.#templateService.getCategories();
+    const selectedTemplate = categories
+      .flatMap(c => c.templates)
+      .find(t => t.id === templateId);
+
+    // Load the template if found
+    if (selectedTemplate) {
+      this.#formBuilderService.importFields(
+        selectedTemplate.fields,
+        selectedTemplate.name
+      );
+    }
   }
 
   private createFieldConfig(fieldType: string): FormlyFieldConfig {
