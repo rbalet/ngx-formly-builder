@@ -404,6 +404,60 @@ export class FormBuilderService {
     }
   }
 
+  /**
+   * Removes a field from the fields array, handling nested fieldGroups created by
+   * left/right drop positions. When a fieldGroup is left with a single field after
+   * removal, that field is unwrapped back to the top level with col-span-12.
+   * Clears the selection if the removed field was selected and saves undo state.
+   */
+  removeField(fieldToRemove: FormlyFieldConfig) {
+    const currentFields = this.$fields();
+
+    // Check top-level first
+    if (currentFields.some((f) => f === fieldToRemove)) {
+      const previousState = structuredClone(currentFields);
+      this.$fields.set(currentFields.filter((f) => f !== fieldToRemove));
+      this.#finalizeRemoval(fieldToRemove, previousState);
+      return;
+    }
+
+    // Search inside fieldGroups (created by left/right drops)
+    const groupIndex = currentFields.findIndex((f) => f.fieldGroup?.some((g) => g === fieldToRemove));
+    if (groupIndex === -1) return; // field not found anywhere — nothing to do
+
+    const previousState = structuredClone(currentFields);
+    const group = currentFields[groupIndex];
+    const newGroup = group.fieldGroup!.filter((f) => f !== fieldToRemove);
+
+    let updatedFields: FormlyFieldConfig[];
+    if (newGroup.length === 0) {
+      // Empty group — remove the wrapper entirely
+      updatedFields = currentFields.filter((_, i) => i !== groupIndex);
+    } else if (newGroup.length === 1) {
+      // Only one field left — unwrap it to top-level as full-width
+      const remaining = { ...newGroup[0], className: 'col-span-12' };
+      updatedFields = currentFields.map((f, i) => (i === groupIndex ? remaining : f));
+    } else {
+      // Group still has 2+ fields — update in place
+      updatedFields = currentFields.map((f, i) =>
+        i === groupIndex ? { ...group, fieldGroup: newGroup } : f,
+      );
+    }
+
+    this.$fields.set(updatedFields);
+    this.#finalizeRemoval(fieldToRemove, previousState);
+  }
+
+  #finalizeRemoval(removedField: FormlyFieldConfig, previousState: FormlyFieldConfig[]) {
+    if (this.$selectedField() === removedField) {
+      this.$selectedField.set(null);
+    }
+    queueMicrotask(() => {
+      this.#$undoStack.update((stack) => [...stack, previousState]);
+      this.#$redoStack.set([]);
+    });
+  }
+
   #getColSpan(field: FormlyFieldConfig): number {
     const match = field.className?.match(/col-span-(\d+)/);
     return match ? parseInt(match[1], 10) : 12;

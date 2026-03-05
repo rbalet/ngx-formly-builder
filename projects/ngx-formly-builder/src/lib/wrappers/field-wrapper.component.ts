@@ -292,18 +292,7 @@ export class FieldWrapperComponent extends FieldWrapper {
 
   onRemove(event: MouseEvent): void {
     event.stopPropagation();
-
-    // Remove this field from the fields array
-    this.formBuilderService.$fields.update((fields) => {
-      const filtered = fields.filter((f) => f !== this.field);
-
-      // If the removed field was selected, clear selection
-      if (this.isSelected()) {
-        this.formBuilderService.$selectedField.set(null);
-      }
-
-      return filtered;
-    });
+    this.formBuilderService.removeField(this.field);
   }
 
   onDragEnter(): void {
