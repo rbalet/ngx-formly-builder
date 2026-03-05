@@ -1,7 +1,9 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { Component, input, output } from '@angular/core';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { FieldGroup } from '../../models/field-group.model';
 
 const DEFAULT_FIELD_GROUPS: FieldGroup[] = [
@@ -73,31 +75,53 @@ const DEFAULT_FIELD_GROUPS: FieldGroup[] = [
 
 @Component({
   selector: 'formly-builder-field-palette',
-  imports: [MatListModule, MatIconModule, DragDropModule],
+  imports: [MatListModule, MatIconModule, MatDividerModule, MatTooltipModule, DragDropModule],
   template: `
-    <div class="field-palette">
-      @for (group of effectiveFieldGroups(); track group.category) {
-        <div class="field-group">
-          <div class="group-header">{{ group.category }}</div>
-          <mat-action-list cdkDropList [cdkDropListSortingDisabled]="true">
-            @for (field of group.fields; track field.type) {
-              <mat-list-item
-                cdkDrag
-                [cdkDragData]="field.type"
-                (click)="onFieldSelect(field.type)"
-                class="field-palette-item"
-              >
-                <mat-icon matListItemIcon>{{ field.icon }}</mat-icon>
-                <div matListItemTitle>
-                  <div class="field-label">{{ field.label }}</div>
-                  <div class="field-description">{{ field.description }}</div>
-                </div>
-              </mat-list-item>
-            }
-          </mat-action-list>
-        </div>
-      }
-    </div>
+    @if (minimized()) {
+      <div class="field-palette field-palette-collapsed">
+        @for (group of effectiveFieldGroups(); track group.category; let first = $first) {
+          @if (!first) {
+            <mat-divider></mat-divider>
+          }
+          @for (field of group.fields; track field.type) {
+            <div
+              class="field-palette-item-icon"
+              cdkDrag
+              [cdkDragData]="field.type"
+              (click)="onFieldSelect(field.type)"
+              [matTooltip]="field.label"
+              matTooltipPosition="right"
+            >
+              <mat-icon>{{ field.icon }}</mat-icon>
+            </div>
+          }
+        }
+      </div>
+    } @else {
+      <div class="field-palette">
+        @for (group of effectiveFieldGroups(); track group.category) {
+          <div class="field-group">
+            <div class="group-header">{{ group.category }}</div>
+            <mat-action-list cdkDropList [cdkDropListSortingDisabled]="true">
+              @for (field of group.fields; track field.type) {
+                <mat-list-item
+                  cdkDrag
+                  [cdkDragData]="field.type"
+                  (click)="onFieldSelect(field.type)"
+                  class="field-palette-item"
+                >
+                  <mat-icon matListItemIcon>{{ field.icon }}</mat-icon>
+                  <div matListItemTitle>
+                    <div class="field-label">{{ field.label }}</div>
+                    <div class="field-description">{{ field.description }}</div>
+                  </div>
+                </mat-list-item>
+              }
+            </mat-action-list>
+          </div>
+        }
+      </div>
+    }
   `,
   styles: [
     `
@@ -170,12 +194,49 @@ const DEFAULT_FIELD_GROUPS: FieldGroup[] = [
           background-color: var(--mat-sys-surface-container-highest);
         }
       }
+      .field-palette-collapsed {
+        padding: 0.5rem 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+
+        mat-divider {
+          width: 80%;
+          margin: 0.25rem 0;
+        }
+      }
+
+      .field-palette-item-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        cursor: pointer;
+        color: var(--mat-sys-on-surface-variant);
+        transition: background-color 0.15s ease;
+
+        &:hover {
+          background-color: var(--mat-sys-surface-container-highest);
+          color: var(--mat-sys-on-surface);
+        }
+
+        mat-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+      }
+
     `,
   ],
 })
 export class FieldPaletteComponent {
   fieldSelect = output<string>();
   fieldGroups = input<FieldGroup[]>([]);
+  minimized = input<boolean>(false);
 
   effectiveFieldGroups() {
     const groups = this.fieldGroups();

@@ -12,6 +12,10 @@ export const PREVIEW_MODE = new InjectionToken<WritableSignal<boolean>>(
 
 export const DEBUG_MODE = new InjectionToken<WritableSignal<boolean>>('formly.builder.debug.mode');
 
+export const PALETTE_MINIMIZED = new InjectionToken<WritableSignal<boolean>>(
+  'formly.builder.palette.minimized',
+);
+
 export const EXPORT_SERVICE = new InjectionToken<ExportService>('formly.builder.export.service', {
   providedIn: 'root',
   factory: () => inject(ExportService),

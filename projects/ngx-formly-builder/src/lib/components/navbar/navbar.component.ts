@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { OpenTemplateDialogComponent } from '../../components/open-template-dialog/open-template-dialog.component';
-import { DEBUG_MODE, EXPORT_SERVICE, PREVIEW_MODE, SCREEN_SIZE } from '../../core/token';
+import { DEBUG_MODE, EXPORT_SERVICE, PALETTE_MINIMIZED, PREVIEW_MODE, SCREEN_SIZE } from '../../core/token';
 import { Template } from '../../models/template.model';
 import { FormBuilderService } from '../../services/form-builder.service';
 import { ImportService } from '../../services/import.service';
@@ -30,10 +30,22 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
   template: `
     <header class="navbar">
       <!-- Left Section -->
-      <div class="navbar-left">
+      <div class="navbar-left" [class.navbar-left-minimized]="$paletteMinimized() && !$previewMode()">
         <mat-icon class="logo-icon">grid_view</mat-icon>
-        <h1 class="app-title">Formly Builder</h1>
-        <span class="alpha-badge">Alpha</span>
+        @if (!$paletteMinimized() || $previewMode()) {
+          <h1 class="app-title">Formly Builder</h1>
+          <span class="alpha-badge">Alpha</span>
+        }
+        @if (!$previewMode()) {
+          <button
+            mat-icon-button
+            class="toggle-palette-btn"
+            [title]="$paletteMinimized() ? 'Expand palette' : 'Collapse palette'"
+            (click)="togglePalette()"
+          >
+            <mat-icon>{{ $paletteMinimized() ? 'left_panel_open' : 'left_panel_close' }}</mat-icon>
+          </button>
+        }
       </div>
 
       <!-- Center Section -->
@@ -204,22 +216,27 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
         align-items: center;
         gap: 0.75rem;
         width: 280px;
-        min-width: 250px;
+        min-width: 64px;
         flex-shrink: 0;
         box-sizing: border-box;
         border-right: 1px solid var(--mat-sys-outline-variant);
         height: 64px;
         position: relative;
+        overflow: hidden;
+        transition: width 0.3s ease-in-out;
 
         .logo-icon {
           font-size: 20px;
           width: 20px;
           height: 20px;
+          flex-shrink: 0;
         }
 
         .app-title {
           margin: 0;
           white-space: nowrap;
+          flex: 1;
+          min-width: 0;
         }
 
         .alpha-badge {
@@ -234,6 +251,22 @@ import { ColorScheme, ThemeService } from '../../services/theme.service';
           position: absolute;
           top: 0;
           right: 0;
+        }
+
+        .toggle-palette-btn {
+          margin-left: auto;
+          flex-shrink: 0;
+        }
+      }
+
+      .navbar-left-minimized {
+        width: 64px;
+        padding: 0.5rem 0;
+        justify-content: center;
+        gap: 0;
+
+        .toggle-palette-btn {
+          margin-left: 0;
         }
       }
 
@@ -384,6 +417,7 @@ export class NavbarComponent {
   readonly $screenSize = inject(SCREEN_SIZE);
   readonly $previewMode = inject(PREVIEW_MODE);
   readonly $debugMode = inject(DEBUG_MODE);
+  readonly $paletteMinimized = inject(PALETTE_MINIMIZED);
 
   // Expose color scheme from theme service
   get colorScheme() {
@@ -435,6 +469,10 @@ export class NavbarComponent {
 
   togglePreviewMode() {
     this.$previewMode.set(!this.$previewMode());
+  }
+
+  togglePalette() {
+    this.$paletteMinimized.set(!this.$paletteMinimized());
   }
 
   onUndo() {
