@@ -186,7 +186,7 @@ export class FormBuilderService {
   importFields(fields: FormlyFieldConfig[], formTitle?: string) {
     // Save state before making the change
     const previousState = structuredClone(this.$fields());
-    this.$fields.set(fields);
+    this.$fields.set(this.#addWrappersToFields(fields));
     // Clear selected field as it may not exist in imported data
     this.$selectedField.set(null);
     // Set form title if provided
@@ -563,5 +563,20 @@ export class FormBuilderService {
   #getColSpan(field: FormlyFieldConfig): number {
     const match = field.className?.match(/col-span-(\d+)/);
     return match ? parseInt(match[1], 10) : 12;
+  }
+
+  /**
+   * Recursively ensures every field (and nested fieldGroup fields) has
+   * `wrappers: ['field-wrapper']` so drag-and-drop works after import.
+   * Existing wrappers are preserved.
+   */
+  #addWrappersToFields(fields: FormlyFieldConfig[]): FormlyFieldConfig[] {
+    return fields.map((field) => ({
+      ...field,
+      wrappers: field.wrappers ?? ['field-wrapper'],
+      ...(field.fieldGroup
+        ? { fieldGroup: this.#addWrappersToFields(field.fieldGroup) }
+        : {}),
+    }));
   }
 }
