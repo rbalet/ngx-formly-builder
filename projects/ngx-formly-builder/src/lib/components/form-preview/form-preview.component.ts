@@ -26,7 +26,7 @@ import { QuickStartComponent } from '../quick-start/quick-start.component';
       <div [class]="previewContainerClass()">
         <form [formGroup]="form" class="mb-4">
           @if (!$previewMode()) {
-            <div class="field-list grid grid-cols-12 gap-4" cdkDropListGroup>
+            <div class="field-list grid grid-cols-12 gap-4">
               @for (field of $fields(); track field.key ?? $index) {
                 <div [class]="getFieldItemClass(field)" (click)="onFieldClick(field)">
                   <formly-form
