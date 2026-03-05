@@ -76,7 +76,7 @@ import { DropPosition, FormBuilderService } from '../services/form-builder.servi
 
       .drop-indicator {
         position: absolute;
-        background-color: white;
+        background-color: var(--mat-sys-on-surface);
         z-index: 10;
         pointer-events: none;
         border-radius: 2px;
