@@ -3,6 +3,7 @@ import { JsonPipe } from '@angular/common';
 import { Component, computed, inject, input, model, output, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { DEBUG_MODE, PREVIEW_MODE } from '../../core/token';
@@ -18,6 +19,7 @@ import { QuickStartComponent } from '../quick-start/quick-start.component';
     FormlyMaterialModule,
     JsonPipe,
     MatCardModule,
+    MatIconModule,
     DragDropModule,
     QuickStartComponent,
   ],
@@ -42,7 +44,15 @@ import { QuickStartComponent } from '../quick-start/quick-start.component';
                   cdkDropList
                   (cdkDropListDropped)="onEmptyDrop($event)"
                   class="empty-drop-zone col-span-12"
-                ></div>
+                >
+                  <div class="empty-hint">
+                    <mat-icon class="empty-hint-icon">drag_indicator</mat-icon>
+                    <p class="empty-hint-text">
+                      <span>Drag &amp; drop a field here</span>
+                      <span>or click a field in the palette</span>
+                    </p>
+                  </div>
+                </div>
               }
             </div>
           } @else {
@@ -127,7 +137,45 @@ import { QuickStartComponent } from '../quick-start/quick-start.component';
       }
 
       .empty-drop-zone {
-        min-height: 50px;
+        min-height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px dashed var(--mat-sys-outline-variant);
+        border-radius: var(--mat-sys-corner-medium);
+        transition: border-color 0.2s ease;
+
+        &:hover {
+          border-color: var(--mat-sys-primary);
+        }
+      }
+
+      .empty-hint {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem;
+        pointer-events: none;
+      }
+
+      .empty-hint-icon {
+        font-size: 2rem;
+        width: 2rem;
+        height: 2rem;
+        color: var(--mat-sys-on-surface-variant);
+        opacity: 0.6;
+      }
+
+      .empty-hint-text {
+        margin: 0;
+        font-size: 0.875rem;
+        color: var(--mat-sys-on-surface-variant);
+        text-align: center;
+        line-height: 1.5;
+        opacity: 0.8;
+        display: flex;
+        flex-direction: column;
       }
     `,
   ],
