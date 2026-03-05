@@ -25,6 +25,7 @@ import { FormlyMatToggleModule } from '@ngx-formly/material/toggle';
 import { provideMarkdown } from 'ngx-markdown';
 import {
   DEBUG_MODE,
+  PALETTE_MINIMIZED,
   PREVIEW_MODE,
   SCREEN_SIZE,
 } from 'projects/ngx-formly-builder/src/lib/core/token';
@@ -41,6 +42,7 @@ export const appConfig: ApplicationConfig = {
 
     { provide: SCREEN_SIZE, useValue: signal('lg') },
     { provide: PREVIEW_MODE, useValue: signal(false) },
+    { provide: PALETTE_MINIMIZED, useValue: signal(false) },
     { provide: DEBUG_MODE, useValue: signal(true) }, // TODO: Set to false when done
 
     provideZonelessChangeDetection(),
