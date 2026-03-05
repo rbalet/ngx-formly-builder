@@ -7,6 +7,7 @@ import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { DEBUG_MODE, PREVIEW_MODE } from '../../core/token';
 import { ScreenSize } from '../../core/type';
+import { FormBuilderService } from '../../services/form-builder.service';
 import { QuickStartComponent } from '../quick-start/quick-start.component';
 
 @Component({
@@ -25,13 +26,8 @@ import { QuickStartComponent } from '../quick-start/quick-start.component';
       <div [class]="previewContainerClass()">
         <form [formGroup]="form" class="mb-4">
           @if (!$previewMode()) {
-            <div
-              cdkDropList
-              (cdkDropListDropped)="onDrop($event)"
-              class="field-list grid grid-cols-12 gap-4"
-              id="form-preview-list"
-            >
-              @for (field of $fields(); track field.key) {
+            <div class="field-list grid grid-cols-12 gap-4">
+              @for (field of $fields(); track field.key ?? $index) {
                 <div [class]="getFieldItemClass(field)" (click)="onFieldClick(field)">
                   <formly-form
                     [model]="$model()"
@@ -40,6 +36,13 @@ import { QuickStartComponent } from '../quick-start/quick-start.component';
                     [form]="form"
                   ></formly-form>
                 </div>
+              }
+              @if (!$fields().length) {
+                <div
+                  cdkDropList
+                  (cdkDropListDropped)="onEmptyDrop($event)"
+                  class="empty-drop-zone col-span-12"
+                ></div>
               }
             </div>
           } @else {
@@ -122,19 +125,22 @@ import { QuickStartComponent } from '../quick-start/quick-start.component';
       .field-item {
         position: relative;
       }
+
+      .empty-drop-zone {
+        min-height: 50px;
+      }
     `,
   ],
 })
 export class FormPreviewComponent {
   readonly $debugMode = inject(DEBUG_MODE);
+  readonly #formBuilderService = inject(FormBuilderService);
 
   $fields = input.required<FormlyFieldConfig[]>();
   $selectedField = model.required<FormlyFieldConfig | null>();
   $screenSize = input<ScreenSize>('lg');
   $previewMode = inject(PREVIEW_MODE);
 
-  fieldsReordered = output<{ previousIndex: number; currentIndex: number }>();
-  fieldDropped = output<{ fieldType: string; index: number }>();
   templateSelected = output<string>();
 
   form = new FormGroup({});
@@ -183,23 +189,13 @@ export class FormPreviewComponent {
     });
   }
 
-  onDrop(event: CdkDragDrop<FormlyFieldConfig[]>) {
-    // Check if this is an external drop from the palette
-    if (event.previousContainer !== event.container) {
-      // External drop from field palette
-      const fieldType = event.item.data as string;
-      this.fieldDropped.emit({
-        fieldType: fieldType,
-        index: event.currentIndex,
-      });
-    } else {
-      // Internal reordering
-      if (event.previousIndex !== event.currentIndex) {
-        this.fieldsReordered.emit({
-          previousIndex: event.previousIndex,
-          currentIndex: event.currentIndex,
-        });
-      }
+  /** Handles drops onto the empty-form fallback drop zone (first field from palette). */
+  onEmptyDrop(event: CdkDragDrop<FormlyFieldConfig[]>) {
+    const fieldType = event.item.data as string;
+    if (typeof fieldType === 'string') {
+      const newField = this.#formBuilderService.createField(fieldType);
+      this.#formBuilderService.addField(newField);
+      this.#formBuilderService.$selectedField.set(newField);
     }
   }
 
