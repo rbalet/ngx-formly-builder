@@ -306,34 +306,54 @@ export class FormBuilderService {
 
   /**
    * Drops a new field (from palette) at a position relative to a target field.
-   * - top/bottom: inserts the new field before/after the target as a full-width (col-span-12) item
-   * - left/right: creates a two-column grid layout beside the target, halving each field's col-span
+   * - top/bottom: inserts the new field before/after the target (or its parent group) as full-width
+   * - left/right: creates a two-column grid layout beside the target, halving each field's col-span;
+   *   if the target is already inside a fieldGroup, the new field is inserted into that group instead
    */
   dropNewFieldAtPosition(newField: FormlyFieldConfig, targetField: FormlyFieldConfig, position: DropPosition) {
     const previousState = structuredClone(this.$fields());
     const fields = [...this.$fields()];
-    const targetIndex = fields.findIndex(f => f === targetField);
-    if (targetIndex === -1) return;
+
+    const { topLevelIndex: targetIndex, groupIndex: targetGroupIndex } = this.#locateField(fields, targetField);
+
+    if (targetIndex === -1 && targetGroupIndex === -1) return;
 
     if (position === 'top' || position === 'bottom') {
       newField.className = 'col-span-12';
-      const insertIndex = position === 'top' ? targetIndex : targetIndex + 1;
+      // When the target is inside a group, insert before/after the entire group row
+      const effectiveIndex = targetIndex !== -1 ? targetIndex : targetGroupIndex;
+      const insertIndex = position === 'top' ? effectiveIndex : effectiveIndex + 1;
       fields.splice(insertIndex, 0, newField);
       this.$fields.set(fields);
       this.$selectedField.set(newField);
     } else {
-      // left / right: create a two-column grid, halving the col-span for both fields
-      const targetColSpan = this.#getColSpan(targetField);
-      const halfSpan = Math.max(1, Math.floor(targetColSpan / 2));
-      const spanClass = `col-span-${halfSpan}`;
-      targetField.className = spanClass;
-      newField.className = spanClass;
+      // left / right
+      if (targetIndex !== -1) {
+        // Target is at top level: create a two-column grid, halving the col-span for both fields
+        const targetColSpan = this.#getColSpan(targetField);
+        const halfSpan = Math.max(1, Math.floor(targetColSpan / 2));
+        const spanClass = `col-span-${halfSpan}`;
+        targetField.className = spanClass;
+        newField.className = spanClass;
 
-      const gridField: FormlyFieldConfig = {
-        fieldGroupClassName: 'grid grid-cols-12 gap-4',
-        fieldGroup: position === 'left' ? [newField, targetField] : [targetField, newField],
-      };
-      fields[targetIndex] = gridField;
+        const gridField: FormlyFieldConfig = {
+          fieldGroupClassName: 'grid grid-cols-12 gap-4',
+          fieldGroup: position === 'left' ? [newField, targetField] : [targetField, newField],
+        };
+        fields[targetIndex] = gridField;
+      } else {
+        // Target is inside an existing group: insert the new field into that group
+        const targetGroup = fields[targetGroupIndex];
+        const targetInGroupIndex = targetGroup.fieldGroup!.findIndex(f => f === targetField);
+        newField.className = targetField.className ?? 'col-span-6';
+        const newGroupFields = [...targetGroup.fieldGroup!];
+        if (position === 'left') {
+          newGroupFields.splice(targetInGroupIndex, 0, newField);
+        } else {
+          newGroupFields.splice(targetInGroupIndex + 1, 0, newField);
+        }
+        fields[targetGroupIndex] = { ...targetGroup, fieldGroup: newGroupFields };
+      }
       this.$fields.set(fields);
       this.$selectedField.set(newField);
     }
@@ -346,61 +366,143 @@ export class FormBuilderService {
 
   /**
    * Moves an existing field to a position relative to a target field.
-   * - top/bottom: reorders the source before/after the target, sets source to col-span-12
-   * - left/right: removes the source from its current position and adds it beside the target
+   * - top/bottom: reorders the source before/after the target (or its parent group), sets source to col-span-12.
+   *   If the source is inside a fieldGroup it is first extracted, unwrapping the group when only one field remains.
+   * - left/right: removes the source from its current position and adds it beside the target;
+   *   if the target is already inside a fieldGroup, the source is inserted into that group instead.
    */
   moveFieldToPosition(sourceField: FormlyFieldConfig, targetField: FormlyFieldConfig, position: DropPosition) {
     if (sourceField === targetField) return;
 
     const previousState = structuredClone(this.$fields());
-    const fields = [...this.$fields()];
-    const sourceIndex = fields.findIndex(f => f === sourceField);
-    const targetIndex = fields.findIndex(f => f === targetField);
+    let fields = [...this.$fields()];
 
-    if (sourceIndex === -1 || targetIndex === -1) return;
+    // Locate source – could be at top level or inside a fieldGroup
+    const { topLevelIndex: sourceIndex, groupIndex: sourceGroupIndex } = this.#locateField(
+      fields,
+      sourceField,
+    );
+    if (sourceIndex === -1 && sourceGroupIndex === -1) return;
+
+    // Locate target – could be at top level or inside a fieldGroup
+    const { topLevelIndex: targetIndex, groupIndex: targetGroupIndex } = this.#locateField(
+      fields,
+      targetField,
+    );
+    if (targetIndex === -1 && targetGroupIndex === -1) return;
 
     if (position === 'top' || position === 'bottom') {
-      // Remove source from its current position
-      fields.splice(sourceIndex, 1);
-      // Recalculate target index after removal
-      const newTargetIndex = fields.findIndex(f => f === targetField);
-      const insertIndex = position === 'top' ? newTargetIndex : newTargetIndex + 1;
+      // Extract source from wherever it lives
+      if (sourceIndex !== -1) {
+        fields.splice(sourceIndex, 1);
+      } else {
+        fields = this.#extractFromGroup(fields, sourceGroupIndex, sourceField);
+      }
+
       sourceField.className = 'col-span-12';
+
+      // When target was inside a group, treat the whole group row as the effective target
+      const { topLevelIndex: newTargetIndex, groupIndex: newTargetGroupIndex } = this.#locateField(
+        fields,
+        targetField,
+      );
+      const effectiveTargetIndex = newTargetIndex !== -1 ? newTargetIndex : newTargetGroupIndex;
+      if (effectiveTargetIndex === -1) return;
+
+      const insertIndex = position === 'top' ? effectiveTargetIndex : effectiveTargetIndex + 1;
       fields.splice(insertIndex, 0, sourceField);
       this.$fields.set(fields);
       this.$selectedField.set(sourceField);
-      queueMicrotask(() => {
-        this.#$undoStack.update((stack) => [...stack, previousState]);
-        this.#$redoStack.set([]);
-      });
     } else {
-      // left / right: remove source from top-level, then add beside target
-      fields.splice(sourceIndex, 1);
+      // left / right: extract source from wherever it lives
+      if (sourceIndex !== -1) {
+        fields.splice(sourceIndex, 1);
+      } else {
+        fields = this.#extractFromGroup(fields, sourceGroupIndex, sourceField);
+      }
       this.$fields.set(fields);
 
-      // Compute half col-span for side-by-side layout
-      const targetColSpan = this.#getColSpan(targetField);
-      const halfSpan = Math.max(1, Math.floor(targetColSpan / 2));
-      const spanClass = `col-span-${halfSpan}`;
-      targetField.className = spanClass;
-      sourceField.className = spanClass;
-
-      // Re-use addFieldBeside on the updated fields array (target is still there)
       const updatedFields = [...this.$fields()];
-      const newTargetIndex = updatedFields.findIndex(f => f === targetField);
-      if (newTargetIndex === -1) return;
 
-      const gridField: FormlyFieldConfig = {
-        fieldGroupClassName: 'grid grid-cols-12 gap-4',
-        fieldGroup: position === 'left' ? [sourceField, targetField] : [targetField, sourceField],
-      };
-      updatedFields[newTargetIndex] = gridField;
+      if (targetIndex !== -1) {
+        // Target is at top level: create a new two-column grid
+        const { topLevelIndex: newTargetIndex } = this.#locateField(updatedFields, targetField);
+        if (newTargetIndex === -1) return;
+
+        const targetColSpan = this.#getColSpan(targetField);
+        const halfSpan = Math.max(1, Math.floor(targetColSpan / 2));
+        const spanClass = `col-span-${halfSpan}`;
+        targetField.className = spanClass;
+        sourceField.className = spanClass;
+
+        const gridField: FormlyFieldConfig = {
+          fieldGroupClassName: 'grid grid-cols-12 gap-4',
+          fieldGroup: position === 'left' ? [sourceField, targetField] : [targetField, sourceField],
+        };
+        updatedFields[newTargetIndex] = gridField;
+      } else {
+        // Target is inside an existing group: insert source into that group
+        const { groupIndex: newTargetGroupIndex } = this.#locateField(updatedFields, targetField);
+        if (newTargetGroupIndex === -1) return;
+
+        const targetGroup = updatedFields[newTargetGroupIndex];
+        const targetInGroupIndex = targetGroup.fieldGroup!.findIndex(f => f === targetField);
+        sourceField.className = targetField.className ?? 'col-span-6';
+        const newGroupFields = [...targetGroup.fieldGroup!];
+        if (position === 'left') {
+          newGroupFields.splice(targetInGroupIndex, 0, sourceField);
+        } else {
+          newGroupFields.splice(targetInGroupIndex + 1, 0, sourceField);
+        }
+        updatedFields[newTargetGroupIndex] = { ...targetGroup, fieldGroup: newGroupFields };
+      }
+
       this.$fields.set(updatedFields);
       this.$selectedField.set(sourceField);
-      queueMicrotask(() => {
-        this.#$undoStack.update((stack) => [...stack, previousState]);
-        this.#$redoStack.set([]);
-      });
+    }
+
+    queueMicrotask(() => {
+      this.#$undoStack.update((stack) => [...stack, previousState]);
+      this.#$redoStack.set([]);
+    });
+  }
+
+  /**
+   * Locates a field in the fields array (top-level or inside a fieldGroup).
+   * Returns `topLevelIndex` if found directly, or `groupIndex` if found inside a fieldGroup.
+   * Exactly one will be ≥ 0 when the field exists; both are -1 if not found.
+   */
+  #locateField(
+    fields: FormlyFieldConfig[],
+    field: FormlyFieldConfig,
+  ): { topLevelIndex: number; groupIndex: number } {
+    const topLevelIndex = fields.findIndex(f => f === field);
+    const groupIndex =
+      topLevelIndex === -1 ? fields.findIndex(f => f.fieldGroup?.some(g => g === field)) : -1;
+    return { topLevelIndex, groupIndex };
+  }
+
+  /**
+   * Extracts a field from the fieldGroup at `groupIndex`.
+   * - If the group becomes empty it is removed entirely.
+   * - If one field remains it is unwrapped to top-level with col-span-12.
+   * - Otherwise the group is updated in place.
+   */
+  #extractFromGroup(
+    fields: FormlyFieldConfig[],
+    groupIndex: number,
+    fieldToExtract: FormlyFieldConfig,
+  ): FormlyFieldConfig[] {
+    const group = fields[groupIndex];
+    const remaining = group.fieldGroup!.filter(f => f !== fieldToExtract);
+
+    if (remaining.length === 0) {
+      return fields.filter((_, i) => i !== groupIndex);
+    } else if (remaining.length === 1) {
+      const unwrapped = { ...remaining[0], className: 'col-span-12' };
+      return fields.map((f, i) => (i === groupIndex ? unwrapped : f));
+    } else {
+      return fields.map((f, i) => (i === groupIndex ? { ...group, fieldGroup: remaining } : f));
     }
   }
 
