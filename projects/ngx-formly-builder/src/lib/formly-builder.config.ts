@@ -16,7 +16,7 @@ import { FormlyMatSelectModule } from '@ngx-formly/material/select';
 import { FormlyMatTextAreaModule } from '@ngx-formly/material/textarea';
 import { FormlyMatToggleModule } from '@ngx-formly/material/toggle';
 import { provideMarkdown } from 'ngx-markdown';
-import { PREVIEW_MODE, SCREEN_SIZE, EXPORT_SERVICE } from './core/token';
+import { PALETTE_MINIMIZED, PREVIEW_MODE, SCREEN_SIZE, EXPORT_SERVICE } from './core/token';
 import { MarkdownFieldComponent } from './types/markdown-field.component';
 import { FieldWrapperComponent } from './wrappers/field-wrapper.component';
 import { FormBuilderService } from './services/form-builder.service';
@@ -50,6 +50,7 @@ export function provideFormlyBuilder(): (Provider | EnvironmentProviders)[] {
 
     { provide: SCREEN_SIZE, useValue: signal('lg') },
     { provide: PREVIEW_MODE, useValue: signal(false) },
+    { provide: PALETTE_MINIMIZED, useValue: signal(false) },
     { provide: EXPORT_SERVICE, useClass: ExportService },
 
     FormBuilderService,

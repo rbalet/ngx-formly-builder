@@ -1,10 +1,10 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { Component, inject, input } from '@angular/core';
+import { Component, effect, inject, input } from '@angular/core';
 import { FieldPaletteComponent } from './components/field-palette/field-palette.component';
 import { FormPreviewComponent } from './components/form-preview/form-preview.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { PropertiesPanelComponent } from './components/properties-panel/properties-panel.component';
-import { PREVIEW_MODE, SCREEN_SIZE } from './core/token';
+import { PALETTE_MINIMIZED, PREVIEW_MODE, SCREEN_SIZE } from './core/token';
 import { FieldGroup } from './models/field-group.model';
 import { FormBuilderService } from './services/form-builder.service';
 import { TemplateService } from './services/template.service';
@@ -24,9 +24,10 @@ import { TemplateService } from './services/template.service';
 
       <div class="main-content" cdkDropListGroup>
         @if (!$previewMode()) {
-          <div class="palette-section">
+          <div class="palette-section" [class.palette-minimized]="$paletteMinimized()">
             <formly-builder-field-palette
               [fieldGroups]="fieldGroups()"
+              [minimized]="$paletteMinimized()"
               (fieldSelect)="onFieldSelect($event)"
             ></formly-builder-field-palette>
           </div>
@@ -68,6 +69,12 @@ import { TemplateService } from './services/template.service';
       width: 280px;
       flex-shrink: 0;
       overflow-y: auto;
+      overflow-x: hidden;
+      transition: width 0.3s ease-in-out;
+    }
+
+    .palette-minimized {
+      width: 64px;
     }
 
     .preview-section {
@@ -106,6 +113,7 @@ import { TemplateService } from './services/template.service';
 export class FormlyBuilder {
   readonly $screenSize = inject(SCREEN_SIZE);
   readonly $previewMode = inject(PREVIEW_MODE);
+  readonly $paletteMinimized = inject(PALETTE_MINIMIZED);
   readonly #formBuilderService = inject(FormBuilderService);
   readonly #templateService = inject(TemplateService);
 
@@ -119,6 +127,11 @@ export class FormlyBuilder {
   constructor() {
     this.$fields = this.#formBuilderService.$fields;
     this.$selectedField = this.#formBuilderService.$selectedField;
+
+    // Auto-minimize the palette on smaller screen sizes
+    effect(() => {
+      this.$paletteMinimized.set(this.$screenSize() !== 'lg');
+    });
   }
 
   onFieldSelect(fieldType: string) {
