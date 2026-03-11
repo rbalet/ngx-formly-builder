@@ -22,39 +22,6 @@ export class App {
 
   constructor() {
     // Initialize with default fields
-    this.#formBuilderService.$fields.set([
-      {
-        key: 'firstName',
-        type: 'input',
-        wrappers: ['field-wrapper'],
-        className: 'col-span-6',
-        props: {
-          label: 'First Name',
-          placeholder: 'Enter your first name',
-          required: true,
-        },
-      },
-      {
-        key: 'lastName',
-        type: 'input',
-        wrappers: ['field-wrapper'],
-        className: 'col-span-6',
-        props: {
-          label: 'Last Name',
-          placeholder: 'Enter your last name',
-          required: true,
-        },
-      },
-      {
-        key: 'email',
-        type: 'input',
-        wrappers: ['field-wrapper'],
-        props: {
-          label: 'Email',
-          placeholder: 'Enter your email',
-          type: 'email',
-        },
-      },
-    ]);
+    this.#formBuilderService.$fields.set([]);
   }
 }
